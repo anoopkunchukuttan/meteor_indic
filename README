@@ -1,0 +1,523 @@
+Meteor version 1.3
+
+Code by Michael Denkowski (mdenkows at cs.cmu.edu)
+
+Authors of previous Meteor versions:
+Abhaya Agarwal (abhayaa at cs.cmu.edu)
+Satanjeev "Bano" Banerjee (satanjeev at cs.cmu.edu)
+Alon Lavie (alavie at cs.cmu.edu)
+
+Carnegie Mellon University
+Pittsburgh, PA, USA
+
+
+Note: See xray/README for directions using Meteor X-Ray
+
+
+1. Introduction:
+================
+
+The Meteor metric evaluates a machine translation hypothesis against a reference
+translation by calculating a similarity score based on an alignment between the
+two strings.  When multiple references are provided, the hypothesis is scored
+against each and the reference producing the highest score is used.  Alignments
+are formed according to the following types of matches between strings:
+
+Exact: Words are matched if and only if their surface forms are identical.
+
+Stem: Words are stemmed using a language-appropriate Snowball Stemmer and
+      matched if the stems are identical.
+
+Synonym: Words are matched if they are both members of a synonym set according
+         to the WordNet database.
+
+Paraphrase: Phrases are matched if they are listed as paraphrases in the Meteor
+            paraphrase tables.
+
+Currently supported languages are English, Czech, German, French, Spanish, and
+Arabic.  The system is written in Java with a full API to allow easy
+incorporation of Meteor scoring into existing systems such as MERT
+implementations.
+
+This release also includes:
+- a standalone version of the Aligner
+- a standalone version of the Sufficient Statistics Scorer
+- a Trainer which can tune optimal Meteor parameters for new data
+- an Extractor which can convert (possibly malformed) XML/SGML into plaintext
+
+2. Running Meteor:
+==================
+
+The following can be seen by running the Meteor scorer with no arguments:
+
+--------------------------------------------------------------------------------
+Meteor version 1.3
+
+Usage: java -Xmx2G -jar meteor-*.jar <test> <reference> [options]
+
+Options:
+-l language                     One of: en cz de es fr ar
+-t task                         One of: rank adq hter li
+-p 'alpha beta gamma'           Custom parameters (overrides default)
+-m 'module1 module2 ...'        Specify modules (overrides default)
+                                  Any of: exact stem synonym paraphrase
+-w 'weight1 weight2 ...'        Specify module weights (overrides default)
+-r refCount                     Number of references (plaintext only)
+-x beamSize                     (default 40)
+-d synonymDirectory             (if not default for language)
+-a paraphraseFile               (if not default for language)
+-j jobs                         Number of jobs to run (nBest only)
+-f filePrefix                   Prefix for output files (default 'meteor')
+-norm                           Tokenize / normalize punctuation and lowercase
+                                  (Recommended unless scoring raw output with
+                                   pretokenized references)
+-lower                          Lowercase only (not required if -norm apecified)
+-noPunct                        Do not consider punctuation when scoring
+                                  (Not recommended unless special case)
+-sgml                           Input is in SGML format
+-nBest                          Input is in nBest format
+-oracle                         Output oracle translations (nBest only)
+-vOut                           Output verbose scores (P / R / frag / score)
+-ssOut                          Output sufficient statistics instead of scores
+-writeAlignments                Output alignments annotated with Meteor scores
+                                  (written to <prefix>-align.out)
+
+Sample options for plaintext: -l <lang> -norm
+Sample options for SGML: -l <lang> -norm -sgml
+Sample options for raw output / pretokenized references: -l <lang> -lower
+
+See README file for additional information
+--------------------------------------------------------------------------------
+
+The simplest way to run Meteor is as follows: 
+
+$ java -Xmx2G -jar meteor-*.jar <test> <reference> -norm
+
+If your input is in SGML format, use:
+
+$ java -Xmx2G -jar meteor-*.jar <test> <reference> -sgml -norm
+
+For example, using the sample files included with this distribution,
+you can run the following test.
+
+Score the example test and reference files using the filtered paraphrase table:
+
+$ java -Xmx2G -jar meteor-*.jar example/test.sgm example/ref.sgm -sgml -norm
+
+Score files for segment, document, and system level scores are produced,
+prefixed with the system name. The output from the above should match the
+example scores.
+
+$ diff meteor-seg.scr example/meteor-seg.scr
+$ diff meteor-doc.scr example/meteor-doc.scr
+$ diff meteor-sys.scr example/meteor-sys.scr
+
+The Meteor jar can be run from any directory as long as correct paths are
+specified.
+
+
+3. Options: 
+===========
+
+Language: -l language
+---------------------
+
+English is assumed by default.  Meteor also supports evaluation of MT output in
+the following languages:
+
+Language         Available Modules
+
+English   (en)    (exact, stem, synonym, paraphrase)
+French    (fr)    (exact, stem, paraphrase)
+German    (de)    (exact, stem, paraphrase)
+Spanish   (es)    (exact, stem, paraphrase)
+Czech     (cz)    (exact, paraphrase)
+Arabic    (ar)    (exact, paraphrase)
+
+
+Task: -t task
+-------------
+
+Each task specifies the modules, module weights, and parameters (alpha, beta,
+gamma) tuned to a specific type of human judgment data.  These tasks and their
+supported languages follow:
+
+rank : Tuned to human rankings of translations from WMT09.
+       - English
+       - Czech
+       - German
+       - Spanish
+       - French
+       
+adq  : Tuned to adequacy scores from NIST OpenMT09.
+       - English
+       Tuned to adequacy scores of Google translations of news into Arabic by
+       volunteers at Columbia University.
+       - Arabic
+
+hter : Tuned to HTER scores from GALE P3.
+       - English
+
+
+Parameters: -p 'alpha beta gamma'
+---------------------------------
+
+Alternatively, the three parameters (alpha, beta, and gamma) can be specified
+manually. This is most often used when tuning Meteor to new data.
+
+
+Modules: -m 'module1 module2 ...'
+---------------------------------
+
+Meteor supports 4 matcher modules:
+
+exact       match using surface forms
+stem        match using stems obtained from the Snowball stemmers
+synonym     match based on synonyms obtained from WordNet
+paraphrase  match based on paraphrases from the Meteor paraphrase tables
+
+See the language section to determine which modules are available for languages.
+
+
+Module Weights: -w 'weight1 weight2 ...'
+----------------------------------------
+
+The module weights can also be specified manually.  This is also primarily used
+for tuning Meteor.
+
+
+Reference Count: -r refCount
+----------------------------
+
+If the input is in plaintext, the number of references can be specified. For N
+references, it is assumed that the reference file will be N times the length of
+the test file, containing sets of N references in order. For example, if N=4,
+reference lines 1-4 will correspond to test line 1, 5-8 to line 2, etc.
+
+
+Beam Size: -x
+-------------
+
+This number, set to 40 by default, is used to limit the beam size when searching
+for the highest scoring alignment.  As parameters are tuned for a beam size of
+40, simply increasing this number does not necessarily produce more reliable
+scores.
+
+
+Synonymy Directory: -d synonymDirectory
+---------------------------------------
+
+This option should only be used to test external synonymy databases. By default,
+the included synonymy database will be used.
+
+
+Paraphrase File: -a paraphraseFile
+----------------------------------
+
+This option should only be used to test external synonymy databases. By default,
+the included paraphrase tables will be used.
+
+
+Jobs: -j jobs
+-------------
+
+This option (nBest scoring only) sets the number of jobs to use for scoring.  It
+is generally a good idea to set this to the number of CPUs on the machine
+running Meteor.
+
+
+File Prefix: -f filePrefix
+--------------------------
+
+Specify the prefix of score files in SGML mode.  Files produced will be
+<filePrefix>-seg.scr, <filePrefix>-doc.scr, <filePrefix>-sys.scr.  The default
+prefix is "meteor".  If alignments are to be written, they are written to
+<prefix>-align.out.
+
+
+Normalize: -norm
+----------------
+
+Tokenize and lowercases input lines, normalize punctuation to improve scoring
+accuracy.  This option is highly recommended unless scoring raw system output
+against pretokenized references.
+
+
+Lowercase: -lower
+-----------------
+
+Lowercase input lines (not required if -norm also specified).  This is most
+commonly used scoring cased, tokenized outputs with pretokenized references.
+
+
+Ignore Punctuation: -noPunct
+----------------------------------
+
+If specified, punctuation symbols will be removed before scoring.  This is
+generally not recommended as parameters are tuned with punctuation included.
+
+
+SGML: -sgml
+-----------
+
+This specifies that input is in SGML format. (See Input/Output section)
+
+
+N-Best: -nBest
+--------------
+
+This specifies that input is in nBest format with multiple translations for each
+segment. For each segment, a line containing a single number for the count of
+translations is followed by one translation per line. For example, an input file
+with translations for three segments might appear as follows:
+
+1
+This is a single translation.
+3
+This is hypothesis one.
+This is hypothesis two.
+This is hypothesis three.
+2
+This segment has two translations.
+This is the second translation.
+
+See Input/Output section for the output format.
+
+
+Oracle Best: -oracle
+--------------------
+
+Also output the oracle 1-best translation for each segment when scoring an
+N-best list.
+
+
+Verbose Output: -vOut
+---------------------
+
+Output verbose scores (Precision, Recall, Fragmentation, Score) in place of
+regular scores.
+
+
+Sufficient Statistics: -ssOut
+-----------------------------
+
+This option outputs sufficient statistics in place of scores and omits
+all other output.  The behavior is slightly different depending on
+the data format.
+
+Plaintext:
+
+Space delimited lines are output, each having the following form:
+
+tstLen refLen stage1tstTotalMatches stage1refTotalMatches
+stage1tstWeightedMatches stage1refWeightedMatches s2tTM s2rTM s2tWM
+s2rWM s3tTM s3rTM s3tWM s3rWM s4tTM s4rTM s4tWM s4rWM chunks lenCost
+
+No system level score is output. The lines can be piped or otherwise passed to
+the StatsScorer program to produce Meteor scores from the sufficient statistics.
+
+SGML:
+
+The output score files will contain space delimited sufficient statistics in
+place of scores. Segment, Document, and System level scores are still produced.
+
+
+Write Alignments: -writeAlignments
+----------------------------------
+
+Write alignments between hypotheses and references to meteor-align.out or
+<prefix>-align.out when file prefix is specified.  Alignments are written in
+Meteor format, annotated with Meteor statistics:
+
+Title precision recall fragmentation score
+sentence1
+sentence2
+Line2Start:Length	Line1Start:Length	Module		Score
+...
+
+
+4. Input/Output Formats:
+========================
+
+Input can be in either plaintext with one segment per line (also see -r and
+-nBest for multiple references or hypotheses), or in SGML.
+
+For plaintext, output is to standard out with scores for each segment and final
+system level statistics.
+
+If nBest is specified, a score is output for each translation hypothesis along
+with system level statistics for first-sentence (first translation in each list)
+and best-choice (best scoring translation in each list).
+
+For SGML, output includes 3 files containing segment, document, and system level
+scores for the systems and test sets:
+
+meteor-seg.scr contains lines: testset	system	document	segment	score
+meteor-doc.scr contains lines: testset	system	document	score
+meteor-sys.scr contains lines: testset	system	score
+
+System level statistics will also be written to standard out for SGML scoring.
+
+
+5. Aligner:
+===========
+
+The Meteor aligner can be run independently with the following command:
+
+$ java -Xmx2G -cp meteor-*.jar Matcher
+
+Without any arguments, the following help text is printed.
+
+--------------------------------------------------------------------------------
+Meteor Aligner version 1.3
+Usage: java -Xmx2G -cp meteor-*.jar Matcher <test> <reference> [options]
+
+Options:
+-l language                     One of: en cz de es fr ar
+-m 'module1 module2 ...'        Specify modules (overrides default)
+                                  One of: exact stem synonym paraphrase
+-t type                         Alignment type (coverage vs accuracy)
+                                  One of: maxcov maxacc
+-x beamSize                     Keep speed reasonable
+-d synonymDirectory             (if not default)
+-a paraphraseFile               (if not default)
+
+See README file for examples
+--------------------------------------------------------------------------------
+
+The aligner reads in two plaintext files and outputs a detailed line-by-line
+alignment between them.  Only the options (outlined in previous sections) which
+apply to the creation of alignments are available.  The type option determines
+whether the aligner prefers coverage (better for correlation with human
+judgments in evaluation) or accuracy (better for tasks requiring high accuracy
+for each alignment link).
+
+
+6. StatsScorer:
+===============
+
+The Meteor sufficient statistics scorer can also be run independently:
+
+$ java -cp meteor-*.jar StatsScorer
+
+The --help option provides the following help text.
+
+--------------------------------------------------------------------------------
+Meteor Stats Scorer version 1.3
+Usage: java -cp meteor.jar StatsScorer [options]
+
+Options:
+-l language			One of: en cz de es fr ar
+-t task				One of: adq rank hter li
+-p 'alpha beta gamma'		Custom parameters (overrides default)
+-w 'weight1 weight2 ...'	Specify module weights (overrides default)
+-final 				Output final (system level) score
+--------------------------------------------------------------------------------
+
+The scorer reads lines of sufficient statistics from standard in and writes
+Meteor scores to standard out.  If -final is specified, an additional line is
+written containing the aggregate score.
+
+
+7. Trainer:
+===============
+
+The Meteor trainer can be used to tune Meteor parameters for new data.  The
+"scripts" directory contains scripts for creating training sets from many common
+data formats.
+
+Without any arguments, the following help text is printed.
+
+--------------------------------------------------------------------------------
+Meteor Trainer version 1.3
+Usage: java -XX:+UseCompressedOops -Xmx2G -cp meteor-*.jar Trainer <task> <dataDir> [options]
+
+Tasks:				One of: segcor rank
+
+Options:
+-a paraphrase
+-e epsilon
+-l language
+-i 'p1 p2 p3 w1 w2 w3 w4'	Initial parameters and weights
+-f 'p1 p2 p3 w1 w2 w3 w4'	Final parameters and weights
+-s 'p1 p2 p3 w1 w2 w3 w4'	Steps
+--------------------------------------------------------------------------------
+
+The Trainer will explore the parameter space bounded by the initial and final
+weights using the given steps.  Output should be piped to a file and sorted to
+determine the best scoring point.  The following tasks are available:
+
+segcor: Segment-level correlation: data dir can contain file triplets for any
+        number of systems in the form:
+        <sysname>.tst - MT system output file (SGML)
+        <sysname>.ref - Reference translation file (SGML)
+        <sysname>.ter - Human score file for this system containing lines in the
+                        form (space delimited):
+                        <document> <segment> <score>
+                        example:
+                        newswire1 12 5
+
+        example: sys1.tst sys1.ref sys1.ter
+
+        Human scores can be of any numerical measure (7 point adequacy scale,
+        0/1 correctness, HTER or other post-edit measure).  For each point in
+        the parameter space, the segment-level length-weighted Pearson's
+        correlation coefficient is calculated across the scores for all segments
+        in all files.
+
+rank: Rank consistency: data dir can contain file groups in the following form:
+      <lang-pair>.rank - rank file containing lines in the form (tab delimited):
+                         <segment>	<lang-pairA>	<sysA>	<lang-pairB>	<sysB>
+                         example:
+                         3	cz-en	sysA	cz-en	sysB
+                         indicating that for a given segment, language pair A,
+                         system A is preferred (higher score) to language pair B
+                         system B.  There can be multiple judgments for the same
+                         systems on the same segments.
+      <lang-pair>.ref.sgm - Reference translation file for this language pair
+                            (SGML)
+      <lang-pair>.<sysA>.sgm - MT system output for this language pair (SGML)
+      <lang-pair>.<sysB>.sgm - another system
+      <lang-pair>.<sysC>.sgm - another system
+      ...additional systems...
+
+      example: cz-en.rank
+               cz-en.ref.sgm
+               cz-en.sysA.sgm
+               cz-en.sysB.sgm
+               cz-en.sysC.sgm
+               ...
+      
+      For each point in the parameter space, the rank consistency (proportion of
+      times preferred segments receive a higher metric score) is calculated.
+
+
+8. SGML-to-Plaintext Converter:
+===============================
+
+This release also includes a program for reliably converting SGML test and
+reference files to plain text.  Resulting files are consistently ordered even
+if the SGML files are not and blank lines are appropriately added for empty or
+missing segments.  To run this program, use:
+
+$ java -cp meteor-*.jar SGMtoPlaintext
+
+
+9. Licensing:
+=============
+
+Meteor is released under the LGPL and includes some files subject to the
+(less restrictive) WordNet license.  See the included COPYING files for
+details.
+
+
+10. Acknowledgements:
+=====================
+
+The following researchers have contributed to previous implementations
+the Meteor system (all at Carnegie Mellon University):
+
+Rachel Reynolds
+Kenji Sagae
+Jeremy Naman
+Shyamsundar Jayaraman

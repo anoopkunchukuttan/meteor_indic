@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/4139/Meteor/meteor/scripts
+END
+sgmlize.py
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/4089/Meteor/meteor/scripts/sgmlize.py
+END
+filter_merge_rank_set.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/4061/Meteor/meteor/scripts/filter_merge_rank_set.py
+END
+freq.py
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/4050/Meteor/meteor/scripts/freq.py
+END
+wmt_fmt.py
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/4139/Meteor/meteor/scripts/wmt_fmt.py
+END
+agg.py
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/4050/Meteor/meteor/scripts/agg.py
+END
+unigram_stats.py
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/4050/Meteor/meteor/scripts/unigram_stats.py
+END
+armageddon.py
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/4137/Meteor/meteor/scripts/armageddon.py
+END
+combine_segcor_trainset.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/3989/Meteor/meteor/scripts/combine_segcor_trainset.py
+END
