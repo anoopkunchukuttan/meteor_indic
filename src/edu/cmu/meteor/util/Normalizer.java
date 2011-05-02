@@ -136,7 +136,7 @@ public class Normalizer {
 			URL nbpFileURL = new URL(Constants.DEFAULT_NBP_DIR_URL.toString()
 					+ "/" + Constants.getLanguageName(langID) + ".prefixes");
 			BufferedReader in = new BufferedReader(new InputStreamReader(
-					nbpFileURL.openStream()));
+					nbpFileURL.openStream(), "UTF-8"));
 			String line;
 			while ((line = in.readLine()) != null) {
 				StringTokenizer tok = new StringTokenizer(line);

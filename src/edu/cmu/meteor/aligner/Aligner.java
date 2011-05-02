@@ -166,7 +166,7 @@ public class Aligner {
 					.toString()
 					+ "/" + this.language + ".words");
 			BufferedReader in = new BufferedReader(new InputStreamReader(
-					wordFileURL.openStream()));
+					wordFileURL.openStream(), "UTF-8"));
 			String line;
 			while ((line = in.readLine()) != null) {
 				this.functionWords.add(line);

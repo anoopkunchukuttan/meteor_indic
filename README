@@ -142,7 +142,7 @@ Each task specifies the modules, module weights, and parameters (alpha, beta,
 gamma) tuned to a specific type of human judgment data.  These tasks and their
 supported languages follow:
 
-rank : Tuned to human rankings of translations from WMT09.
+rank : Tuned to human rankings of translations from WMT09 and WMT10.
        - English
        - Czech
        - German
@@ -155,7 +155,7 @@ adq  : Tuned to adequacy scores from NIST OpenMT09.
        volunteers at Columbia University.
        - Arabic
 
-hter : Tuned to HTER scores from GALE P3.
+hter : Tuned to HTER scores from GALE P2 and P3.
        - English
 
 

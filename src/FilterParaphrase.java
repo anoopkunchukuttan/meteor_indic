@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -70,9 +71,10 @@ public class FilterParaphrase {
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(
 				new GZIPInputStream((new File(paraFile)).toURI().toURL()
-						.openStream())));
-		PrintWriter out = new PrintWriter(new GZIPOutputStream(
-				new FileOutputStream(filteredFile)));
+						.openStream()), "UTF-8"));
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(
+				new GZIPOutputStream(new FileOutputStream(filteredFile)),
+				"UTF-8"));
 		int count = 0;
 		int used = 0;
 		System.out.println("Filtering paraphrases...");

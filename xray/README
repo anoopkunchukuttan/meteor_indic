@@ -23,6 +23,9 @@ Gnuplot 4.4 (http://www.gnuplot.info/)
 GNU Unifont (http://unifoundry.com/unifont.html)
 (Optional, used for non-western languages)
 
+For example, on Ubuntu Linux, install the following packages:
+python texlive-full gnuplot unifont
+
 Setup:
 
 If XeTeX and Gnuplot are installed somewhere other than /usr/bin, edit

@@ -10,8 +10,9 @@
 package edu.cmu.meteor.util;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -57,7 +58,8 @@ public class SGMData {
 		String currentDocID = "";
 		String currentSegID = "";
 
-		BufferedReader in = new BufferedReader(new FileReader(fileName));
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				new FileInputStream(fileName), "UTF-8"));
 		String line;
 		Matcher match;
 

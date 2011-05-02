@@ -37,7 +37,7 @@ public class SynonymDictionary {
 
 		// Exception file
 		BufferedReader inExc = new BufferedReader(new InputStreamReader(
-				excFileURL.openStream()));
+				excFileURL.openStream(), "UTF-8"));
 		String base;
 		String line;
 		while ((base = inExc.readLine()) != null) {

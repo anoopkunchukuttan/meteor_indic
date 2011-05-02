@@ -7,7 +7,9 @@
  * 
  */
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,7 +18,6 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 
-import edu.cmu.meteor.util.Normalizer;
 import edu.cmu.meteor.util.SGMData;
 
 public class SGMtoPlaintext {
@@ -125,7 +126,9 @@ public class SGMtoPlaintext {
 			while (sysIDs.hasNext()) {
 				String sysID = sysIDs.next();
 				System.out.println("Found system [" + sysID + "]");
-				PrintWriter out = new PrintWriter(setID + "." + sysID + ".tst");
+				PrintWriter out = new PrintWriter(new OutputStreamWriter(
+						new FileOutputStream(setID + "." + sysID + ".tst"),
+						"UTF-8"));
 				Hashtable<String, Hashtable<String, String>> testDocs = testSyss
 						.get(sysID);
 				AssocList refDocKeyList = refSetKeyList.get(setID);
@@ -141,8 +144,7 @@ public class SGMtoPlaintext {
 						if (testSegs != null) {
 							String txt = testSegs.get(segID);
 							if (txt != null) {
-								// Clean SGML tags
-								out.println(Normalizer.unescapeSGML(txt));
+								out.println(txt);
 							} else {
 								// Null segment
 								System.err.println("Warning: no segment ["
@@ -169,7 +171,9 @@ public class SGMtoPlaintext {
 			Iterator<String> sysIDs = refSyss.keySet().iterator();
 			while (sysIDs.hasNext()) {
 				String sysID = sysIDs.next();
-				PrintWriter out = new PrintWriter(setID + "." + sysID + ".ref");
+				PrintWriter out = new PrintWriter(new OutputStreamWriter(
+						new FileOutputStream(setID + "." + sysID + ".ref"),
+						"UTF-8"));
 				Hashtable<String, Hashtable<String, String>> refDocs = refSyss
 						.get(sysID);
 				AssocList refDocKeyList = refSetKeyList.get(setID);
@@ -185,8 +189,7 @@ public class SGMtoPlaintext {
 						if (refSegs != null) {
 							String txt = refSegs.get(segID);
 							if (txt != null) {
-								// Clean SGML tags
-								out.println(Normalizer.unescapeSGML(txt));
+								out.println(txt);
 							} else {
 								// Null segment
 								System.err.println("Warning: no segment ["

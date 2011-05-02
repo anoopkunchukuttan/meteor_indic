@@ -9,8 +9,11 @@
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -57,7 +60,6 @@ public class Meteor {
 		Boolean oracle = Boolean.parseBoolean(props.getProperty("oracle"));
 
 		String format = sgml ? "SGML" : "plaintext";
-		String encoding = System.getProperty("file.encoding");
 		if (!oracle && !ssOut) {
 			System.out.println("Meteor version: " + Constants.VERSION);
 			System.out.println();
@@ -65,14 +67,6 @@ public class Meteor {
 					+ config.getLanguage().substring(0, 1).toUpperCase()
 					+ config.getLanguage().substring(1));
 			System.out.println("Format:         " + format);
-
-			System.out.println("Encoding:       " + encoding);
-			// Make sure non-UTF-8 is intentional
-			if (!encoding.equals("UTF-8")) {
-				System.err
-						.println("Warning: Encoding not set to UTF-8, may produce errors");
-				System.err.println("To fix: Use `java -Dfile.encoding=UTF-8`");
-			}
 			System.out.println("Task:           " + config.getTaskDesc());
 			System.out.println("Modules:        " + config.getModulesString());
 			System.out.println("Weights:        "
@@ -138,7 +132,8 @@ public class Meteor {
 		ArrayList<String> lines2 = new ArrayList<String>();
 		ArrayList<ArrayList<String>> lines2mref = new ArrayList<ArrayList<String>>();
 
-		BufferedReader in = new BufferedReader(new FileReader(testFile));
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				new FileInputStream(testFile), "UTF-8"));
 		String line;
 		while ((line = in.readLine()) != null)
 			lines1.add(line);
@@ -146,7 +141,8 @@ public class Meteor {
 
 		int refCount = getRefCount(props);
 
-		in = new BufferedReader(new FileReader(refFile));
+		in = new BufferedReader(new InputStreamReader(new FileInputStream(
+				refFile), "UTF-8"));
 		if (refCount == 1)
 			while ((line = in.readLine()) != null)
 				lines2.add(line);
@@ -176,7 +172,8 @@ public class Meteor {
 			String filePrefix = props.getProperty("filePrefix");
 			if (filePrefix == null)
 				filePrefix = "meteor";
-			out = new PrintWriter(filePrefix + "-align.out");
+			out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(
+					filePrefix + "-align.out"), "UTF-8"));
 		}
 
 		Boolean ssOut = Boolean.parseBoolean(props.getProperty("ssOut"));
@@ -334,8 +331,10 @@ public class Meteor {
 		printer.start();
 
 		// Reading thread
-		BufferedReader testRead = new BufferedReader(new FileReader(testFile));
-		BufferedReader refRead = new BufferedReader(new FileReader(refFile));
+		BufferedReader testRead = new BufferedReader(new InputStreamReader(
+				new FileInputStream(testFile), "UTF-8"));
+		BufferedReader refRead = new BufferedReader(new InputStreamReader(
+				new FileInputStream(refFile), "UTF-8"));
 		try {
 			String line;
 			while ((line = testRead.readLine()) != null) {
@@ -743,7 +742,8 @@ public class Meteor {
 			}
 		});
 		// Write
-		PrintWriter out = new PrintWriter(filePrefix + "-sys.scr");
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(
+				new FileOutputStream(filePrefix + "-sys.scr"), "UTF-8"));
 		for (String line : sysLines)
 			out.println(line);
 		out.close();
@@ -762,7 +762,8 @@ public class Meteor {
 			}
 		});
 		// Write
-		out = new PrintWriter(filePrefix + "-doc.scr");
+		out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(
+				filePrefix + "-doc.scr"), "UTF-8"));
 		for (String line : docLines)
 			out.println(line);
 		out.close();
@@ -798,7 +799,8 @@ public class Meteor {
 			}
 		});
 		// Write
-		out = new PrintWriter(filePrefix + "-seg.scr");
+		out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(
+				filePrefix + "-seg.scr"), "UTF-8"));
 		for (String line : segLines)
 			out.println(line);
 		out.close();
@@ -807,7 +809,8 @@ public class Meteor {
 		Boolean writeAlignments = Boolean.parseBoolean(props
 				.getProperty("writeAlignments"));
 		if (writeAlignments) {
-			out = new PrintWriter(filePrefix + "-align.out");
+			out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(
+					filePrefix + "-align.out"), "UTF-8"));
 			for (int i = 0; i < segLines.size(); i++) {
 				String line = segLines.get(i);
 				MeteorStats stats = segStats.get(line);

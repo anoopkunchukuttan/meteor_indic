@@ -9,7 +9,8 @@
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -165,8 +166,10 @@ public class Matcher {
 		BufferedReader inTest = null;
 		BufferedReader inRef = null;
 		try {
-			inTest = new BufferedReader(new FileReader(test));
-			inRef = new BufferedReader(new FileReader(ref));
+			inTest = new BufferedReader(new InputStreamReader(
+					new FileInputStream(test), "UTF-8"));
+			inRef = new BufferedReader(new InputStreamReader(
+					new FileInputStream(ref), "UTF-8"));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			System.exit(1);

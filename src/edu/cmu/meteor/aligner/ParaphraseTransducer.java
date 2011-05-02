@@ -102,7 +102,8 @@ public class ParaphraseTransducer {
 
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(
-					new GZIPInputStream(paraphraseFileURL.openStream())));
+					new GZIPInputStream(paraphraseFileURL.openStream()),
+					"UTF-8"));
 			String line;
 			// System.out.println("Loading paraphrases:");
 			while ((line = in.readLine()) != null) {
