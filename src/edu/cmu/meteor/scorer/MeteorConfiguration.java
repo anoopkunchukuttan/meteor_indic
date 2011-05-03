@@ -56,6 +56,19 @@ public class MeteorConfiguration {
 		setNormalization(Constants.NO_NORMALIZE);
 	}
 
+	/**
+	 * Return the string identifying this Meteor scorer configuration.
+	 */
+	public String getConfigID() {
+		// Format: meteor.version.lang.norm.params.mods.weights
+		return "meteor." + Constants.VERSION + "-"
+				+ Constants.getLanguageShortName(this.langID) + "-"
+				+ Constants.getNormName(this.normalization) + "-"
+				+ Constants.getWeightListString(this.parameters) + "-"
+				+ Constants.getModuleListString(this.modules) + "-"
+				+ Constants.getWeightListString(this.moduleWeights);
+	}
+
 	public String getLanguage() {
 		return language;
 	}

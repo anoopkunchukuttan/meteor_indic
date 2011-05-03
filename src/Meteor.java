@@ -63,6 +63,8 @@ public class Meteor {
 		if (!oracle && !ssOut) {
 			System.out.println("Meteor version: " + Constants.VERSION);
 			System.out.println();
+			System.out.println("Eval ID:        " + config.getConfigID());
+			System.out.println();
 			System.out.println("Language:       "
 					+ config.getLanguage().substring(0, 1).toUpperCase()
 					+ config.getLanguage().substring(1));

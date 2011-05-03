@@ -257,6 +257,20 @@ public class Constants {
 		return "xx";
 	}
 
+	public static String getNormName(int norm) {
+		if (norm == NO_NORMALIZE)
+			return "no_norm";
+		if (norm == NORMALIZE_LC_ONLY)
+			return "lc_only";
+		if (norm == NORMALIZE_KEEP_PUNCT)
+			return "norm";
+		if (norm == NORMALIZE_NO_PUNCT)
+			return "norm_nopunct";
+
+		// Not found
+		return "other";
+	}
+
 	public static int getModuleID(String modName) {
 		String mod = modName.toLowerCase();
 		if (mod.equals("exact"))
@@ -286,6 +300,30 @@ public class Constants {
 
 		// Not found
 		return "other";
+	}
+
+	public static String getModuleShortName(int module) {
+		if (module == MODULE_EXACT)
+			return "ex";
+		if (module == MODULE_STEM)
+			return "st";
+		if (module == MODULE_SYNONYM)
+			return "sy";
+		if (module == MODULE_PARAPHRASE)
+			return "pa";
+
+		// Not found
+		return "other";
+	}
+
+	public static String getModuleListString(ArrayList<Integer> mods) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < mods.size(); i++) {
+			sb.append(getModuleShortName(mods.get(i)));
+			if (i < mods.size() - 1)
+				sb.append("_");
+		}
+		return sb.toString();
 	}
 
 	public static int getTaskID(String taskName) {
@@ -388,6 +426,16 @@ public class Constants {
 			weights.add(weight);
 
 		return weights;
+	}
+
+	public static String getWeightListString(ArrayList<Double> weights) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < weights.size(); i++) {
+			sb.append(weights.get(i));
+			if (i < weights.size() - 1)
+				sb.append("_");
+		}
+		return sb.toString();
 	}
 
 	public static SnowballStemmer newStemmer(String language) {
