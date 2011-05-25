@@ -37,13 +37,10 @@ public class StatsScorer {
 					.println("-p 'alpha beta gamma delta'\t\tCustom parameters (overrides default)");
 			System.out
 					.println("-w 'weight1 weight2 ...'\tSpecify module weights (overrides default)");
-			System.out
-					.println("-final \t\t\t\tOutput final (system level) score");
 			return;
 		}
 
 		Properties props = new Properties();
-		boolean finalOut = false;
 		// Get input args
 		int arg = 0;
 		while (arg < args.length) {
@@ -59,9 +56,9 @@ public class StatsScorer {
 			} else if (args[arg].equals("-w")) {
 				props.setProperty("moduleWeights", args[arg + 1]);
 				arg += 2;
-			} else if (args[arg].equals("-final")) {
-				finalOut = true;
-				arg += 1;
+			} else {
+				System.err.println("Unknown option \"" + args[arg] + "\"");
+				System.exit(1);
 			}
 		}
 
@@ -104,23 +101,15 @@ public class StatsScorer {
 		String line;
 
 		// Score input lines
-		MeteorStats total = new MeteorStats();
 		try {
 			while ((line = in.readLine()) != null) {
 				MeteorStats stats = new MeteorStats(line);
 				scorer.computeMetrics(stats);
 				System.out.println(stats.score);
-				total.addStats(stats);
 			}
 		} catch (IOException ex) {
 			ex.printStackTrace();
 			System.exit(1);
-		}
-		if (finalOut) {
-			scorer.computeMetrics(total);
-			System.out.println();
-			System.out.println(total.toString());
-			System.out.println(total.score);
 		}
 	}
 }

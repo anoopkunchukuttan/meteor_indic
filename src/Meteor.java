@@ -951,8 +951,7 @@ public class Meteor {
 				props.setProperty("vOut", "true");
 				curArg += 1;
 			} else {
-				System.err.println("Error: unknown option \"" + args[curArg]
-						+ "\"");
+				System.err.println("Unknown option \"" + args[curArg] + "\"");
 				System.exit(1);
 			}
 			String params = props.getProperty("parameters");

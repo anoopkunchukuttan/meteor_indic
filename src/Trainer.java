@@ -116,6 +116,9 @@ public class Trainer {
 			} else if (args[curArg].equals("-l")) {
 				language = args[curArg + 1];
 				curArg += 2;
+			} else {
+				System.err.println("Unknown option \"" + args[curArg] + "\"");
+				System.exit(1);
 			}
 		}
 

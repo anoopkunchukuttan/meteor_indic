@@ -147,6 +147,11 @@ public class Constants {
 	public static final double PARAM_I[] = { 0.75, 1.40, 0.70, 0.50 };
 	public static final double WEIGHT_I[] = { 1.0, 0.0, 0.0, 0.0 };
 
+	/* Tuning task */
+	public static final int TASK_TUNE = 100;
+	public static final double PARAM_TUNE[] = { 0.5, 1.0, 0.5, 0.5 };
+	public static final double WEIGHT_TUNE[] = { 1.0, 0.5, 0.5, 0.5 };
+
 	// Cannot be used to set task, only used when options are specified manually
 	public static final int TASK_CUSTOM = -1;
 
@@ -338,6 +343,8 @@ public class Constants {
 			return TASK_HTER;
 		if (task.equals("li"))
 			return TASK_LI;
+		if (task.equals("tune"))
+			return TASK_TUNE;
 
 		// Other
 		return TASK_CUSTOM;
@@ -352,6 +359,8 @@ public class Constants {
 			return "hter";
 		if (task == TASK_LI)
 			return "li";
+		if (task == TASK_TUNE)
+			return "tune";
 
 		// Other
 		return "custom";
@@ -370,6 +379,8 @@ public class Constants {
 			return "HTER";
 		if (task == TASK_LI)
 			return "Language-Independent";
+		if (task == TASK_TUNE)
+			return "Tune";
 
 		// Other
 		return "Custom";
@@ -381,14 +392,15 @@ public class Constants {
 		double[] TASK_PARAM;
 		if (langID == LANG_OTHER || taskID == TASK_LI) {
 			TASK_PARAM = PARAM_I;
+		} else if (taskID == TASK_TUNE) {
+			TASK_PARAM = PARAM_TUNE;
+		} else if (taskID == TASK_RANK) {
+			TASK_PARAM = PARAM_RANK[langID];
+		} else if (taskID == TASK_HTER) {
+			TASK_PARAM = PARAM_HTER[langID];
 		} else {
-			if (taskID == TASK_RANK)
-				TASK_PARAM = PARAM_RANK[langID];
-			else if (taskID == TASK_HTER)
-				TASK_PARAM = PARAM_HTER[langID];
-			else
-				// Assume TASK_ADQ
-				TASK_PARAM = PARAM_ADQ[langID];
+			// Assume TASK_ADQ
+			TASK_PARAM = PARAM_ADQ[langID];
 		}
 
 		// Copy parameters
@@ -410,14 +422,15 @@ public class Constants {
 		double[] TASK_WEIGHT;
 		if (langID == LANG_OTHER || taskID == TASK_LI) {
 			TASK_WEIGHT = WEIGHT_I;
+		} else if (taskID == TASK_TUNE) {
+			TASK_WEIGHT = WEIGHT_TUNE;
+		} else if (taskID == TASK_RANK) {
+			TASK_WEIGHT = WEIGHT_RANK[langID];
+		} else if (taskID == TASK_HTER) {
+			TASK_WEIGHT = WEIGHT_HTER[langID];
 		} else {
-			if (taskID == TASK_RANK)
-				TASK_WEIGHT = WEIGHT_RANK[langID];
-			else if (taskID == TASK_HTER)
-				TASK_WEIGHT = WEIGHT_HTER[langID];
-			else
-				// Assume TASK_ADQ
-				TASK_WEIGHT = WEIGHT_ADQ[langID];
+			// Assume TASK_ADQ
+			TASK_WEIGHT = WEIGHT_ADQ[langID];
 		}
 
 		// Copy weights
