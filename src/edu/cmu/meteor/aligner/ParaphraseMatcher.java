@@ -54,10 +54,12 @@ public class ParaphraseMatcher {
 						m.length = len;
 						m.matchStart = i;
 						m.matchLength = words.length;
-
-						s.line1Coverage[i]++;
-						s.line2Coverage[j]++;
 						s.matches.get(j).add(m);
+
+						for (int k = 0; k < m.matchLength; k++)
+							s.line1Coverage[i + k]++;
+						for (int k = 0; k < m.length; k++)
+							s.line2Coverage[j + k]++;
 					}
 				}
 			}
@@ -83,17 +85,18 @@ public class ParaphraseMatcher {
 						}
 					if (match) {
 						Match m = new Match();
-						s.matches.get(j).add(m);
 						m.module = stage;
 						m.prob = 1;
 						m.start = j;
 						m.length = words.length;
 						m.matchStart = i;
 						m.matchLength = len;
-
-						s.line1Coverage[i]++;
-						s.line2Coverage[j]++;
 						s.matches.get(j).add(m);
+
+						for (int k = 0; k < m.matchLength; k++)
+							s.line1Coverage[i + k]++;
+						for (int k = 0; k < m.length; k++)
+							s.line2Coverage[j + k]++;
 					}
 				}
 			}

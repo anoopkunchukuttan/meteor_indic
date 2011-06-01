@@ -18,4 +18,7 @@ public class Match {
 	public double prob; // probability supplied by matcher
 	public int module; // module which made this match
 
+	public String toString() {
+		return start + ":" + length + " " + matchStart + ":" + matchLength;
+	}
 }
