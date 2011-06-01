@@ -56,11 +56,12 @@ public class Meteor {
 		// Print settings
 		Boolean ssOut = Boolean.parseBoolean(props.getProperty("ssOut"));
 		Boolean sgml = Boolean.parseBoolean(props.getProperty("sgml"));
+		Boolean mira = Boolean.parseBoolean(props.getProperty("mira"));
 		Boolean nBest = Boolean.parseBoolean(props.getProperty("nBest"));
 		Boolean oracle = Boolean.parseBoolean(props.getProperty("oracle"));
 
 		String format = sgml ? "SGML" : "plaintext";
-		if (!oracle && !ssOut) {
+		if (!oracle && !ssOut && !mira) {
 			System.out.println("Meteor version: " + Constants.VERSION);
 			System.out.println();
 			System.out.println("Eval ID:        " + config.getConfigID());
@@ -84,15 +85,29 @@ public class Meteor {
 					+ "- modules with no weights will not be counted.");
 		}
 
+		// MIRA check
+		if (mira && (sgml || nBest)) {
+			System.err
+					.println("Warning: MIRA incompatible with other modes - using MIRA only");
+		}
+
 		// SGML / NBest check
 		if (sgml && nBest) {
-			System.err.println("Warning: nBest incompatible with SGML - using "
-					+ "SGML only");
+			System.err
+					.println("Warning: nBest incompatible with SGML - using SGML only");
 		}
 
 		MeteorScorer scorer = new MeteorScorer(config);
 
-		if (sgml) {
+		if (mira) {
+			try {
+				scoreMIRA(scorer, props, config);
+			} catch (IOException ex) {
+				System.err.println("Error: Could not score MIRA outputs");
+				ex.printStackTrace();
+				System.exit(1);
+			}
+		} else if (sgml) {
 			try {
 				scoreSGML(scorer, props, config, testFile, refFile);
 			} catch (IOException ex) {
@@ -352,10 +367,12 @@ public class Meteor {
 						System.exit(1);
 					}
 					// Normalize refs as they are read
-					if (norm)
+					if (norm) {
 						ref = Normalizer.normalizeLine(ref, langID, !noPunct);
-					if (lower)
 						ref = ref.toLowerCase();
+					} else if (lower) {
+						ref = ref.toLowerCase();
+					}
 					refs.add(ref);
 				}
 
@@ -367,10 +384,12 @@ public class Meteor {
 						System.exit(1);
 					}
 					// Normalize segments as they are read
-					if (norm)
+					if (norm) {
 						seg = Normalizer.normalizeLine(seg, langID, !noPunct);
-					if (lower)
 						seg = seg.toLowerCase();
+					} else if (lower) {
+						seg = seg.toLowerCase();
+					}
 					MeteorWorker.Request request = new MeteorWorker.Request(
 							seg, refs);
 					toScore.put(request);
@@ -830,6 +849,79 @@ public class Meteor {
 		}
 	}
 
+	/**
+	 * Input is in MIRA format
+	 */
+
+	private static void scoreMIRA(MeteorScorer scorer, Properties props,
+			MeteorConfiguration config) throws IOException {
+
+		// Info for normalization since it will be done outside of the scorer
+		int langID = config.getLangID();
+		Boolean norm = Boolean.parseBoolean(props.getProperty("norm"));
+		Boolean noPunct = Boolean.parseBoolean(props.getProperty("noPunct"));
+		Boolean lower = Boolean.parseBoolean(props.getProperty("lower"));
+
+		// Info for output format
+		Boolean ssOut = Boolean.parseBoolean(props.getProperty("ssOut"));
+		Boolean vOut = Boolean.parseBoolean(props.getProperty("vOut"));
+
+		ArrayList<ArrayList<String>> references = new ArrayList<ArrayList<String>>();
+
+		// Read in references
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in,
+				"UTF-8"));
+		Integer refCount = Integer.parseInt(in.readLine());
+		boolean done = false;
+		while (!done) {
+			ArrayList<String> refs = new ArrayList<String>();
+			for (int i = 0; i < refCount; i++) {
+				String line = in.readLine();
+				if (line.equals("|||")) {
+					done = true;
+					break;
+				}
+				if (norm) {
+					line = Normalizer.normalizeLine(line, langID, !noPunct);
+					line = line.toLowerCase();
+				} else if (lower) {
+					line = line.toLowerCase();
+				}
+				refs.add(line);
+			}
+			if (!done)
+				references.add(refs);
+		}
+
+		// Score inputs
+		// idx ||| sentence
+		String line;
+		while ((line = in.readLine()) != null) {
+			String[] part = line.split("\\|\\|\\|");
+			int idx = Integer.parseInt(part[0].trim());
+			String test = part[1].trim();
+			if (norm) {
+				test = Normalizer.normalizeLine(test, langID, !noPunct);
+				test = test.toLowerCase();
+			} else if (lower) {
+				test = test.toLowerCase();
+			}
+			MeteorStats stats = scorer
+					.getMeteorStats(test, references.get(idx));
+			if (ssOut) {
+				System.out.println(stats.toString());
+			} else if (vOut) {
+				System.out.println(stats.precision + "\t" + stats.recall + "\t"
+						+ stats.fragPenalty + "\t" + stats.score);
+			} else {
+				System.out.println(stats.score);
+			}
+		}
+
+		// Finished scoring
+		in.close();
+	}
+
 	private static void printVerboseStats(MeteorStats stats,
 			MeteorConfiguration config) {
 		printVerboseStats(stats, config, "\nSystem level statistics:\n");
@@ -941,6 +1033,9 @@ public class Meteor {
 			} else if (args[curArg].equals("-sgml")) {
 				props.setProperty("sgml", "true");
 				curArg += 1;
+			} else if (args[curArg].equals("-mira")) {
+				props.setProperty("mira", "true");
+				curArg += 1;
 			} else if (args[curArg].equals("-noPunct")) {
 				props.setProperty("noPunct", "true");
 				curArg += 1;
@@ -1047,10 +1142,11 @@ public class Meteor {
 		Boolean norm = Boolean.parseBoolean(props.getProperty("norm"));
 		Boolean lower = Boolean.parseBoolean(props.getProperty("lower"));
 		Boolean noPunct = Boolean.parseBoolean(props.getProperty("noPunct"));
+		Boolean mira = Boolean.parseBoolean(props.getProperty("mira"));
 		Boolean nBest = Boolean.parseBoolean(props.getProperty("nBest"));
 
-		if (nBest) {
-			// NBest scoring handles its own normalization
+		if (mira || nBest) {
+			// MIRA and NBest scoring handle their own normalization
 			config.setNormalization(Constants.NO_NORMALIZE);
 		} else if (norm) {
 			if (noPunct)
@@ -1076,7 +1172,7 @@ public class Meteor {
 		System.out
 				.println("-l language                     One of: en cz de es fr ar");
 		System.out
-				.println("-t task                         One of: rank adq hter li");
+				.println("-t task                         One of: rank adq hter li tune");
 		System.out
 				.println("-p 'alpha beta gamma delta'     Custom parameters (overrides default)");
 		System.out
@@ -1110,6 +1206,12 @@ public class Meteor {
 				.println("                                  (Not recommended unless special case)");
 		System.out
 				.println("-sgml                           Input is in SGML format");
+		System.out
+				.println("-mira                           Input is in MIRA format");
+		System.out
+				.println("                                  (Use '-' for test and reference files)");
+		System.out
+				.println("                                  (MIRA probably expects -ssOut too)");
 		System.out
 				.println("-nBest                          Input is in nBest format");
 		System.out

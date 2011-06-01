@@ -32,7 +32,7 @@ public class StatsScorer {
 			System.out.println();
 			System.out.println("Options:");
 			System.out.println("-l language\t\t\tOne of: en cz de es fr ar");
-			System.out.println("-t task\t\t\t\tOne of: adq rank hter li");
+			System.out.println("-t task\t\t\t\tOne of: adq rank hter li tune");
 			System.out
 					.println("-p 'alpha beta gamma delta'\t\tCustom parameters (overrides default)");
 			System.out
