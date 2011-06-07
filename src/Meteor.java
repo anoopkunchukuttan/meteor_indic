@@ -101,7 +101,7 @@ public class Meteor {
 
 		if (mira) {
 			try {
-				scoreMIRA(scorer, props, config);
+				scoreMIRA(scorer);
 			} catch (IOException ex) {
 				System.err.println("Error: Could not score MIRA outputs");
 				ex.printStackTrace();
@@ -853,73 +853,42 @@ public class Meteor {
 	 * Input is in MIRA format
 	 */
 
-	private static void scoreMIRA(MeteorScorer scorer, Properties props,
-			MeteorConfiguration config) throws IOException {
+	private static void scoreMIRA(MeteorScorer scorer) throws IOException {
 
-		// Info for normalization since it will be done outside of the scorer
-		int langID = config.getLangID();
-		Boolean norm = Boolean.parseBoolean(props.getProperty("norm"));
-		Boolean noPunct = Boolean.parseBoolean(props.getProperty("noPunct"));
-		Boolean lower = Boolean.parseBoolean(props.getProperty("lower"));
-
-		// Info for output format
-		Boolean ssOut = Boolean.parseBoolean(props.getProperty("ssOut"));
-		Boolean vOut = Boolean.parseBoolean(props.getProperty("vOut"));
-
-		ArrayList<ArrayList<String>> references = new ArrayList<ArrayList<String>>();
-
-		// Read in references
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in,
 				"UTF-8"));
-		Integer refCount = Integer.parseInt(in.readLine());
-		boolean done = false;
-		while (!done) {
-			ArrayList<String> refs = new ArrayList<String>();
-			for (int i = 0; i < refCount; i++) {
-				String line = in.readLine();
-				if (line.equals("|||")) {
-					done = true;
-					break;
-				}
-				if (norm) {
-					line = Normalizer.normalizeLine(line, langID, !noPunct);
-					line = line.toLowerCase();
-				} else if (lower) {
-					line = line.toLowerCase();
-				}
-				refs.add(line);
-			}
-			if (!done)
-				references.add(refs);
-		}
-
-		// Score inputs
-		// idx ||| sentence
 		String line;
+
 		while ((line = in.readLine()) != null) {
-			String[] part = line.split("\\|\\|\\|");
-			int idx = Integer.parseInt(part[0].trim());
-			String test = part[1].trim();
-			if (norm) {
-				test = Normalizer.normalizeLine(test, langID, !noPunct);
-				test = test.toLowerCase();
-			} else if (lower) {
-				test = test.toLowerCase();
-			}
-			MeteorStats stats = scorer
-					.getMeteorStats(test, references.get(idx));
-			if (ssOut) {
+
+			if (line.startsWith("SCORE") || line.startsWith("score")) {
+				String[] part = line.split("\\|\\|\\|");
+				if (part.length < 3) {
+					System.out
+							.println("Error: specify hypothesis and at least one reference");
+					continue;
+				}
+				ArrayList<String> refs = new ArrayList<String>();
+				for (int i = 1; i < part.length - 1; i++)
+					refs.add(part[i].trim());
+				String test = part[part.length - 1].trim();
+				MeteorStats stats = scorer.getMeteorStats(test, refs);
 				System.out.println(stats.toString());
-			} else if (vOut) {
-				System.out.println(stats.precision + "\t" + stats.recall + "\t"
-						+ stats.fragPenalty + "\t" + stats.score);
-			} else {
+
+			} else if (line.startsWith("EVAL") || line.startsWith("eval")) {
+				String[] part = line.split("\\|\\|\\|");
+				if (part.length < 2) {
+					System.out.println("Error: specify Meteor stats");
+					continue;
+				}
+				MeteorStats stats = new MeteorStats(part[1].trim());
+				scorer.computeMetrics(stats);
 				System.out.println(stats.score);
+
+			} else {
+				System.out.println("Error: specify SCORE or EVAL");
 			}
 		}
-
-		// Finished scoring
-		in.close();
 	}
 
 	private static void printVerboseStats(MeteorStats stats,
@@ -1142,11 +1111,10 @@ public class Meteor {
 		Boolean norm = Boolean.parseBoolean(props.getProperty("norm"));
 		Boolean lower = Boolean.parseBoolean(props.getProperty("lower"));
 		Boolean noPunct = Boolean.parseBoolean(props.getProperty("noPunct"));
-		Boolean mira = Boolean.parseBoolean(props.getProperty("mira"));
 		Boolean nBest = Boolean.parseBoolean(props.getProperty("nBest"));
 
-		if (mira || nBest) {
-			// MIRA and NBest scoring handle their own normalization
+		if (nBest) {
+			// NBest scoring handles its own normalization
 			config.setNormalization(Constants.NO_NORMALIZE);
 		} else if (norm) {
 			if (noPunct)
@@ -1210,8 +1178,6 @@ public class Meteor {
 				.println("-mira                           Input is in MIRA format");
 		System.out
 				.println("                                  (Use '-' for test and reference files)");
-		System.out
-				.println("                                  (MIRA probably expects -ssOut too)");
 		System.out
 				.println("-nBest                          Input is in nBest format");
 		System.out
