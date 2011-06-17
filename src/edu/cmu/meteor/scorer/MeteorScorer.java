@@ -313,7 +313,7 @@ public class MeteorScorer {
 			frag = 0;
 		else
 			frag = ((double) stats.chunks)
-					/ ((stats.testTotalMatches + stats.referenceTotalMatches) / 2);
+					/ (((double) (stats.testTotalMatches + stats.referenceTotalMatches)) / 2);
 		// Fragmentation penalty
 		stats.fragPenalty = gamma * Math.pow(frag, beta);
 		// Score
