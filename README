@@ -8,8 +8,6 @@ Satanjeev "Bano" Banerjee (satanjeev at cs.cmu.edu)
 Alon Lavie (alavie at cs.cmu.edu)
 
 Carnegie Mellon University
-Pittsburgh, PA, USA
-
 
 Note: See xray/README for directions using Meteor X-Ray
 
@@ -57,8 +55,8 @@ Usage: java -Xmx2G -jar meteor-*.jar <test> <reference> [options]
 
 Options:
 -l language                     One of: en cz de es fr ar
--t task                         One of: rank adq hter li
--p 'alpha beta gamma'           Custom parameters (overrides default)
+-t task                         One of: rank adq hter li tune
+-p 'alpha beta gamma delta'     Custom parameters (overrides default)
 -m 'module1 module2 ...'        Specify modules (overrides default)
                                   Any of: exact stem synonym paraphrase
 -w 'weight1 weight2 ...'        Specify module weights (overrides default)
@@ -71,10 +69,12 @@ Options:
 -norm                           Tokenize / normalize punctuation and lowercase
                                   (Recommended unless scoring raw output with
                                    pretokenized references)
--lower                          Lowercase only (not required if -norm apecified)
+-lower                          Lowercase only (not required if -norm specified)
 -noPunct                        Do not consider punctuation when scoring
                                   (Not recommended unless special case)
 -sgml                           Input is in SGML format
+-mira                           Input is in MIRA format
+                                  (Use '-' for test and reference files)
 -nBest                          Input is in nBest format
 -oracle                         Output oracle translations (nBest only)
 -vOut                           Output verbose scores (P / R / frag / score)
@@ -93,7 +93,7 @@ The simplest way to run Meteor is as follows:
 
 $ java -Xmx2G -jar meteor-*.jar <test> <reference> -norm
 
-If your input is in SGML format, use:
+If files are in SGML format, use:
 
 $ java -Xmx2G -jar meteor-*.jar <test> <reference> -sgml -norm
 
@@ -104,16 +104,61 @@ Score the example test and reference files using the filtered paraphrase table:
 
 $ java -Xmx2G -jar meteor-*.jar example/test.sgm example/ref.sgm -sgml -norm
 
+You should see the following output:
+
+--------------------------------------------------------------------------------
+Meteor version: 1.3
+
+Eval ID:        meteor.1.3-en-norm-0.85_0.2_0.6_0.75-ex_st_sy_pa-1.0_0.6_0.8_0.6
+
+Language:       English
+Format:         SGML
+Task:           Ranking
+Modules:        exact stem synonym paraphrase
+Weights:        1.0 0.6 0.8 0.6
+Parameters:     0.85 0.2 0.6 0.75
+
+[newstest2009][cmu-combo] 
+
+           Test Matches                  Reference Matches
+Stage      Content  Function    Total    Content  Function    Total
+1            16052     21035    37087      16052     21035    37087
+2              553        13      566        555        11      566
+3              899       150     1049        932       117     1049
+4             3989      3275     7264       4151      2982     7133
+Total        21493     24473    45966      21690     24145    45835
+
+Test words:             64748
+Reference words:        66017
+Chunks:                 22847
+Precision:              0.6466761746295856
+Recall:                 0.62208024339228
+f1:                     0.6341398024007918
+fMean:                  0.6256496735692693
+Fragmentation penalty:  0.5218595115532901
+
+Final score:            0.299148440516935
+--------------------------------------------------------------------------------
+
+This includes the following in order:
+- Meteor version
+- Eval ID, a string that uniquely identifies all version, setting, and parameter
+  information to ensure that other data sets scored with Meteor can be scored
+  consistently and comparably.
+- Header describing settings and parameters
+- List of translations to be scored (in this case only the cmu-combo system on
+  one test set.
+- Match statistics
+- Summary statistics
+- Final score
+
 Score files for segment, document, and system level scores are produced,
-prefixed with the system name. The output from the above should match the
-example scores.
+prefixed with "meteor" or the spefied prefix. The output from the above should
+match the example scores.
 
 $ diff meteor-seg.scr example/meteor-seg.scr
 $ diff meteor-doc.scr example/meteor-doc.scr
 $ diff meteor-sys.scr example/meteor-sys.scr
-
-The Meteor jar can be run from any directory as long as correct paths are
-specified.
 
 
 3. Options: 
@@ -159,11 +204,11 @@ hter : Tuned to HTER scores from GALE P2 and P3.
        - English
 
 
-Parameters: -p 'alpha beta gamma'
+Parameters: -p 'alpha beta gamma delta'
 ---------------------------------
 
-Alternatively, the three parameters (alpha, beta, and gamma) can be specified
-manually. This is most often used when tuning Meteor to new data.
+Alternatively, the three parameters (alpha, beta, gamma, delta) can be
+specified manually. This is most often used when tuning Meteor to new data.
 
 
 Modules: -m 'module1 module2 ...'
@@ -261,6 +306,23 @@ SGML: -sgml
 -----------
 
 This specifies that input is in SGML format. (See Input/Output section)
+
+
+MIRA: -mira
+-----------
+
+Input is in cdec scoring format.  Use with "-" for test and reference files,
+reads from standard in and writes to standard out.  Lines are composed of the
+following:
+
+SCORE ||| reference 1 words ||| reference n words ||| hypothesis words
+
+Scores hypothesis against one or more references and returns line of sufficient
+statistics.
+
+EVAL ||| stats
+
+Calculates final scores using output of SCORE lines.
 
 
 N-Best: -nBest
@@ -503,7 +565,15 @@ missing segments.  To run this program, use:
 $ java -cp meteor-*.jar SGMtoPlaintext
 
 
-9. Licensing:
+9. Scripts:
+===========
+
+The scripts directory contains many useful scripts for training and debugging
+Meteor.  If you are brave enough to use them, most of them are reasonably
+commented.  You can also send email to mdenkows at cs.cmu.edu .
+
+
+10. Licensing:
 =============
 
 Meteor is released under the LGPL and includes some files subject to the
@@ -511,7 +581,7 @@ Meteor is released under the LGPL and includes some files subject to the
 details.
 
 
-10. Acknowledgements:
+11. Acknowledgements:
 =====================
 
 The following researchers have contributed to previous implementations
