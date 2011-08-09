@@ -203,6 +203,8 @@ adq  : Tuned to adequacy scores from NIST OpenMT09.
 hter : Tuned to HTER scores from GALE P2 and P3.
        - English
 
+li   : Language independent - exact matches only, parameters selected to
+       generalize well across languages
 
 Parameters: -p 'alpha beta gamma delta'
 ---------------------------------
