@@ -25,6 +25,8 @@ def main(argv):
       metavar='LBL', help='optional system label list, comma separated: label1,label2,...')
     opt.add_option('-u', '--unifont', action='store_true', dest='uni', \
       default=False, help='use unifont (use for non-western languages)')
+    opt.add_option('-r', '--right-to-left', action='store_true', dest='rtl', \
+      default=False, help='language written right to left')
 
     # Parse
     o, a = opt.parse_args()
@@ -38,6 +40,7 @@ def main(argv):
     prefix = o.prefix
     label = o.label
     uni = o.uni
+    rtl = o.rtl
     align_files = a
 
     seg_scores = []
@@ -87,6 +90,9 @@ def main(argv):
             # Print each alignment
             for i in range(len(alignments)):
                 a1, a2 = alignments[i]
+                if rtl:
+                    a1.rtl()
+                    a2.rtl()
                 if not check_printable(a1, a2):
                     continue
                 print_align_table(tex_out, a1, a2)
@@ -120,6 +126,8 @@ def main(argv):
             # Print each alignment
             for i in range(len(alignments)):
                 a1 = alignments[i]
+                if rtl:
+                    a1.rtl()
                 if not check_printable(a1):
                     continue
                 print_align_table(tex_out, a1)

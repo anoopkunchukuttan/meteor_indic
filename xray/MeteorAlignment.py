@@ -77,6 +77,14 @@ class ScoredAlignment(object):
                 for j in range(m2_l):
                     self.matrix[m1_s + i][m2_s + j] = MATCH_TYPES[mod]
 
+    # Reverse sentence 2 and alignment to render right to left
+    def rtl(self):
+        self.sen2.reverse()
+        for x in self.matrix:
+            x.reverse()
+        self.sen1_matched.reverse()
+
+
 class ScoredSegment(object):
     
     sen_len = 0
