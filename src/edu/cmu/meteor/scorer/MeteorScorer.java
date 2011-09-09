@@ -95,10 +95,10 @@ public class MeteorScorer {
 		gamma = parameters.get(2);
 		delta = parameters.get(3);
 		moduleWeights = config.getModuleWeights();
-		aligner = new Aligner(language, config.getModules(), config
-				.getModuleWeights(), config.getBeamSize(), config
-				.getSynDirURL(), config.getParaDirURL(),
-		// Best alignments for evaluation
+		aligner = new Aligner(language, config.getModules(),
+				config.getModuleWeights(), config.getBeamSize(),
+				config.getSynDirURL(), config.getParaDirURL(),
+				// Best alignments for evaluation
 				Constants.PARTIAL_COMPARE_TOTAL);
 
 		// Best weights for evaluation
@@ -152,6 +152,20 @@ public class MeteorScorer {
 	 */
 	public void updateModuleWeights(ArrayList<Double> moduleWeights) {
 		aligner.updateModuleWeights(moduleWeights);
+	}
+
+	/**
+	 * Get stats when test and reference are already tokenized and normalized
+	 * (Make sure you know what you're doing)
+	 * 
+	 * @param test
+	 * @param reference
+	 * @return
+	 */
+	public MeteorStats getMeteorStats(ArrayList<String> test,
+			ArrayList<String> reference) {
+		Alignment alignment = aligner.align(test, reference);
+		return getMeteorStats(alignment);
 	}
 
 	/**
@@ -281,8 +295,7 @@ public class MeteorScorer {
 					* moduleWeights.get(i) * delta;
 		for (int i = 0; i < moduleWeights.size(); i++)
 			stats.referenceWeightedMatches += stats.referenceStageMatchesContent
-					.get(i)
-					* moduleWeights.get(i) * delta;
+					.get(i) * moduleWeights.get(i) * delta;
 
 		// Apply module weights and delta to test and reference matches
 		// (Function)
@@ -291,8 +304,7 @@ public class MeteorScorer {
 					* moduleWeights.get(i) * (1.0 - delta);
 		for (int i = 0; i < moduleWeights.size(); i++)
 			stats.referenceWeightedMatches += stats.referenceStageMatchesFunction
-					.get(i)
-					* moduleWeights.get(i) * (1.0 - delta);
+					.get(i) * moduleWeights.get(i) * (1.0 - delta);
 
 		// Precision = test matches / test length
 		stats.precision = stats.testWeightedMatches / stats.testWeightedLength;
