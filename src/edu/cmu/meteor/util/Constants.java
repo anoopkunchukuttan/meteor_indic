@@ -60,7 +60,7 @@ public class Constants {
 	public static final URL DEFAULT_SYN_DIR_URL = ClassLoader
 			.getSystemResource("synonym");
 
-	public static final URL DEFAULT_FUNCTION_DIR_URL = ClassLoader
+	public static final URL DEFAULT_WORD_DIR_URL = ClassLoader
 			.getSystemResource("function");
 
 	/*

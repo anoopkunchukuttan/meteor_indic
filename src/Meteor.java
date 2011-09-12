@@ -972,6 +972,9 @@ public class Meteor {
 			} else if (args[curArg].equals("-x")) {
 				props.setProperty("beamSize", args[curArg + 1]);
 				curArg += 2;
+			} else if (args[curArg].equals("-s")) {
+				props.setProperty("wordDir", args[curArg + 1]);
+				curArg += 2;
 			} else if (args[curArg].equals("-d")) {
 				props.setProperty("synDir", args[curArg + 1]);
 				curArg += 2;
@@ -1085,6 +1088,17 @@ public class Meteor {
 		if (beamSize != null)
 			config.setBeamSize(Integer.parseInt(beamSize));
 
+		// Word list dir
+		String wordDir = (props.getProperty("wordDir"));
+		if (wordDir != null)
+			try {
+				// This should not ever throw a malformed url exception
+				config.setWordDirURL((new File(wordDir)).toURI().toURL());
+			} catch (MalformedURLException ex) {
+				System.err.println("Error: Word list directory URL NOT set");
+				ex.printStackTrace();
+			}
+
 		// Synonym dir
 		String synDir = (props.getProperty("synDir"));
 		if (synDir != null)
@@ -1152,6 +1166,8 @@ public class Meteor {
 		System.out
 				.println("-r refCount                     Number of references (plaintext only)");
 		System.out.println("-x beamSize                     (default 40)");
+		System.out
+				.println("-s wordListDirectory            (if not default for language)");
 		System.out
 				.println("-d synonymDirectory             (if not default for language)");
 		System.out

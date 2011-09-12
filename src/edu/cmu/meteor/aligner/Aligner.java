@@ -46,7 +46,8 @@ public class Aligner {
 	public Aligner(String language, ArrayList<Integer> modules) {
 		this.beamSize = Constants.DEFAULT_BEAM_SIZE;
 		this.partialComparator = Constants.PARTIAL_COMPARE_TOTAL;
-		setupModules(language, modules, Constants.DEFAULT_SYN_DIR_URL,
+		setupModules(language, modules, Constants.DEFAULT_WORD_DIR_URL,
+				Constants.DEFAULT_SYN_DIR_URL,
 				Constants.getDefaultParaFileURL(Constants
 						.getLanguageID(Constants.normLanguageName(language))));
 	}
@@ -55,7 +56,8 @@ public class Aligner {
 			ArrayList<Double> moduleWeights) {
 		this.beamSize = Constants.DEFAULT_BEAM_SIZE;
 		this.partialComparator = Constants.PARTIAL_COMPARE_TOTAL;
-		setupModules(language, modules, Constants.DEFAULT_SYN_DIR_URL,
+		setupModules(language, modules, Constants.DEFAULT_WORD_DIR_URL,
+				Constants.DEFAULT_SYN_DIR_URL,
 				Constants.getDefaultParaFileURL(Constants
 						.getLanguageID(Constants.normLanguageName(language))));
 		this.moduleWeights = moduleWeights;
@@ -65,37 +67,51 @@ public class Aligner {
 			ArrayList<Double> moduleWeights, int beamSize) {
 		this.beamSize = beamSize;
 		this.partialComparator = Constants.PARTIAL_COMPARE_TOTAL;
-		setupModules(language, modules, Constants.DEFAULT_SYN_DIR_URL,
+		setupModules(language, modules, Constants.DEFAULT_WORD_DIR_URL,
+				Constants.DEFAULT_SYN_DIR_URL,
 				Constants.getDefaultParaFileURL(Constants
 						.getLanguageID(Constants.normLanguageName(language))));
 		this.moduleWeights = moduleWeights;
 	}
 
 	public Aligner(String language, ArrayList<Integer> modules,
-			ArrayList<Double> moduleWeights, int beamSize, URL synDirURL) {
+			ArrayList<Double> moduleWeights, int beamSize, URL wordDirURL) {
 		this.beamSize = beamSize;
 		this.partialComparator = Constants.PARTIAL_COMPARE_TOTAL;
-		setupModules(language, modules, synDirURL, Constants
-				.getDefaultParaFileURL(Constants.getLanguageID(Constants
-						.normLanguageName(language))));
+		setupModules(language, modules, wordDirURL,
+				Constants.DEFAULT_SYN_DIR_URL,
+				Constants.getDefaultParaFileURL(Constants
+						.getLanguageID(Constants.normLanguageName(language))));
 		this.moduleWeights = moduleWeights;
 	}
 
 	public Aligner(String language, ArrayList<Integer> modules,
-			ArrayList<Double> moduleWeights, int beamSize, URL synDirURL,
-			URL paraDirURL) {
+			ArrayList<Double> moduleWeights, int beamSize, URL wordDirURL,
+			URL synDirURL) {
 		this.beamSize = beamSize;
 		this.partialComparator = Constants.PARTIAL_COMPARE_TOTAL;
-		setupModules(language, modules, synDirURL, paraDirURL);
+		setupModules(language, modules, wordDirURL, synDirURL,
+				Constants.getDefaultParaFileURL(Constants
+						.getLanguageID(Constants.normLanguageName(language))));
 		this.moduleWeights = moduleWeights;
 	}
 
 	public Aligner(String language, ArrayList<Integer> modules,
-			ArrayList<Double> moduleWeights, int beamSize, URL synDirURL,
-			URL paraDirURL, Comparator<PartialAlignment> partialComparator) {
+			ArrayList<Double> moduleWeights, int beamSize, URL wordDirURL,
+			URL synDirURL, URL paraDirURL) {
+		this.beamSize = beamSize;
+		this.partialComparator = Constants.PARTIAL_COMPARE_TOTAL;
+		setupModules(language, modules, wordDirURL, synDirURL, paraDirURL);
+		this.moduleWeights = moduleWeights;
+	}
+
+	public Aligner(String language, ArrayList<Integer> modules,
+			ArrayList<Double> moduleWeights, int beamSize, URL wordDirURL,
+			URL synDirURL, URL paraDirURL,
+			Comparator<PartialAlignment> partialComparator) {
 		this.beamSize = beamSize;
 		this.partialComparator = partialComparator;
-		setupModules(language, modules, synDirURL, paraDirURL);
+		setupModules(language, modules, wordDirURL, synDirURL, paraDirURL);
 		this.moduleWeights = moduleWeights;
 	}
 
@@ -122,7 +138,7 @@ public class Aligner {
 	}
 
 	private void setupModules(String language, ArrayList<Integer> modules,
-			URL synDirURL, URL paraDirURL) {
+			URL wordDirURL, URL synDirURL, URL paraDirURL) {
 		this.language = Constants.normLanguageName(language);
 		this.moduleCount = modules.size();
 		this.modules = modules;
@@ -162,11 +178,9 @@ public class Aligner {
 		}
 		this.functionWords = new HashSet<String>();
 		try {
-			URL wordFileURL = new URL(Constants.DEFAULT_FUNCTION_DIR_URL
-					.toString()
-					+ "/" + this.language + ".words");
 			BufferedReader in = new BufferedReader(new InputStreamReader(
-					wordFileURL.openStream(), "UTF-8"));
+					(new URL(wordDirURL.toString() + "/" + this.language
+							+ ".words")).openStream(), "UTF-8"));
 			String line;
 			while ((line = in.readLine()) != null) {
 				this.functionWords.add(line);
@@ -234,8 +248,8 @@ public class Aligner {
 		boolean[] line2UsedWords = new boolean[a.words2.size()];
 		Arrays.fill(line2UsedWords, false);
 
-		PartialAlignment initialPath = new PartialAlignment(new Match[a.words2
-				.size()], line1UsedWords, line2UsedWords);
+		PartialAlignment initialPath = new PartialAlignment(
+				new Match[a.words2.size()], line1UsedWords, line2UsedWords);
 
 		// One-to-one, non-overlapping matches are definite
 		for (int i = 0; i < s.matches.size(); i++) {
