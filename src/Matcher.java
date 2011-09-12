@@ -163,7 +163,8 @@ public class Matcher {
 
 		// Construct aligner
 		Aligner aligner = new Aligner(language, modules, moduleWeights,
-				beamSize, synURL, paraURL, partialComparator);
+				beamSize, Constants.DEFAULT_WORD_DIR_URL, synURL, paraURL,
+				partialComparator);
 
 		// Open files
 		BufferedReader inTest = null;
