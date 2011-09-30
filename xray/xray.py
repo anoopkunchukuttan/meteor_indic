@@ -15,6 +15,8 @@ def main(argv):
       usage='Usage: %prog [options] <align.out> [align.out2 ...]')
     opt.add_option('-c', '--compare', action='store_true', dest='compare', \
       default=False, help='compare alignments of two result sets (only first 2 input files used)')
+    opt.add_option('-b', '--best-first', action='store_true', dest='bestfirst', \
+      default=False, help='Sort by improvement of sys2 over sys1')
     opt.add_option('-n', '--no-align', action='store_true', dest='noalign', \
       default=False, help='do not visualize alignments')
     opt.add_option('-x', '--max', dest='maxalign', default='-1', \
@@ -35,6 +37,7 @@ def main(argv):
         opt.print_help()
         sys.exit(1)
     compare = o.compare
+    best_first = o.bestfirst
     no_align = o.noalign
     max_align = int(o.maxalign)
     prefix = o.prefix
@@ -77,7 +80,8 @@ def main(argv):
         seg_scores.append(extract_scores(align_1))
         seg_scores.append(extract_scores(align_2))
         alignments = zip(align_1, align_2)
-        alignments.sort(cmp=cmp_score_diff, reverse=True)
+        alignments.sort(cmp=cmp_score_best if best_first else cmp_score_diff,
+          reverse=True)
         if not no_align:
             # Write tex file
             tex_out = open(shutil.os.path.join(pre_dir, tex_file), 'w')
