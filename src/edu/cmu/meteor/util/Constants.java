@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 import org.tartarus.snowball.SnowballStemmer;
+import org.tartarus.snowball.ext.danishStemmer;
 import org.tartarus.snowball.ext.englishStemmer;
 import org.tartarus.snowball.ext.frenchStemmer;
 import org.tartarus.snowball.ext.germanStemmer;
@@ -79,6 +80,7 @@ public class Constants {
 	public static final int LANG_AR = 5;
 	public static final int LANG_PT = 6;
 	public static final int LANG_RU = 7;
+	public static final int LANG_DA = 8;
 	public static final int LANG_OTHER = 99;
 
 	/* Adequacy task */
@@ -93,6 +95,7 @@ public class Constants {
 			{ 0.00, 0.05, 0.80, 0.50 }, // Arabic
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
 	};
 	public static final double WEIGHT_ADQ[][] = {
 			//
@@ -104,6 +107,7 @@ public class Constants {
 			{ 1.0, 0.6, 0.0, 0.0 }, // Arabic
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
 	};
 
 	/* Ranking task */
@@ -118,6 +122,7 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.50 }, // Arabic
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
 	};
 	public static final double WEIGHT_RANK[][] = {
 			//
@@ -129,6 +134,7 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
 	};
 
 	/* HTER task */
@@ -143,6 +149,7 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
 	};
 	public static final double WEIGHT_HTER[][] = {
 			//
@@ -154,6 +161,7 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
 	};
 
 	public static final int TASK_DEFAULT = TASK_RANK;
@@ -223,7 +231,8 @@ public class Constants {
 			return "portuguese";
 		if (lang.equals("russian") || lang.equals("ru"))
 			return "russian";
-
+		if (lang.equals("danish") || lang.equals("da"))
+			return "danish";
 		// Not listed
 		return "other";
 	}
@@ -245,7 +254,8 @@ public class Constants {
 			return LANG_PT;
 		if (language.equals("russian"))
 			return LANG_RU;
-
+		if (language.equals("danish"))
+			return LANG_DA;
 		// Not found
 		return LANG_OTHER;
 	}
@@ -267,6 +277,8 @@ public class Constants {
 			return "portuguese";
 		if (langID == LANG_RU)
 			return "russian";
+		if (langID == LANG_DA)
+			return "danish";
 
 		// Not found
 		return "other";
@@ -289,7 +301,8 @@ public class Constants {
 			return "pt";
 		if (langID == LANG_RU)
 			return "ru";
-
+		if (langID == LANG_DA)
+			return "da";
 		// Not found
 		return "xx";
 	}
@@ -496,7 +509,8 @@ public class Constants {
 			return new portugueseStemmer();
 		if (language.equals("russian"))
 			return new russianStemmer();
-
+		if (language.equals("danish"))
+			return new danishStemmer();
 		// Not found
 		return new englishStemmer();
 	}
@@ -532,6 +546,9 @@ public class Constants {
 			modules.add(MODULE_EXACT);
 			modules.add(MODULE_STEM);
 		} else if (langID == LANG_RU) {
+			modules.add(MODULE_EXACT);
+			modules.add(MODULE_STEM);
+		} else if (langID == LANG_DA) {
 			modules.add(MODULE_EXACT);
 			modules.add(MODULE_STEM);
 		} else {
