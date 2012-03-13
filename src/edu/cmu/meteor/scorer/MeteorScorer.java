@@ -97,7 +97,8 @@ public class MeteorScorer {
 		moduleWeights = config.getModuleWeights();
 		aligner = new Aligner(language, config.getModules(),
 				config.getModuleWeights(), config.getBeamSize(),
-				config.getSynDirURL(), config.getParaDirURL(),
+				config.getWordDirURL(), config.getSynDirURL(),
+				config.getParaDirURL(),
 				// Best alignments for evaluation
 				Constants.PARTIAL_COMPARE_TOTAL);
 

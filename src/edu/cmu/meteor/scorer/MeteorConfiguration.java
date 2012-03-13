@@ -41,6 +41,7 @@ public class MeteorConfiguration {
 	private ArrayList<Integer> modules;
 	private ArrayList<Double> moduleWeights;
 	private int beamSize;
+	private URL wordDirURL;
 	private URL synDirURL;
 	private URL paraDirURL;
 
@@ -51,6 +52,7 @@ public class MeteorConfiguration {
 		setLanguage("english");
 		setTask("default");
 		setBeamSize(Constants.DEFAULT_BEAM_SIZE);
+		setWordDirURL(Constants.DEFAULT_WORD_DIR_URL);
 		setSynDirURL(Constants.DEFAULT_SYN_DIR_URL);
 		setParaFileURL(Constants.getDefaultParaFileURL(langID));
 		setNormalization(Constants.NO_NORMALIZE);
@@ -147,8 +149,9 @@ public class MeteorConfiguration {
 
 	public void setParameters(String language, String taskName) {
 		setTaskName(taskName);
-		parameters = Constants.getParameters(Constants.getLanguageID(Constants
-				.normLanguageName(language)), Constants.getTaskID(taskName));
+		parameters = Constants.getParameters(
+				Constants.getLanguageID(Constants.normLanguageName(language)),
+				Constants.getTaskID(taskName));
 	}
 
 	public ArrayList<Integer> getModules() {
@@ -190,6 +193,20 @@ public class MeteorConfiguration {
 	public void setModuleWeights(ArrayList<Double> moduleScores) {
 		setTaskName("custom");
 		this.moduleWeights = new ArrayList<Double>(moduleScores);
+	}
+
+	public URL getWordDirURL() {
+		return wordDirURL;
+	}
+
+	public void setWordDirURL(URL wordDirURL) {
+		try {
+			// This should not ever throw a malformed url exception
+			this.wordDirURL = new URL(wordDirURL.toString());
+		} catch (MalformedURLException ex) {
+			System.err.println("Error: Word list directory URL NOT set");
+			ex.printStackTrace();
+		}
 	}
 
 	public URL getSynDirURL() {

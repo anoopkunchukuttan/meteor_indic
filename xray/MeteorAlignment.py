@@ -121,6 +121,10 @@ def read_align_file(align_file, max_align=-1, a_type=ALIGN_METEOR):
         alignments.append(a)
     return alignments
 
+def cmp_score_best(x, y):
+    diff = (x[0].score - x[1].score) - (y[0].score - y[1].score)
+    return -1 if diff > 0 else 1 if diff < 0 else 0
+
 def cmp_score_diff(x, y):
     diff = abs(x[0].score - x[1].score) - abs(y[0].score - y[1].score)
     return 1 if diff > 0 else -1 if diff < 0 else 0
