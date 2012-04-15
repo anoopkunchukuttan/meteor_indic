@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Properties;
-import java.util.StringTokenizer;
 
 import edu.cmu.meteor.scorer.MeteorConfiguration;
 import edu.cmu.meteor.scorer.MeteorScorer;
@@ -32,11 +31,13 @@ public class StatsScorer {
 			System.out.println();
 			System.out.println("Options:");
 			System.out.println("-l language\t\t\tOne of: en cz de es fr ar");
-			System.out.println("-t task\t\t\t\tOne of: adq rank hter li tune");
+			System.out
+					.println("-t task\t\t\t\tOne of: adq util rank hter li tune");
 			System.out
 					.println("-p 'alpha beta gamma delta'\t\tCustom parameters (overrides default)");
 			System.out
 					.println("-w 'weight1 weight2 ...'\tSpecify module weights (overrides default)");
+			System.out.println("-ch for character-based P and R");
 			return;
 		}
 
@@ -56,6 +57,9 @@ public class StatsScorer {
 			} else if (args[arg].equals("-w")) {
 				props.setProperty("moduleWeights", args[arg + 1]);
 				arg += 2;
+			} else if (args[arg].equals("-ch")) {
+				props.setProperty("charBased", "true");
+				arg += 1;
 			} else {
 				System.err.println("Unknown option \"" + args[arg] + "\"");
 				System.exit(1);
@@ -63,33 +67,7 @@ public class StatsScorer {
 		}
 
 		// Create configuration
-		MeteorConfiguration config = new MeteorConfiguration();
-
-		String language = props.getProperty("language");
-		if (language != null)
-			config.setLanguage(language);
-
-		String task = props.getProperty("task");
-		if (task != null)
-			config.setTask(task);
-
-		String parameters = props.getProperty("parameters");
-		if (parameters != null) {
-			ArrayList<Double> params = new ArrayList<Double>();
-			StringTokenizer tok = new StringTokenizer(parameters);
-			while (tok.hasMoreTokens())
-				params.add(Double.parseDouble(tok.nextToken()));
-			config.setParameters(params);
-		}
-
-		String weights = props.getProperty("moduleWeights");
-		if (weights != null) {
-			ArrayList<Double> w = new ArrayList<Double>();
-			StringTokenizer tok = new StringTokenizer(weights);
-			while (tok.hasMoreTokens())
-				w.add(Double.parseDouble(tok.nextToken()));
-			config.setModuleWeights(w);
-		}
+		MeteorConfiguration config = new MeteorConfiguration(props);
 
 		// Do not load resources for any modules
 		ArrayList<Integer> none = new ArrayList<Integer>();

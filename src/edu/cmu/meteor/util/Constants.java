@@ -164,6 +164,33 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
 	};
 
+	/* Utility task */
+	public static final int TASK_UTIL = 3;
+	public static final double PARAM_UTIL[][] = {
+			//
+			{ 0.0, 0.0, 0.0, 0.0 }, // English
+			{ 0.0, 0.0, 0.0, 0.0 }, // Czech
+			{ 0.0, 0.0, 0.0, 0.0 }, // French
+			{ 0.0, 0.0, 0.0, 0.0 }, // Spanish
+			{ 0.0, 0.0, 0.0, 0.0 }, // German
+			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic
+			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
+			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
+	};
+	public static final double WEIGHT_UTIL[][] = {
+			//
+			{ 0.0, 0.0, 0.0, 0.0 }, // English
+			{ 0.0, 0.0, 0.0, 0.0 }, // Czech
+			{ 0.0, 0.0, 0.0, 0.0 }, // French
+			{ 0.0, 0.0, 0.0, 0.0 }, // Spanish
+			{ 0.0, 0.0, 0.0, 0.0 }, // German
+			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic
+			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
+			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
+	};
+
 	public static final int TASK_DEFAULT = TASK_RANK;
 
 	/* Language-independent task */
@@ -390,6 +417,8 @@ public class Constants {
 			return TASK_LI;
 		if (task.equals("tune"))
 			return TASK_TUNE;
+		if (task.equals("util"))
+			return TASK_UTIL;
 
 		// Other
 		return TASK_CUSTOM;
@@ -406,6 +435,8 @@ public class Constants {
 			return "li";
 		if (task == TASK_TUNE)
 			return "tune";
+		if (task == TASK_UTIL)
+			return "util";
 
 		// Other
 		return "custom";
@@ -426,6 +457,8 @@ public class Constants {
 			return "Language-Independent";
 		if (task == TASK_TUNE)
 			return "Tune";
+		if (task == TASK_UTIL)
+			return "Translator-Utility";
 
 		// Other
 		return "Custom";
@@ -443,6 +476,8 @@ public class Constants {
 			TASK_PARAM = PARAM_RANK[langID];
 		} else if (taskID == TASK_HTER) {
 			TASK_PARAM = PARAM_HTER[langID];
+		} else if (taskID == TASK_UTIL) {
+			TASK_PARAM = PARAM_UTIL[langID];
 		} else {
 			// Assume TASK_ADQ
 			TASK_PARAM = PARAM_ADQ[langID];
@@ -473,6 +508,8 @@ public class Constants {
 			TASK_WEIGHT = WEIGHT_RANK[langID];
 		} else if (taskID == TASK_HTER) {
 			TASK_WEIGHT = WEIGHT_HTER[langID];
+		} else if (taskID == TASK_UTIL) {
+			TASK_WEIGHT = WEIGHT_UTIL[langID];
 		} else {
 			// Assume TASK_ADQ
 			TASK_WEIGHT = WEIGHT_ADQ[langID];

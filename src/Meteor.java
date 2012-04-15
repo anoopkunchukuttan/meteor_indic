@@ -8,14 +8,12 @@
  */
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -23,16 +21,11 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Properties;
-import java.util.StringTokenizer;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Semaphore;
 
 import edu.cmu.meteor.scorer.MeteorConfiguration;
 import edu.cmu.meteor.scorer.MeteorScorer;
 import edu.cmu.meteor.scorer.MeteorStats;
 import edu.cmu.meteor.util.Constants;
-import edu.cmu.meteor.util.Normalizer;
 import edu.cmu.meteor.util.SGMData;
 
 public class Meteor {
@@ -51,17 +44,15 @@ public class Meteor {
 
 		// Use command line options to create props, configuration
 		Properties props = createPropertiesFromArgs(args, 2);
-		MeteorConfiguration config = createConfiguration(props);
+		MeteorConfiguration config = new MeteorConfiguration(props);
 
 		// Print settings
 		Boolean ssOut = Boolean.parseBoolean(props.getProperty("ssOut"));
 		Boolean sgml = Boolean.parseBoolean(props.getProperty("sgml"));
 		Boolean mira = Boolean.parseBoolean(props.getProperty("mira"));
-		Boolean nBest = Boolean.parseBoolean(props.getProperty("nBest"));
-		Boolean oracle = Boolean.parseBoolean(props.getProperty("oracle"));
 
 		String format = sgml ? "SGML" : "plaintext";
-		if (!oracle && !ssOut && !mira) {
+		if (!ssOut && !mira) {
 			System.out.println("Meteor version: " + Constants.VERSION);
 			System.out.println();
 			System.out.println("Eval ID:        " + config.getConfigID());
@@ -86,15 +77,9 @@ public class Meteor {
 		}
 
 		// MIRA check
-		if (mira && (sgml || nBest)) {
+		if (mira && sgml) {
 			System.err
 					.println("Warning: MIRA incompatible with other modes - using MIRA only");
-		}
-
-		// SGML / NBest check
-		if (sgml && nBest) {
-			System.err
-					.println("Warning: nBest incompatible with SGML - using SGML only");
 		}
 
 		MeteorScorer scorer = new MeteorScorer(config);
@@ -117,11 +102,7 @@ public class Meteor {
 			}
 		} else
 			try {
-				if (nBest) {
-					scoreNBest(scorer, props, config, testFile, refFile);
-				} else {
-					scorePlaintext(scorer, props, config, testFile, refFile);
-				}
+				scorePlaintext(scorer, props, config, testFile, refFile);
 			} catch (IOException ex) {
 				System.err.println("Error: Could not score text files:");
 				ex.printStackTrace();
@@ -226,286 +207,6 @@ public class Meteor {
 		if (!ssOut) {
 			scorer.computeMetrics(aggStats);
 			printVerboseStats(aggStats, config);
-		}
-	}
-
-	/**
-	 * Input is in nBest format, output will be in nBest score format
-	 */
-
-	private static void scoreNBest(final MeteorScorer scorer, Properties props,
-			final MeteorConfiguration config, String testFile, String refFile)
-			throws IOException {
-
-		// Info for normalization since it will be done outside of the scorer
-		int langID = config.getLangID();
-		Boolean norm = Boolean.parseBoolean(props.getProperty("norm"));
-		Boolean noPunct = Boolean.parseBoolean(props.getProperty("noPunct"));
-		Boolean lower = Boolean.parseBoolean(props.getProperty("lower"));
-
-		int refCount = getRefCount(props);
-		final Boolean oracle = Boolean
-				.parseBoolean(props.getProperty("oracle"));
-		final Boolean ssOut = Boolean.parseBoolean(props.getProperty("ssOut"));
-		final Boolean vOut = Boolean.parseBoolean(props.getProperty("vOut"));
-
-		// Number of jobs to run simultaneously
-		int jobs = 1;
-		String jobString = props.getProperty("jobs");
-		if (jobString != null)
-			jobs = Integer.parseInt(jobString);
-
-		final MeteorWorker.Request.Completion nextSegment = new MeteorWorker.Request.Completion();
-		final MeteorWorker.Request.Completion doneScoring = new MeteorWorker.Request.Completion();
-		final MeteorWorker.Request.Completion errorScoring = new MeteorWorker.Request.Completion();
-
-		final ArrayBlockingQueue<MeteorWorker.Request> toScore = new ArrayBlockingQueue<MeteorWorker.Request>(
-				jobs * 2);
-		final ArrayBlockingQueue<MeteorWorker.Request.Completion> toOutput = new ArrayBlockingQueue<MeteorWorker.Request.Completion>(
-				jobs * 2);
-
-		ArrayList<Thread> scorers = new ArrayList<Thread>(jobs);
-		for (int i = 0; i < jobs; i++) {
-			Thread worker = new Thread(new MeteorWorker(scorer, toScore));
-			worker.start();
-			scorers.add(worker);
-		}
-
-		Thread printer = new Thread(new Runnable() {
-			public void run() {
-				MeteorStats bestAgg = new MeteorStats();
-				MeteorStats firstAgg = new MeteorStats();
-				String oracleTrans = "";
-				MeteorWorker.Request.Completion task = null;
-				int curSeg = 0;
-				while (task != doneScoring) {
-					int segNum = 0;
-					MeteorStats best = null;
-					MeteorStats first = null;
-					while (true) {
-						try {
-							task = toOutput.take();
-						} catch (java.lang.InterruptedException e) {
-							return;
-						}
-						if (task == nextSegment)
-							break;
-						if (task == doneScoring)
-							break;
-						if (task == errorScoring)
-							return;
-						MeteorStats stats;
-						try {
-							stats = task.get();
-						} catch (java.lang.InterruptedException e) {
-							return;
-						}
-						if (first == null) {
-							oracleTrans = task.test;
-							best = stats;
-							first = stats;
-						} else if (stats.score > best.score) {
-							oracleTrans = task.test;
-							best = stats;
-						}
-						if (ssOut) {
-							System.out.println(stats.toString());
-						} else if (vOut) {
-							System.out.println("Segment " + curSeg
-									+ " translation " + (segNum + 1)
-									+ " score:\t" + stats.precision + "\t"
-									+ stats.recall + "\t" + stats.fragPenalty
-									+ "\t" + stats.score);
-						} else if (!oracle)
-							System.out.println("Segment " + curSeg
-									+ " translation " + (segNum + 1)
-									+ " score:\t" + stats.score);
-						segNum++;
-					}
-					if (first != null) {
-						bestAgg.addStats(best);
-						firstAgg.addStats(first);
-					}
-					if (task == nextSegment) {
-						if (oracle) {
-							System.out.println(oracleTrans);
-						} else {
-							System.out.println();
-						}
-					}
-					curSeg++;
-				}
-				if (!oracle && !ssOut) {
-					scorer.computeMetrics(bestAgg);
-					scorer.computeMetrics(firstAgg);
-					printVerboseStats(bestAgg, config,
-							"Best-choice translation statistics\n");
-					printVerboseStats(firstAgg, config,
-							"\nFirst-sentence translation statistics\n");
-				}
-			}
-		});
-		printer.start();
-
-		// Reading thread
-		BufferedReader testRead = new BufferedReader(new InputStreamReader(
-				new FileInputStream(testFile), "UTF-8"));
-		BufferedReader refRead = new BufferedReader(new InputStreamReader(
-				new FileInputStream(refFile), "UTF-8"));
-		try {
-			String line;
-			while ((line = testRead.readLine()) != null) {
-				int segCount = Integer.parseInt(line);
-
-				// Read references
-				ArrayList<String> refs = new ArrayList<String>(refCount);
-				for (int refNum = 0; refNum < refCount; refNum++) {
-					String ref = refRead.readLine();
-					if (ref == null) {
-						System.err.println("Error: too few references");
-						toOutput.put(doneScoring);
-						System.exit(1);
-					}
-					// Normalize refs as they are read
-					if (norm) {
-						ref = Normalizer.normalizeLine(ref, langID, !noPunct);
-						ref = ref.toLowerCase();
-					} else if (lower) {
-						ref = ref.toLowerCase();
-					}
-					refs.add(ref);
-				}
-
-				for (int segNum = 0; segNum < segCount; segNum++) {
-					String seg = testRead.readLine();
-					if (seg == null) {
-						System.err.println("Error: too few segments");
-						toOutput.put(doneScoring);
-						System.exit(1);
-					}
-					// Normalize segments as they are read
-					if (norm) {
-						seg = Normalizer.normalizeLine(seg, langID, !noPunct);
-						seg = seg.toLowerCase();
-					} else if (lower) {
-						seg = seg.toLowerCase();
-					}
-					MeteorWorker.Request request = new MeteorWorker.Request(
-							seg, refs);
-					toScore.put(request);
-					toOutput.put(request.getOut());
-				}
-				toOutput.put(nextSegment);
-			}
-			toOutput.put(doneScoring);
-		} catch (InterruptedException ex) {
-			ex.printStackTrace();
-			try {
-				toOutput.put(doneScoring);
-			} catch (InterruptedException ex2) {
-				ex.printStackTrace();
-				System.exit(1);
-			}
-			System.err.println("Error: Interrupted");
-			System.exit(1);
-		}
-
-		try {
-			printer.join();
-		} catch (InterruptedException ex) {
-			ex.printStackTrace();
-			System.exit(1);
-		}
-
-		try {
-			for (int i = 0; i < jobs; i++) {
-				toScore.put(MeteorWorker.DONE);
-			}
-		} catch (InterruptedException ex) {
-			ex.printStackTrace();
-			System.exit(1);
-		}
-
-		if (refRead.readLine() != null) {
-			System.err.println("Error: too many references");
-			System.exit(1);
-		}
-
-		testRead.close();
-		refRead.close();
-	}
-
-	// Used for multithreaded nBest scoring
-	static class MeteorWorker implements Runnable {
-
-		public static class Request {
-			public static class Completion {
-				private Semaphore wait;
-				private String test;
-				private MeteorStats result;
-
-				public Completion() {
-					wait = new Semaphore(0);
-				}
-
-				public Completion(String test) {
-					this.test = test;
-					wait = new Semaphore(0);
-				}
-
-				public void finish(MeteorStats value) {
-					result = value;
-					wait.release();
-				}
-
-				// Only call once to avoid deadlock
-				public MeteorStats get() throws InterruptedException {
-					wait.acquire();
-					return result;
-				}
-			}
-
-			protected String test;
-			protected ArrayList<String> references;
-
-			private Completion out;
-
-			// Null request
-			protected Request() {
-			}
-
-			public Request(String seg, ArrayList<String> refs) {
-				test = seg;
-				references = refs;
-				out = new Completion(test);
-			}
-
-			public Completion getOut() {
-				return out;
-			}
-		}
-
-		public static final Request DONE = new Request();
-
-		private MeteorScorer scorer;
-		private BlockingQueue<Request> requests;
-
-		public MeteorWorker(MeteorScorer scorer, BlockingQueue<Request> queue) {
-			this.scorer = new MeteorScorer(scorer);
-			requests = queue;
-		}
-
-		public void run() {
-			Request req;
-			try {
-				while ((req = requests.take()) != DONE) {
-					req.getOut().finish(
-							scorer.getMeteorStats(req.test, req.references));
-				}
-			} catch (InterruptedException ex) {
-				ex.printStackTrace();
-				return;
-			}
 		}
 	}
 
@@ -981,12 +682,12 @@ public class Meteor {
 			} else if (args[curArg].equals("-a")) {
 				props.setProperty("paraFile", args[curArg + 1]);
 				curArg += 2;
-			} else if (args[curArg].equals("-j")) {
-				props.setProperty("jobs", args[curArg + 1]);
-				curArg += 2;
 			} else if (args[curArg].equals("-f")) {
 				props.setProperty("filePrefix", args[curArg + 1]);
 				curArg += 2;
+			} else if (args[curArg].equals("-ch")) {
+				props.setProperty("charBased", "true");
+				curArg += 1;
 			} else if (args[curArg].equals("-writeAlignments")) {
 				props.setProperty("writeAlignments", "true");
 				curArg += 1;
@@ -995,12 +696,6 @@ public class Meteor {
 				curArg += 1;
 			} else if (args[curArg].equals("-lower")) {
 				props.setProperty("lower", "true");
-				curArg += 1;
-			} else if (args[curArg].equals("-nBest")) {
-				props.setProperty("nBest", "true");
-				curArg += 1;
-			} else if (args[curArg].equals("-oracle")) {
-				props.setProperty("oracle", "true");
 				curArg += 1;
 			} else if (args[curArg].equals("-sgml")) {
 				props.setProperty("sgml", "true");
@@ -1028,122 +723,6 @@ public class Meteor {
 		return props;
 	}
 
-	public static MeteorConfiguration createConfiguration(Properties props) {
-
-		// Default configuration
-		MeteorConfiguration config = new MeteorConfiguration();
-
-		// Language
-		String language = props.getProperty("language");
-		if (language != null)
-			config.setLanguage(language);
-
-		// Task
-		String task = props.getProperty("task");
-		if (task != null)
-			config.setTask(task);
-
-		// Parameters
-		String parameters = props.getProperty("parameters");
-		if (parameters != null) {
-			ArrayList<Double> params = new ArrayList<Double>();
-			StringTokenizer p = new StringTokenizer(parameters);
-			while (p.hasMoreTokens())
-				params.add(Double.parseDouble(p.nextToken()));
-			config.setParameters(params);
-		}
-
-		// Weights
-		String weights = props.getProperty("moduleWeights");
-		if (weights != null) {
-			ArrayList<Double> weightList = new ArrayList<Double>();
-			StringTokenizer wtok = new StringTokenizer(weights);
-			while (wtok.hasMoreTokens())
-				weightList.add(Double.parseDouble(wtok.nextToken()));
-			config.setModuleWeights(weightList);
-		}
-
-		// Modules
-		String modules = props.getProperty("modules");
-		if (modules != null) {
-			ArrayList<String> modList = new ArrayList<String>();
-			StringTokenizer mods = new StringTokenizer(modules);
-			while (mods.hasMoreTokens())
-				modList.add(mods.nextToken());
-			config.setModulesByName(modList);
-			// Update weights to match number of modules
-			ArrayList<Double> weightList = config.getModuleWeights();
-			ArrayList<Double> sizedWeightList = new ArrayList<Double>();
-			for (int i = 0; i < modList.size(); i++) {
-				if (i < weightList.size())
-					sizedWeightList.add(weightList.get(i));
-				else
-					sizedWeightList.add(0.0);
-			}
-			config.setModuleWeights(sizedWeightList);
-		}
-
-		// Beam size
-		String beamSize = props.getProperty("beamSize");
-		if (beamSize != null)
-			config.setBeamSize(Integer.parseInt(beamSize));
-
-		// Word list dir
-		String wordDir = (props.getProperty("wordDir"));
-		if (wordDir != null)
-			try {
-				// This should not ever throw a malformed url exception
-				config.setWordDirURL((new File(wordDir)).toURI().toURL());
-			} catch (MalformedURLException ex) {
-				System.err.println("Error: Word list directory URL NOT set");
-				ex.printStackTrace();
-			}
-
-		// Synonym dir
-		String synDir = (props.getProperty("synDir"));
-		if (synDir != null)
-			try {
-				// This should not ever throw a malformed url exception
-				config.setSynDirURL((new File(synDir)).toURI().toURL());
-			} catch (MalformedURLException ex) {
-				System.err.println("Error: Synonym directory URL NOT set");
-				ex.printStackTrace();
-			}
-
-		// Paraphrase file
-		String paraFile = (props.getProperty("paraFile"));
-		if (paraFile != null)
-			try {
-				// This should not ever throw a malformed url exception
-				config.setParaFileURL((new File(paraFile)).toURI().toURL());
-			} catch (MalformedURLException ex) {
-				System.err.println("Error: Paraphrase directory URL NOT set");
-				ex.printStackTrace();
-			}
-
-		// Normalization
-		Boolean norm = Boolean.parseBoolean(props.getProperty("norm"));
-		Boolean lower = Boolean.parseBoolean(props.getProperty("lower"));
-		Boolean noPunct = Boolean.parseBoolean(props.getProperty("noPunct"));
-		Boolean nBest = Boolean.parseBoolean(props.getProperty("nBest"));
-
-		if (nBest) {
-			// NBest scoring handles its own normalization
-			config.setNormalization(Constants.NO_NORMALIZE);
-		} else if (norm) {
-			if (noPunct)
-				config.setNormalization(Constants.NORMALIZE_NO_PUNCT);
-			else
-				config.setNormalization(Constants.NORMALIZE_KEEP_PUNCT);
-		} else if (lower) {
-			config.setNormalization(Constants.NORMALIZE_LC_ONLY);
-		} else {
-			config.setNormalization(Constants.NO_NORMALIZE);
-		}
-
-		return config;
-	}
-
 	private static void printUsage() {
 		System.out.println("Meteor version " + Constants.VERSION);
 		System.out.println();
@@ -1154,7 +733,9 @@ public class Meteor {
 		System.out
 				.println("-l language                     One of: en cz de es fr ar");
 		System.out
-				.println("-t task                         One of: rank adq hter li tune");
+				.println("-t task                         One of: rank util adq hter li tune");
+		System.out
+				.println("                                  util implies -ch");
 		System.out
 				.println("-p 'alpha beta gamma delta'     Custom parameters (overrides default)");
 		System.out
@@ -1173,9 +754,9 @@ public class Meteor {
 		System.out
 				.println("-a paraphraseFile               (if not default for language)");
 		System.out
-				.println("-j jobs                         Number of jobs to run (nBest only)");
-		System.out
 				.println("-f filePrefix                   Prefix for output files (default 'meteor')");
+		System.out
+				.println("-ch                             Character-based precision and recall");
 		System.out
 				.println("-norm                           Tokenize / normalize punctuation and lowercase");
 		System.out
@@ -1194,10 +775,6 @@ public class Meteor {
 				.println("-mira                           Input is in MIRA format");
 		System.out
 				.println("                                  (Use '-' for test and reference files)");
-		System.out
-				.println("-nBest                          Input is in nBest format");
-		System.out
-				.println("-oracle                         Output oracle translations (nBest only)");
 		System.out
 				.println("-vOut                           Output verbose scores (P / R / frag / score)");
 		System.out

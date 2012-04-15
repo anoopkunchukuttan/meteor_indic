@@ -64,8 +64,8 @@ Options:
 -x beamSize                     (default 40)
 -d synonymDirectory             (if not default for language)
 -a paraphraseFile               (if not default for language)
--j jobs                         Number of jobs to run (nBest only)
 -f filePrefix                   Prefix for output files (default 'meteor')
+-ch                             Character-based precision and recall
 -norm                           Tokenize / normalize punctuation and lowercase
                                   (Recommended unless scoring raw output with
                                    pretokenized references)
@@ -75,8 +75,6 @@ Options:
 -sgml                           Input is in SGML format
 -mira                           Input is in MIRA format
                                   (Use '-' for test and reference files)
--nBest                          Input is in nBest format
--oracle                         Output oracle translations (nBest only)
 -vOut                           Output verbose scores (P / R / frag / score)
 -ssOut                          Output sufficient statistics instead of scores
 -writeAlignments                Output alignments annotated with Meteor scores
@@ -265,14 +263,6 @@ This option should only be used to test external synonymy databases. By default,
 the included paraphrase tables will be used.
 
 
-Jobs: -j jobs
--------------
-
-This option (nBest scoring only) sets the number of jobs to use for scoring.  It
-is generally a good idea to set this to the number of CPUs on the machine
-running Meteor.
-
-
 File Prefix: -f filePrefix
 --------------------------
 
@@ -325,34 +315,6 @@ statistics.
 EVAL ||| stats
 
 Calculates final scores using output of SCORE lines.
-
-
-N-Best: -nBest
---------------
-
-This specifies that input is in nBest format with multiple translations for each
-segment. For each segment, a line containing a single number for the count of
-translations is followed by one translation per line. For example, an input file
-with translations for three segments might appear as follows:
-
-1
-This is a single translation.
-3
-This is hypothesis one.
-This is hypothesis two.
-This is hypothesis three.
-2
-This segment has two translations.
-This is the second translation.
-
-See Input/Output section for the output format.
-
-
-Oracle Best: -oracle
---------------------
-
-Also output the oracle 1-best translation for each segment when scoring an
-N-best list.
 
 
 Verbose Output: -vOut

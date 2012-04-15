@@ -9,9 +9,12 @@
 
 package edu.cmu.meteor.scorer;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Properties;
+import java.util.StringTokenizer;
 
 import edu.cmu.meteor.util.Constants;
 
@@ -44,11 +47,16 @@ public class MeteorConfiguration {
 	private URL wordDirURL;
 	private URL synDirURL;
 	private URL paraDirURL;
+	private boolean charBased;
 
 	/**
 	 * Create configuration with default parameters
 	 */
 	public MeteorConfiguration() {
+		setDefaults();
+	}
+
+	private void setDefaults() {
 		setLanguage("english");
 		setTask("default");
 		setBeamSize(Constants.DEFAULT_BEAM_SIZE);
@@ -56,14 +64,16 @@ public class MeteorConfiguration {
 		setSynDirURL(Constants.DEFAULT_SYN_DIR_URL);
 		setParaFileURL(Constants.getDefaultParaFileURL(langID));
 		setNormalization(Constants.NO_NORMALIZE);
+		setCharBased(false);
 	}
 
 	/**
 	 * Return the string identifying this Meteor scorer configuration.
 	 */
 	public String getConfigID() {
-		// Format: meteor.version.lang.norm.params.mods.weights
-		return "meteor." + Constants.VERSION + "-"
+		// Format: meteor-version-ch-lang-norm-params-mods-weights
+		return "meteor-" + Constants.VERSION + "-"
+				+ (this.charBased ? "ch-" : "wo-")
 				+ Constants.getLanguageShortName(this.langID) + "-"
 				+ Constants.getNormName(this.normalization) + "-"
 				+ Constants.getWeightListString(this.parameters) + "-"
@@ -116,6 +126,8 @@ public class MeteorConfiguration {
 			sizedWeightList.add(weightList.get(i));
 		setModuleWeights(sizedWeightList);
 		setTaskName(Constants.getTaskName(taskID));
+		// Utility task uses character-based evaluation
+		setCharBased(taskID == Constants.TASK_UTIL);
 	}
 
 	// Only used by other methods
@@ -243,5 +255,131 @@ public class MeteorConfiguration {
 
 	public void setBeamSize(int beamSize) {
 		this.beamSize = beamSize;
+	}
+
+	public boolean getCharBased() {
+		return charBased;
+	}
+
+	public void setCharBased(boolean charBased) {
+		this.charBased = charBased;
+	}
+
+	// Integration with Java properties
+	public MeteorConfiguration(Properties props) {
+
+		setDefaults();
+
+		// Language
+		String language = props.getProperty("language");
+		if (language != null)
+			setLanguage(language);
+
+		// Task
+		String task = props.getProperty("task");
+		if (task != null)
+			setTask(task);
+
+		// Parameters
+		String parameters = props.getProperty("parameters");
+		if (parameters != null) {
+			ArrayList<Double> params = new ArrayList<Double>();
+			StringTokenizer p = new StringTokenizer(parameters);
+			while (p.hasMoreTokens())
+				params.add(Double.parseDouble(p.nextToken()));
+			setParameters(params);
+		}
+
+		// Weights
+		String weights = props.getProperty("moduleWeights");
+		if (weights != null) {
+			ArrayList<Double> weightList = new ArrayList<Double>();
+			StringTokenizer wtok = new StringTokenizer(weights);
+			while (wtok.hasMoreTokens())
+				weightList.add(Double.parseDouble(wtok.nextToken()));
+			setModuleWeights(weightList);
+		}
+
+		// Modules
+		String modules = props.getProperty("modules");
+		if (modules != null) {
+			ArrayList<String> modList = new ArrayList<String>();
+			StringTokenizer mods = new StringTokenizer(modules);
+			while (mods.hasMoreTokens())
+				modList.add(mods.nextToken());
+			setModulesByName(modList);
+			// Update weights to match number of modules
+			ArrayList<Double> weightList = getModuleWeights();
+			ArrayList<Double> sizedWeightList = new ArrayList<Double>();
+			for (int i = 0; i < modList.size(); i++) {
+				if (i < weightList.size())
+					sizedWeightList.add(weightList.get(i));
+				else
+					sizedWeightList.add(0.0);
+			}
+			setModuleWeights(sizedWeightList);
+		}
+
+		// Beam size
+		String beamSize = props.getProperty("beamSize");
+		if (beamSize != null)
+			setBeamSize(Integer.parseInt(beamSize));
+
+		// Word list dir
+		String wordDir = (props.getProperty("wordDir"));
+		if (wordDir != null)
+			try {
+				// This should not ever throw a malformed url exception
+				setWordDirURL((new File(wordDir)).toURI().toURL());
+			} catch (MalformedURLException ex) {
+				System.err.println("Error: Word list directory URL NOT set");
+				ex.printStackTrace();
+			}
+
+		// Synonym dir
+		String synDir = (props.getProperty("synDir"));
+		if (synDir != null)
+			try {
+				// This should not ever throw a malformed url exception
+				setSynDirURL((new File(synDir)).toURI().toURL());
+			} catch (MalformedURLException ex) {
+				System.err.println("Error: Synonym directory URL NOT set");
+				ex.printStackTrace();
+			}
+
+		// Paraphrase file
+		String paraFile = (props.getProperty("paraFile"));
+		if (paraFile != null)
+			try {
+				// This should not ever throw a malformed url exception
+				setParaFileURL((new File(paraFile)).toURI().toURL());
+			} catch (MalformedURLException ex) {
+				System.err.println("Error: Paraphrase directory URL NOT set");
+				ex.printStackTrace();
+			}
+
+		// Normalization
+		Boolean norm = Boolean.parseBoolean(props.getProperty("norm"));
+		Boolean lower = Boolean.parseBoolean(props.getProperty("lower"));
+		Boolean noPunct = Boolean.parseBoolean(props.getProperty("noPunct"));
+		Boolean nBest = Boolean.parseBoolean(props.getProperty("nBest"));
+
+		if (nBest) {
+			// NBest scoring handles its own normalization
+			setNormalization(Constants.NO_NORMALIZE);
+		} else if (norm) {
+			if (noPunct)
+				setNormalization(Constants.NORMALIZE_NO_PUNCT);
+			else
+				setNormalization(Constants.NORMALIZE_KEEP_PUNCT);
+		} else if (lower) {
+			setNormalization(Constants.NORMALIZE_LC_ONLY);
+		} else {
+			setNormalization(Constants.NO_NORMALIZE);
+		}
+
+		Boolean charBased = Boolean
+				.parseBoolean(props.getProperty("charBased"));
+		setCharBased(charBased);
 	}
 }
