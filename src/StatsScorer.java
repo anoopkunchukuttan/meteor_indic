@@ -37,7 +37,7 @@ public class StatsScorer {
 					.println("-p 'alpha beta gamma delta'\t\tCustom parameters (overrides default)");
 			System.out
 					.println("-w 'weight1 weight2 ...'\tSpecify module weights (overrides default)");
-			System.out.println("-ch for character-based P and R");
+			System.out.println("-ch\t\t\t\tfor character-based P and R");
 			return;
 		}
 

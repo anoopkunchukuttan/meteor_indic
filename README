@@ -1,4 +1,4 @@
-Meteor version 1.3
+Meteor version 1.4
 
 Code by Michael Denkowski (mdenkows at cs.cmu.edu)
 
@@ -49,7 +49,7 @@ This release also includes:
 The following can be seen by running the Meteor scorer with no arguments:
 
 --------------------------------------------------------------------------------
-Meteor version 1.3
+Meteor version 1.4
 
 Usage: java -Xmx2G -jar meteor-*.jar <test> <reference> [options]
 
@@ -105,9 +105,9 @@ $ java -Xmx2G -jar meteor-*.jar example/test.sgm example/ref.sgm -sgml -norm
 You should see the following output:
 
 --------------------------------------------------------------------------------
-Meteor version: 1.3
+Meteor version: 1.4
 
-Eval ID:        meteor.1.3-en-norm-0.85_0.2_0.6_0.75-ex_st_sy_pa-1.0_0.6_0.8_0.6
+Eval ID:        meteor-1.4-wo-en-norm-0.85_0.2_0.6_0.75-ex_st_sy_pa-1.0_0.6_0.8_0.6
 
 Language:       English
 Format:         SGML
@@ -395,7 +395,7 @@ $ java -Xmx2G -cp meteor-*.jar Matcher
 Without any arguments, the following help text is printed.
 
 --------------------------------------------------------------------------------
-Meteor Aligner version 1.3
+Meteor Aligner version 1.4
 Usage: java -Xmx2G -cp meteor-*.jar Matcher <test> <reference> [options]
 
 Options:
@@ -429,7 +429,7 @@ $ java -cp meteor-*.jar StatsScorer
 The --help option provides the following help text.
 
 --------------------------------------------------------------------------------
-Meteor Stats Scorer version 1.3
+Meteor Stats Scorer version 1.4
 Usage: java -cp meteor.jar StatsScorer [options]
 
 Options:
@@ -437,7 +437,7 @@ Options:
 -t task				One of: adq rank hter li
 -p 'alpha beta gamma'		Custom parameters (overrides default)
 -w 'weight1 weight2 ...'	Specify module weights (overrides default)
--final 				Output final (system level) score
+-ch                             for character-based P and R
 --------------------------------------------------------------------------------
 
 The scorer reads lines of sufficient statistics from standard in and writes
@@ -455,7 +455,7 @@ data formats.
 Without any arguments, the following help text is printed.
 
 --------------------------------------------------------------------------------
-Meteor Trainer version 1.3
+Meteor Trainer version 1.4
 Usage: java -XX:+UseCompressedOops -Xmx2G -cp meteor-*.jar Trainer <task> <dataDir> [options]
 
 Tasks:				One of: segcor rank
@@ -464,6 +464,7 @@ Options:
 -a paraphrase
 -e epsilon
 -l language
+-ch                             for character-based P and R
 -i 'p1 p2 p3 w1 w2 w3 w4'	Initial parameters and weights
 -f 'p1 p2 p3 w1 w2 w3 w4'	Final parameters and weights
 -s 'p1 p2 p3 w1 w2 w3 w4'	Steps

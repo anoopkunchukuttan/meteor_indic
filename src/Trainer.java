@@ -72,6 +72,7 @@ public class Trainer {
 			System.out.println("-a paraphrase");
 			System.out.println("-e epsilon");
 			System.out.println("-l language");
+			System.out.println("-ch\t\t\t\tfor character-based P and R");
 			System.out.println("-i 'p1 p2 p3 p4 w1 w2 w3 w4'\tInitial "
 					+ "parameters and weights");
 			System.out.println("-f 'p1 p2 p3 p4 w1 w2 w3 w4'\tFinal "
@@ -83,6 +84,7 @@ public class Trainer {
 		String task = args[0];
 		String dataDir = args[1];
 		String paraFile = "";
+		boolean charBased = false;
 
 		// Load defaults
 		initialWeights = new ArrayList<Double>();
@@ -116,6 +118,9 @@ public class Trainer {
 			} else if (args[curArg].equals("-l")) {
 				language = args[curArg + 1];
 				curArg += 2;
+			} else if (args[curArg].equals("-ch")) {
+				charBased = true;
+				curArg += 1;
 			} else {
 				System.err.println("Unknown option \"" + args[curArg] + "\"");
 				System.exit(1);
@@ -135,9 +140,9 @@ public class Trainer {
 
 		// Task
 		if (task.equals("segcor")) {
-			segcor(dataDir, paraFile);
+			segcor(dataDir, paraFile, charBased);
 		} else if (task.equals("rank")) {
-			rank(dataDir, paraFile);
+			rank(dataDir, paraFile, charBased);
 		} else {
 			System.err.println("Please specify a valid task");
 			System.exit(1);
@@ -145,7 +150,8 @@ public class Trainer {
 
 	}
 
-	private static void segcor(String dataDir, String paraFile) {
+	private static void segcor(String dataDir, String paraFile,
+			boolean charBased) {
 		/*
 		 * Run Meteor on each available set and collect the sufficient
 		 * statistics for rescoring. Create the MeteorStats list and the TER
@@ -240,6 +246,7 @@ public class Trainer {
 
 		// Create configuration
 		config = new MeteorConfiguration();
+		config.setCharBased(charBased);
 		ArrayList<Integer> none = new ArrayList<Integer>();
 		config.setModules(none);
 		weights = new ArrayList<Double>(initialWeights);
@@ -331,7 +338,7 @@ public class Trainer {
 		return corr_pearson;
 	}
 
-	private static void rank(String dataDir, String paraFile) {
+	private static void rank(String dataDir, String paraFile, boolean charBased) {
 		/*
 		 * Run Meteor on each available set and collect the sufficient
 		 * statistics for rescoring. Create the MeteorStats list and the TER
@@ -357,8 +364,8 @@ public class Trainer {
 			System.err.println(tstFile);
 			refFile = tstFile.substring(0, tstFile.indexOf(".")) + ".ref.sgm";
 			langPair = tstFile.substring(0, tstFile.indexOf("."));
-			sysName = tstFile.substring(tstFile.indexOf(".") + 1, tstFile
-					.lastIndexOf("."));
+			sysName = tstFile.substring(tstFile.indexOf(".") + 1,
+					tstFile.lastIndexOf("."));
 
 			// Run Meteor with all modules
 			String test = dataDir + "/" + tstFile;
@@ -465,6 +472,7 @@ public class Trainer {
 
 		// Create configuration
 		config = new MeteorConfiguration();
+		config.setCharBased(charBased);
 		ArrayList<Integer> none = new ArrayList<Integer>();
 		config.setModules(none);
 		weights = new ArrayList<Double>(initialWeights);
@@ -550,8 +558,8 @@ public class Trainer {
 
 		int langID = Constants.getLanguageID(Constants
 				.normLanguageName(language));
-		ArrayList<Integer> mods = Constants.getModules(langID, Constants
-				.getDefaultTask(langID));
+		ArrayList<Integer> mods = Constants.getModules(langID,
+				Constants.getDefaultTask(langID));
 		String modString = "";
 		String weightString = "";
 		for (int mod : mods) {

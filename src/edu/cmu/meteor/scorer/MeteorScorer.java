@@ -42,6 +42,8 @@ public class MeteorScorer {
 	// Weights
 	private ArrayList<Double> moduleWeights;
 
+	private boolean charBased;
+
 	/**
 	 * Use default configuration
 	 * 
@@ -78,6 +80,7 @@ public class MeteorScorer {
 		delta = scorer.delta;
 		moduleWeights = new ArrayList<Double>(scorer.moduleWeights);
 		aligner = new Aligner(scorer.aligner);
+		charBased = scorer.charBased;
 	}
 
 	/**
@@ -116,6 +119,7 @@ public class MeteorScorer {
 				setWeights.add(0.5);
 		}
 		aligner.updateModuleWeights(setWeights);
+		charBased = config.getCharBased();
 	}
 
 	/**

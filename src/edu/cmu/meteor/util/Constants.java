@@ -30,7 +30,7 @@ public class Constants {
 
 	/* Version */
 
-	public static final String VERSION = "1.3";
+	public static final String VERSION = "1.4";
 
 	/*
 	 * Normalizer constants
