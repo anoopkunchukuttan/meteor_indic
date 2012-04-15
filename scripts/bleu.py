@@ -41,16 +41,16 @@ def main(argv):
     os.remove(ref_sgm)
 
 def sgm(f_in, f_out, f_type):
-    i = codecs.open(f_in, 'r', 'utf-8')
-    o = codecs.open(f_out, 'w', 'utf-8')
+    i = open(f_in)
+    o = open(f_out, 'w')
     s = 0
-    print >> o, u'<{0} trglang="trg" setid="set" srclang="src">'.format(f_type)
-    print >> o, u'<doc docid="doc" sysid="sys">'
+    print >> o, '<{0} trglang="trg" setid="set" srclang="src">'.format(f_type)
+    print >> o, '<doc docid="doc" sysid="sys">'
     for line in i:
         s += 1
-        print >> o, u'<seg id="{0}"> {1} </seg>'.format(s, line.strip())
-    print >> o, u'</doc>'
-    print >> o, u'</{0}>'.format(f_type)
+        print >> o, '<seg id="{0}"> {1} </seg>'.format(s, line.strip())
+    print >> o, '</doc>'
+    print >> o, '</{0}>'.format(f_type)
     i.close()
     o.close()
 
