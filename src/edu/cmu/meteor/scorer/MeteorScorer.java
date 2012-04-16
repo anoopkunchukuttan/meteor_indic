@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import edu.cmu.meteor.aligner.Aligner;
 import edu.cmu.meteor.aligner.Alignment;
+import edu.cmu.meteor.aligner.Match;
 import edu.cmu.meteor.util.Constants;
 import edu.cmu.meteor.util.Normalizer;
 
@@ -238,22 +239,80 @@ public class MeteorScorer {
 		MeteorStats stats = new MeteorStats();
 
 		// Copy alignment stats
-		stats.testLength = alignment.words1.size();
-		stats.referenceLength = alignment.words2.size();
 
-		stats.testFunctionWords = alignment.line1FunctionWords;
-		stats.referenceFunctionWords = alignment.line2FunctionWords;
+		// Sum word lengths if evaluating by character
+		if (charBased) {
+			stats.testLength = 0;
+			for (String word : alignment.words1)
+				stats.testLength += word.length();
+			stats.referenceLength = 0;
+			for (String word : alignment.words2)
+				stats.referenceLength += word.length();
+			stats.testFunctionWords = 0;
+			for (int i : alignment.line1FunctionWords)
+				stats.testFunctionWords += alignment.words1.get(i).length();
+			stats.referenceFunctionWords = 0;
+			for (int i : alignment.line2FunctionWords)
+				stats.referenceFunctionWords += alignment.words2.get(i)
+						.length();
 
-		stats.testStageMatchesContent = new ArrayList<Integer>(
-				alignment.moduleContentMatches1);
-		stats.referenceStageMatchesContent = new ArrayList<Integer>(
-				alignment.moduleContentMatches2);
+			// Module and total matches with summed word lengths
+			int[] testStageMatchesContent = new int[alignment.moduleContentMatches1
+					.size()];
+			int[] referenceStageMatchesContent = new int[alignment.moduleContentMatches1
+					.size()];
+			int[] testStageMatchesFunction = new int[alignment.moduleContentMatches1
+					.size()];
+			int[] referenceStageMatchesFunction = new int[alignment.moduleContentMatches1
+					.size()];
+			// Sum these here to avoid pushing character-level operations to the
+			// aligner
+			for (Match m : alignment.matches) {
+				if (m != null) {
+					for (int i = 0; i < m.matchLength; i++)
+						if (alignment.line1FunctionWords.contains(m.matchStart
+								+ i))
+							testStageMatchesFunction[m.module] += alignment.words1
+									.get(m.matchStart + i).length();
+						else
+							testStageMatchesContent[m.module] += alignment.words1
+									.get(m.matchStart + i).length();
+					for (int i = 0; i < m.length; i++)
+						if (alignment.line2FunctionWords.contains(m.start + i))
+							referenceStageMatchesFunction[m.module] += alignment.words2
+									.get(m.start + i).length();
+						else
+							referenceStageMatchesContent[m.module] += alignment.words2
+									.get(m.start + i).length();
+				}
+			}
+			for (int i = 0; i < alignment.moduleContentMatches1.size(); i++) {
+				stats.testStageMatchesContent.add(testStageMatchesContent[i]);
+				stats.referenceStageMatchesContent
+						.add(referenceStageMatchesContent[i]);
+				stats.testStageMatchesFunction.add(testStageMatchesFunction[i]);
+				stats.referenceStageMatchesFunction
+						.add(referenceStageMatchesFunction[i]);
+			}
+		}
+		// Otherwise use word counts
+		else {
+			stats.testLength = alignment.words1.size();
+			stats.referenceLength = alignment.words2.size();
+			stats.testFunctionWords = alignment.line1FunctionWords.size();
+			stats.referenceFunctionWords = alignment.line2FunctionWords.size();
 
-		stats.testStageMatchesFunction = new ArrayList<Integer>(
-				alignment.moduleFunctionMatches1);
-		stats.referenceStageMatchesFunction = new ArrayList<Integer>(
-				alignment.moduleFunctionMatches2);
+			stats.testStageMatchesContent = new ArrayList<Integer>(
+					alignment.moduleContentMatches1);
+			stats.referenceStageMatchesContent = new ArrayList<Integer>(
+					alignment.moduleContentMatches2);
+			stats.testStageMatchesFunction = new ArrayList<Integer>(
+					alignment.moduleFunctionMatches1);
+			stats.referenceStageMatchesFunction = new ArrayList<Integer>(
+					alignment.moduleFunctionMatches2);
+		}
 
+		// Same for word and character level
 		stats.chunks = alignment.numChunks;
 
 		// Total matches
@@ -266,6 +325,13 @@ public class MeteorScorer {
 			stats.referenceTotalMatches += stats.referenceStageMatchesContent
 					.get(i);
 			stats.referenceTotalMatches += stats.referenceStageMatchesFunction
+					.get(i);
+			// Total for fragmentation/reporting
+			stats.testWordMatches += alignment.moduleContentMatches1.get(i);
+			stats.testWordMatches += alignment.moduleFunctionMatches1.get(i);
+			stats.referenceWordMatches += alignment.moduleContentMatches2
+					.get(i);
+			stats.referenceWordMatches += alignment.moduleFunctionMatches2
 					.get(i);
 		}
 
@@ -330,7 +396,7 @@ public class MeteorScorer {
 			frag = 0;
 		else
 			frag = ((double) stats.chunks)
-					/ (((double) (stats.testTotalMatches + stats.referenceTotalMatches)) / 2);
+					/ (((double) (stats.testWordMatches + stats.referenceWordMatches)) / 2);
 		// Fragmentation penalty
 		stats.fragPenalty = gamma * Math.pow(frag, beta);
 		// Score

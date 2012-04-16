@@ -42,6 +42,10 @@ public class MeteorStats {
 
 	public int chunks;
 
+	// Different in case of character-based evaluation
+	public int testWordMatches;
+	public int referenceWordMatches;
+
 	/* Calculated statistics */
 
 	/**
@@ -87,6 +91,9 @@ public class MeteorStats {
 
 		chunks = 0;
 
+		testWordMatches = 0;
+		referenceWordMatches = 0;
+
 		testWeightedMatches = 0;
 		referenceWeightedMatches = 0;
 
@@ -122,20 +129,23 @@ public class MeteorStats {
 			testStageMatchesContent.set(i, testStageMatchesContent.get(i)
 					+ ss.testStageMatchesContent.get(i));
 		for (int i = 0; i < ss.referenceStageMatchesContent.size(); i++)
-			referenceStageMatchesContent.set(i, referenceStageMatchesContent
-					.get(i)
-					+ ss.referenceStageMatchesContent.get(i));
+			referenceStageMatchesContent.set(i,
+					referenceStageMatchesContent.get(i)
+							+ ss.referenceStageMatchesContent.get(i));
 		for (int i = 0; i < ss.testStageMatchesFunction.size(); i++)
 			testStageMatchesFunction.set(i, testStageMatchesFunction.get(i)
 					+ ss.testStageMatchesFunction.get(i));
 		for (int i = 0; i < ss.referenceStageMatchesFunction.size(); i++)
-			referenceStageMatchesFunction.set(i, referenceStageMatchesFunction
-					.get(i)
-					+ ss.referenceStageMatchesFunction.get(i));
+			referenceStageMatchesFunction.set(i,
+					referenceStageMatchesFunction.get(i)
+							+ ss.referenceStageMatchesFunction.get(i));
 
 		if (!(ss.testTotalMatches == ss.testLength
 				&& ss.referenceTotalMatches == ss.referenceLength && ss.chunks == 1))
 			chunks += ss.chunks;
+
+		testWordMatches += ss.testWordMatches;
+		referenceWordMatches += ss.referenceWordMatches;
 
 		// Score does not aggregate
 	}
@@ -146,8 +156,9 @@ public class MeteorStats {
 	 * tstLen refLen tstFuncWords refFuncWords stage1tstMatchesContent
 	 * stage1refMatchesContent stage1tstMatchesFunction stage1refMatchesFunction
 	 * s2tc s2rc s2tf s2rf s3tc s3rc s3tf s3rf s4tc s4rc s4tf s4rf chunks
+	 * tstwordMatches refWordMatches
 	 * 
-	 * ex: 15 14 4 3 6 6 2 2 1 1 0 0 1 1 0 0 2 2 1 1 3
+	 * ex: 15 14 4 3 6 6 2 2 1 1 0 0 1 1 0 0 2 2 1 1 3 15 14
 	 * 
 	 * @param delim
 	 */
@@ -171,7 +182,9 @@ public class MeteorStats {
 			}
 		}
 		sb.append(chunks + delim);
-		return sb.toString();
+		sb.append(testWordMatches + delim);
+		sb.append(referenceWordMatches + delim);
+		return sb.toString().trim();
 	}
 
 	public String toString() {
@@ -210,6 +223,8 @@ public class MeteorStats {
 			}
 		}
 		stats[idx++] = chunks * SCALE_FACTOR;
+		stats[idx++] = testWordMatches * SCALE_FACTOR;
+		stats[idx++] = referenceWordMatches * SCALE_FACTOR;
 		return stats;
 	}
 
@@ -258,6 +273,9 @@ public class MeteorStats {
 		}
 
 		chunks = s.nextInt();
+
+		testWordMatches = s.nextInt();
+		referenceWordMatches = s.nextInt();
 	}
 
 	/**
@@ -305,5 +323,8 @@ public class MeteorStats {
 		}
 
 		chunks = stats[idx++] / SCALE_FACTOR;
+
+		testWordMatches = stats[idx++] / SCALE_FACTOR;
+		referenceWordMatches = stats[idx++] / SCALE_FACTOR;
 	}
 }

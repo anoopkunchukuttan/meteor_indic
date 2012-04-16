@@ -294,12 +294,12 @@ public class Aligner {
 		for (int i = 0; i < a.words1.size(); i++)
 			if (functionWords.contains(a.words1.get(i).toLowerCase())) {
 				isFunctionWord1[i] = true;
-				a.line1FunctionWords++;
+				a.line1FunctionWords.add(i);
 			}
 		for (int i = 0; i < a.words2.size(); i++)
 			if (functionWords.contains(a.words2.get(i).toLowerCase())) {
 				isFunctionWord2[i] = true;
-				a.line2FunctionWords++;
+				a.line2FunctionWords.add(i);
 			}
 
 		// Sum matches by module, word type

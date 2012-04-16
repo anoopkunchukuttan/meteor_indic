@@ -10,6 +10,7 @@
 package edu.cmu.meteor.aligner;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.StringTokenizer;
 
 public class Alignment {
@@ -18,9 +19,9 @@ public class Alignment {
 	public ArrayList<String> words1;
 	public ArrayList<String> words2;
 
-	// Function word counts
-	public int line1FunctionWords;
-	public int line2FunctionWords;
+	// Function word indices
+	public HashSet<Integer> line1FunctionWords;
+	public HashSet<Integer> line2FunctionWords;
 
 	// matches[i] contains a match starting at index i in line2
 	public Match[] matches;
@@ -57,8 +58,8 @@ public class Alignment {
 
 	// Initialize values
 	private void initData(int words2length) {
-		line1FunctionWords = 0;
-		line2FunctionWords = 0;
+		line1FunctionWords = new HashSet<Integer>();
+		line2FunctionWords = new HashSet<Integer>();
 
 		matches = new Match[words2length];
 

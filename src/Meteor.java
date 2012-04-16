@@ -635,8 +635,11 @@ public class Meteor {
 				referenceFunctionMatches, referenceContentMatches
 						+ referenceFunctionMatches));
 		System.out.println();
-		System.out.println("Test words:             " + stats.testLength);
-		System.out.println("Reference words:        " + stats.referenceLength);
+		System.out.println("Test " + (config.getCharBased() ? "char" : "word")
+				+ "s:             " + stats.testLength);
+		System.out.println("Reference "
+				+ (config.getCharBased() ? "char" : "word") + "s:        "
+				+ stats.referenceLength);
 		System.out.println("Chunks:                 " + stats.chunks);
 		System.out.println("Precision:              " + stats.precision);
 		System.out.println("Recall:                 " + stats.recall);
