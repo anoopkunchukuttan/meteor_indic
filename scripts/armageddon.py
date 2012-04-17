@@ -39,7 +39,7 @@ cat {0}/output.* | sort -g > {0}/output.sort
 def main(argv):
     
     if len(argv[1:]) < 7:
-        print 'usage: {0} <meteor.jar> <lang> <n_mods> <paraphrase.gz> <task> <data_dir> <work_dir> [b_min b_max d_min d_max]'.format(argv[0])
+        print 'usage: {0} <meteor.jar> <lang> <n_mods> <paraphrase.gz> <task> <data_dir> <work_dir> [b_min b_max d_min d_max] [other args like -ch]'.format(argv[0])
         sys.exit(1)
     
     # Args
@@ -57,6 +57,7 @@ def main(argv):
     b_max = argv[9] if len(argv[1:]) > 8 else '2.0'
     d_min = argv[10] if len(argv[1:]) > 9 else '0.4'
     d_max = argv[11] if len(argv[1:]) > 10 else '0.9'
+    other_args = argv[12:]
 
     # Working dir
     if os.path.exists(work_dir):
@@ -95,7 +96,7 @@ def main(argv):
         # direction per run)
         start = '{0} {1} 0 {2} {3}'.format(a, b_min, d_min, w_start)
         end = '{0} {1} 1 {2} {3}'.format(a, b_max, d_max, w_end)
-        trainer_cmd = 'java -XX:+UseCompressedOops -Xmx2G -cp {0} Trainer {1} {2} -l {3} -a {4} -i \'{5}\' -f \'{6}\' -s \'{7}\' > {8}'.format(meteor_jar, task, data_dir, lang, paraphrase_gz, start, end, step, out_file)
+        trainer_cmd = 'java -XX:+UseCompressedOops -Xmx2G -cp {0} Trainer {1} {2} -l {3} -a {4} -i \'{5}\' -f \'{6}\' -s \'{7}\' {args} > {8}'.format(meteor_jar, task, data_dir, lang, paraphrase_gz, start, end, step, out_file, args=' '.join(other_args))
         o = open(script_file, 'w')
         print >> o, '#!/usr/bin/env bash'
         print >> o, 'if [[ -e {0} ]] ; then exit ; fi'.format(out_file)
