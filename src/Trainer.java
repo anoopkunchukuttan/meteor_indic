@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 
@@ -198,7 +199,7 @@ public class Trainer {
 					System.exit(1);
 				}
 
-				Meteor.main(getMArgs(testFile, refFile, paraFile));
+				Meteor.main(getMArgs(testFile, refFile, paraFile, charBased));
 
 				// Store the MeteorStats
 				try {
@@ -371,7 +372,7 @@ public class Trainer {
 			String test = dataDir + "/" + tstFile;
 			String ref = dataDir + "/" + refFile;
 
-			Meteor.main(getMArgs(test, ref, paraFile));
+			Meteor.main(getMArgs(test, ref, paraFile, charBased));
 
 			if (!segIdx.containsKey(langPair))
 				segIdx.put(langPair,
@@ -554,7 +555,7 @@ public class Trainer {
 	}
 
 	private static String[] getMArgs(String testFile, String refFile,
-			String paraFile) {
+			String paraFile, boolean charBased) {
 
 		int langID = Constants.getLanguageID(Constants
 				.normLanguageName(language));
@@ -574,6 +575,10 @@ public class Trainer {
 		String[] mArgs = { testFile, refFile, "-sgml", "-norm", "-ssOut", "-l",
 				language, "-m", modString, "-a", paraFile, "-w", weightString,
 				"-p", "0.5 0.5 0.5 0.5" };
+		if (charBased) {
+			mArgs = Arrays.copyOf(mArgs, mArgs.length + 1);
+			mArgs[mArgs.length - 1] = "-ch";
+		}
 		return mArgs;
 	}
 }
