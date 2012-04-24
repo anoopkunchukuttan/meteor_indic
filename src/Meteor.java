@@ -50,9 +50,10 @@ public class Meteor {
 		Boolean ssOut = Boolean.parseBoolean(props.getProperty("ssOut"));
 		Boolean sgml = Boolean.parseBoolean(props.getProperty("sgml"));
 		Boolean mira = Boolean.parseBoolean(props.getProperty("mira"));
+		Boolean quiet = Boolean.parseBoolean(props.getProperty("quiet"));
 
 		String format = sgml ? "SGML" : "plaintext";
-		if (!ssOut && !mira) {
+		if (!ssOut && !mira && !quiet) {
 			System.out.println("Meteor version: " + Constants.VERSION);
 			System.out.println();
 			System.out.println("Eval ID:        " + config.getConfigID());
@@ -176,6 +177,8 @@ public class Meteor {
 
 		Boolean ssOut = Boolean.parseBoolean(props.getProperty("ssOut"));
 		Boolean vOut = Boolean.parseBoolean(props.getProperty("vOut"));
+		Boolean quiet = Boolean.parseBoolean(props.getProperty("quiet"));
+
 		for (int i = 0; i < lines1.size(); i++) {
 			MeteorStats stats;
 			if (refCount == 1) {
@@ -188,6 +191,8 @@ public class Meteor {
 				System.out.println("Segment " + (i + 1) + " score:\t"
 						+ stats.precision + "\t" + stats.recall + "\t"
 						+ stats.fragPenalty + "\t" + stats.score);
+			} else if (quiet) {
+				System.err.println(stats.score);
 			} else {
 				System.out.println("Segment " + (i + 1) + " score:\t"
 						+ stats.score);
@@ -206,7 +211,11 @@ public class Meteor {
 
 		if (!ssOut) {
 			scorer.computeMetrics(aggStats);
-			printVerboseStats(aggStats, config);
+			if (quiet) {
+				System.out.println(aggStats.score);
+			} else {
+				printVerboseStats(aggStats, config);
+			}
 		}
 	}
 
@@ -691,6 +700,9 @@ public class Meteor {
 			} else if (args[curArg].equals("-ch")) {
 				props.setProperty("charBased", "true");
 				curArg += 1;
+			} else if (args[curArg].equals("-q")) {
+				props.setProperty("quiet", "true");
+				curArg += 1;
 			} else if (args[curArg].equals("-writeAlignments")) {
 				props.setProperty("writeAlignments", "true");
 				curArg += 1;
@@ -758,6 +770,10 @@ public class Meteor {
 				.println("-a paraphraseFile               (if not default for language)");
 		System.out
 				.println("-f filePrefix                   Prefix for output files (default 'meteor')");
+		System.out
+				.println("-q                              Quiet: Segment scores to stderr, final to stdout,");
+		System.out
+				.println("                                  no additional output (plaintext only)");
 		System.out
 				.println("-ch                             Character-based precision and recall");
 		System.out
