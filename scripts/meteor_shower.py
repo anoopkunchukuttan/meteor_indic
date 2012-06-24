@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Tune Meteor parameters quickly with 42 Meteors
+# Learn Meteor parameters quickly with up to 42 Meteors
 # Run as many as requeted in parallel
 # Meteors use 1 cpu / 2gb each
 
@@ -9,7 +9,8 @@ import collections, os, subprocess, sys, threading
 def main(argv):
     
     if len(argv[1:]) < 7:
-        print >> sys.stderr, 'usage: {0} <meteor.jar> <lang> <n-mods> <task> <data_dir> <work_dir> <n-jobs> [other args like -a par.gz, -ch, ...]'.format(argv[0])
+        print >> sys.stderr, 'Learn Meteor parameters efficiently with parallel Trainers'
+        print >> sys.stderr, 'Usage: {0} <meteor.jar> <lang> <n-mods> <task> <data_dir> <work_dir> <n-jobs> [other args like -a par.gz, -ch, ...]'.format(argv[0])
         sys.exit(1)
     
     # Args
@@ -54,9 +55,6 @@ def main(argv):
         out_file = os.path.join(work_dir, 'output.{0}'.format(i + 1))
         a = 0.05 * (i / 2)
         (g_min, g_max) = (0, 0.5) if (i % 2 == 0) else (0.55, 1.0)
-        # If optimal parameters include b=2.5 or d={0.4,0.9}, pass b/d args
-        # to script to explore additional area in those directions (one
-        # direction per run)
         start = '{0} 0 {1} 0 {2}'.format(a, g_min, w_start)
         end = '{0} 2.5 {1} 1.0 {2}'.format(a, g_max, w_end)
         # Retry in case of filesystem failure
@@ -77,7 +75,6 @@ def main(argv):
     # Sort output
     sort_cmd = 'cat {0}/output.* | sort -g -S4G > {0}/output.sort'.format(work_dir)
     subprocess.call(sort_cmd, shell=True)
-    #print sort_cmd
 
 # Run commands until end of queue
 def run(queue):
@@ -86,6 +83,5 @@ def run(queue):
         if cmd == -1:
             return
         subprocess.call(cmd, shell=True)
-        #print cmd
 
 if __name__ == '__main__' : main(sys.argv)
