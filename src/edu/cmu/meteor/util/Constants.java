@@ -18,11 +18,15 @@ import java.util.Comparator;
 import org.tartarus.snowball.SnowballStemmer;
 import org.tartarus.snowball.ext.danishStemmer;
 import org.tartarus.snowball.ext.englishStemmer;
+import org.tartarus.snowball.ext.finnishStemmer;
 import org.tartarus.snowball.ext.frenchStemmer;
 import org.tartarus.snowball.ext.germanStemmer;
+import org.tartarus.snowball.ext.hungarianStemmer;
 import org.tartarus.snowball.ext.portugueseStemmer;
+import org.tartarus.snowball.ext.romanianStemmer;
 import org.tartarus.snowball.ext.russianStemmer;
 import org.tartarus.snowball.ext.spanishStemmer;
+import org.tartarus.snowball.ext.turkishStemmer;
 
 import edu.cmu.meteor.aligner.PartialAlignment;
 
@@ -81,7 +85,21 @@ public class Constants {
 	public static final int LANG_PT = 6;
 	public static final int LANG_RU = 7;
 	public static final int LANG_DA = 8;
+	public static final int LANG_RO = 9;
+	public static final int LANG_HU = 10;
+	public static final int LANG_TR = 11;
+	public static final int LANG_FI = 12;
+	public static final int LANG_MAX = 12;
 	public static final int LANG_OTHER = 99;
+
+	public static String getLangsString() {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i <= LANG_MAX; i++) {
+			sb.append(" ");
+			sb.append(getLanguageShortName(i));
+		}
+		return sb.toString().trim();
+	}
 
 	/* Adequacy task */
 	public static final int TASK_ADQ = 0;
@@ -260,6 +278,14 @@ public class Constants {
 			return "russian";
 		if (lang.equals("danish") || lang.equals("da"))
 			return "danish";
+		if (lang.equals("romanian") || lang.equals("ro"))
+			return "romanian";
+		if (lang.equals("hungarian") || lang.equals("hu"))
+			return "hungarian";
+		if (lang.equals("turkish") || lang.equals("tr"))
+			return "turkish";
+		if (lang.equals("finnish") || lang.equals("fi"))
+			return "finnish";
 		// Not listed
 		return "other";
 	}
@@ -283,6 +309,14 @@ public class Constants {
 			return LANG_RU;
 		if (language.equals("danish"))
 			return LANG_DA;
+		if (language.equals("romanian"))
+			return LANG_RO;
+		if (language.equals("hungarian"))
+			return LANG_HU;
+		if (language.equals("turkish"))
+			return LANG_TR;
+		if (language.equals("finnish"))
+			return LANG_FI;
 		// Not found
 		return LANG_OTHER;
 	}
@@ -306,7 +340,14 @@ public class Constants {
 			return "russian";
 		if (langID == LANG_DA)
 			return "danish";
-
+		if (langID == LANG_RO)
+			return "romanian";
+		if (langID == LANG_HU)
+			return "hungarian";
+		if (langID == LANG_TR)
+			return "turkish";
+		if (langID == LANG_FI)
+			return "finnish";
 		// Not found
 		return "other";
 	}
@@ -330,6 +371,14 @@ public class Constants {
 			return "ru";
 		if (langID == LANG_DA)
 			return "da";
+		if (langID == LANG_RO)
+			return "ro";
+		if (langID == LANG_HU)
+			return "hu";
+		if (langID == LANG_TR)
+			return "tr";
+		if (langID == LANG_FI)
+			return "fi";
 		// Not found
 		return "xx";
 	}
@@ -548,6 +597,14 @@ public class Constants {
 			return new russianStemmer();
 		if (language.equals("danish"))
 			return new danishStemmer();
+		if (language.equals("romanian"))
+			return new romanianStemmer();
+		if (language.equals("hungarian"))
+			return new hungarianStemmer();
+		if (language.equals("turkish"))
+			return new turkishStemmer();
+		if (language.equals("finnish"))
+			return new finnishStemmer();
 		// Not found
 		return new englishStemmer();
 	}
