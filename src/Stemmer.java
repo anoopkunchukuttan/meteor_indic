@@ -25,12 +25,27 @@ public class Stemmer {
 		while ((line = in.readLine()) != null) {
 			StringBuilder sb = new StringBuilder();
 			StringTokenizer tok = new StringTokenizer(line);
+			String word;
 			while (tok.hasMoreTokens()) {
-				stemmer.setCurrent(tok.nextToken());
-				stemmer.stem();
-				sb.append(" " + stemmer.getCurrent());
+				word = tok.nextToken();
+				if (!isNumber(word)) {
+					stemmer.setCurrent(word);
+					stemmer.stem();
+					word = stemmer.getCurrent();
+				}
+				sb.append(" " + word);
 			}
 			System.out.println(sb.toString().trim());
 		}
+	}
+
+	private static boolean isNumber(String s) {
+		for (int i = 0; i < s.length(); i++) {
+			if (!(Character.isDigit(s.charAt(i)) || s.charAt(i) == ','
+					|| s.charAt(i) == '.' || s.charAt(i) == '-')) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
