@@ -114,6 +114,10 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Romanian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Hungarian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Turkish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Finnish
 	};
 	public static final double WEIGHT_ADQ[][] = {
 			//
@@ -126,6 +130,10 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Romanian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Hungarian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Turkish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Finnish
 	};
 
 	/* Ranking task */
@@ -141,6 +149,10 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Romanian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Hungarian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Turkish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Finnish
 	};
 	public static final double WEIGHT_RANK[][] = {
 			//
@@ -153,6 +165,10 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Romanian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Hungarian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Turkish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Finnish
 	};
 
 	/* HTER task */
@@ -168,6 +184,10 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Romanian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Hungarian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Turkish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Finnish
 	};
 	public static final double WEIGHT_HTER[][] = {
 			//
@@ -180,6 +200,10 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Romanian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Hungarian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Turkish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Finnish
 	};
 
 	/* Utility task */
@@ -195,6 +219,10 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Romanian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Hungarian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Turkish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Finnish
 	};
 	public static final double WEIGHT_UTIL[][] = {
 			//
@@ -207,6 +235,10 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Romanian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Hungarian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Turkish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Finnish
 	};
 
 	public static final int TASK_DEFAULT = TASK_RANK;
@@ -643,6 +675,18 @@ public class Constants {
 			modules.add(MODULE_EXACT);
 			modules.add(MODULE_STEM);
 		} else if (langID == LANG_DA) {
+			modules.add(MODULE_EXACT);
+			modules.add(MODULE_STEM);
+		} else if (langID == LANG_RO) {
+			modules.add(MODULE_EXACT);
+			modules.add(MODULE_STEM);
+		} else if (langID == LANG_HU) {
+			modules.add(MODULE_EXACT);
+			modules.add(MODULE_STEM);
+		} else if (langID == LANG_TR) {
+			modules.add(MODULE_EXACT);
+			modules.add(MODULE_STEM);
+		} else if (langID == LANG_FI) {
 			modules.add(MODULE_EXACT);
 			modules.add(MODULE_STEM);
 		} else {

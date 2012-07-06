@@ -35,7 +35,7 @@ public class Meteor {
 		// Usage
 		if (args.length < 2) {
 			printUsage();
-			return;
+			System.exit(2);
 		}
 
 		// Files
@@ -739,75 +739,75 @@ public class Meteor {
 	}
 
 	private static void printUsage() {
-		System.out.println("Meteor version " + Constants.VERSION);
-		System.out.println();
-		System.out
+		System.err.println("Meteor version " + Constants.VERSION);
+		System.err.println();
+		System.err
 				.println("Usage: java -Xmx2G -jar meteor-*.jar <test> <reference> [options]");
-		System.out.println();
-		System.out.println("Options:");
-		System.out
+		System.err.println();
+		System.err.println("Options:");
+		System.err
 				.println("-l language                     One of: en cz de es fr ar");
-		System.out
+		System.err
 				.println("-t task                         One of: rank util adq hter li tune");
-		System.out
+		System.err
 				.println("                                  util implies -ch");
-		System.out
+		System.err
 				.println("-p 'alpha beta gamma delta'     Custom parameters (overrides default)");
-		System.out
+		System.err
 				.println("-m 'module1 module2 ...'        Specify modules (overrides default)");
-		System.out
+		System.err
 				.println("                                  Any of: exact stem synonym paraphrase");
-		System.out
+		System.err
 				.println("-w 'weight1 weight2 ...'        Specify module weights (overrides default)");
-		System.out
+		System.err
 				.println("-r refCount                     Number of references (plaintext only)");
-		System.out.println("-x beamSize                     (default 40)");
-		System.out
+		System.err.println("-x beamSize                     (default 40)");
+		System.err
 				.println("-s wordListDirectory            (if not default for language)");
-		System.out
+		System.err
 				.println("-d synonymDirectory             (if not default for language)");
-		System.out
+		System.err
 				.println("-a paraphraseFile               (if not default for language)");
-		System.out
+		System.err
 				.println("-f filePrefix                   Prefix for output files (default 'meteor')");
-		System.out
+		System.err
 				.println("-q                              Quiet: Segment scores to stderr, final to stdout,");
-		System.out
+		System.err
 				.println("                                  no additional output (plaintext only)");
-		System.out
+		System.err
 				.println("-ch                             Character-based precision and recall");
-		System.out
+		System.err
 				.println("-norm                           Tokenize / normalize punctuation and lowercase");
-		System.out
+		System.err
 				.println("                                  (Recommended unless scoring raw output with");
-		System.out
+		System.err
 				.println("                                   pretokenized references)");
-		System.out
+		System.err
 				.println("-lower                          Lowercase only (not required if -norm specified)");
-		System.out
+		System.err
 				.println("-noPunct                        Do not consider punctuation when scoring");
-		System.out
+		System.err
 				.println("                                  (Not recommended unless special case)");
-		System.out
+		System.err
 				.println("-sgml                           Input is in SGML format");
-		System.out
+		System.err
 				.println("-mira                           Input is in MIRA format");
-		System.out
+		System.err
 				.println("                                  (Use '-' for test and reference files)");
-		System.out
+		System.err
 				.println("-vOut                           Output verbose scores (P / R / frag / score)");
-		System.out
+		System.err
 				.println("-ssOut                          Output sufficient statistics instead of scores");
-		System.out
+		System.err
 				.println("-writeAlignments                Output alignments annotated with Meteor scores");
-		System.out
+		System.err
 				.println("                                  (written to <prefix>-align.out)");
-		System.out.println();
-		System.out.println("Sample options for plaintext: -l <lang> -norm");
-		System.out.println("Sample options for SGML: -l <lang> -norm -sgml");
-		System.out
+		System.err.println();
+		System.err.println("Sample options for plaintext: -l <lang> -norm");
+		System.err.println("Sample options for SGML: -l <lang> -norm -sgml");
+		System.err
 				.println("Sample options for raw output / pretokenized references: -l <lang> -lower");
-		System.out.println();
-		System.out.println("See README file for additional information");
+		System.err.println();
+		System.err.println("See README file for additional information");
 	}
 }
