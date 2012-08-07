@@ -11,7 +11,7 @@ public class Stemmer {
 		if (args.length != 1) {
 			System.err
 					.println("Snowball stem some text in a supported language");
-			System.err.println("Languages: en da de es fi fr hu pt ro ru tr");
+			System.err.println("Languages: en da de es fi fr hu it nl no pt ro ru se tr");
 			System.err.println("Usage: Stemmer lang < in > out");
 			System.exit(1);
 		}

@@ -17,15 +17,19 @@ import java.util.Comparator;
 
 import org.tartarus.snowball.SnowballStemmer;
 import org.tartarus.snowball.ext.danishStemmer;
+import org.tartarus.snowball.ext.dutchStemmer;
 import org.tartarus.snowball.ext.englishStemmer;
 import org.tartarus.snowball.ext.finnishStemmer;
 import org.tartarus.snowball.ext.frenchStemmer;
 import org.tartarus.snowball.ext.germanStemmer;
 import org.tartarus.snowball.ext.hungarianStemmer;
+import org.tartarus.snowball.ext.italianStemmer;
+import org.tartarus.snowball.ext.norwegianStemmer;
 import org.tartarus.snowball.ext.portugueseStemmer;
 import org.tartarus.snowball.ext.romanianStemmer;
 import org.tartarus.snowball.ext.russianStemmer;
 import org.tartarus.snowball.ext.spanishStemmer;
+import org.tartarus.snowball.ext.swedishStemmer;
 import org.tartarus.snowball.ext.turkishStemmer;
 
 import edu.cmu.meteor.aligner.PartialAlignment;
@@ -89,7 +93,12 @@ public class Constants {
 	public static final int LANG_HU = 10;
 	public static final int LANG_TR = 11;
 	public static final int LANG_FI = 12;
-	public static final int LANG_MAX = 12;
+	public static final int LANG_NL = 13;
+	public static final int LANG_IT = 14;
+	public static final int LANG_NO = 15;
+	public static final int LANG_SE = 16;
+
+	public static final int LANG_MAX = 16;
 	public static final int LANG_OTHER = 99;
 
 	public static String getLangsString() {
@@ -118,6 +127,10 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Hungarian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Turkish
 			{ 0.0, 0.0, 0.0, 0.0 }, // Finnish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Dutch
+			{ 0.0, 0.0, 0.0, 0.0 }, // Italian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Norwegian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Swedish
 	};
 	public static final double WEIGHT_ADQ[][] = {
 			//
@@ -134,6 +147,10 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Hungarian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Turkish
 			{ 0.0, 0.0, 0.0, 0.0 }, // Finnish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Dutch
+			{ 0.0, 0.0, 0.0, 0.0 }, // Italian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Norwegian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Swedish
 	};
 
 	/* Ranking task */
@@ -153,6 +170,10 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Hungarian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Turkish
 			{ 0.0, 0.0, 0.0, 0.0 }, // Finnish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Dutch
+			{ 0.0, 0.0, 0.0, 0.0 }, // Italian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Norwegian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Swedish
 	};
 	public static final double WEIGHT_RANK[][] = {
 			//
@@ -169,6 +190,10 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Hungarian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Turkish
 			{ 0.0, 0.0, 0.0, 0.0 }, // Finnish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Dutch
+			{ 0.0, 0.0, 0.0, 0.0 }, // Italian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Norwegian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Swedish
 	};
 
 	/* HTER task */
@@ -188,6 +213,10 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Hungarian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Turkish
 			{ 0.0, 0.0, 0.0, 0.0 }, // Finnish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Dutch
+			{ 0.0, 0.0, 0.0, 0.0 }, // Italian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Norwegian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Swedish
 	};
 	public static final double WEIGHT_HTER[][] = {
 			//
@@ -204,6 +233,10 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Hungarian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Turkish
 			{ 0.0, 0.0, 0.0, 0.0 }, // Finnish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Dutch
+			{ 0.0, 0.0, 0.0, 0.0 }, // Italian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Norwegian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Swedish
 	};
 
 	/* Utility task */
@@ -223,6 +256,10 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Hungarian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Turkish
 			{ 0.0, 0.0, 0.0, 0.0 }, // Finnish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Dutch
+			{ 0.0, 0.0, 0.0, 0.0 }, // Italian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Norwegian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Swedish
 	};
 	public static final double WEIGHT_UTIL[][] = {
 			//
@@ -239,6 +276,10 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Hungarian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Turkish
 			{ 0.0, 0.0, 0.0, 0.0 }, // Finnish
+			{ 0.0, 0.0, 0.0, 0.0 }, // Dutch
+			{ 0.0, 0.0, 0.0, 0.0 }, // Italian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Norwegian
+			{ 0.0, 0.0, 0.0, 0.0 }, // Swedish
 	};
 
 	public static final int TASK_DEFAULT = TASK_RANK;
@@ -318,6 +359,14 @@ public class Constants {
 			return "turkish";
 		if (lang.equals("finnish") || lang.equals("fi"))
 			return "finnish";
+		if (lang.equals("dutch") || lang.equals("nl"))
+			return "dutch";
+		if (lang.equals("italian") || lang.equals("it"))
+			return "italian";
+		if (lang.equals("norwegian") || lang.equals("no"))
+			return "norweigian";
+		if (lang.equals("swedish") || lang.equals("se"))
+			return "swedish";
 		// Not listed
 		return "other";
 	}
@@ -349,6 +398,14 @@ public class Constants {
 			return LANG_TR;
 		if (language.equals("finnish"))
 			return LANG_FI;
+		if (language.equals("dutch"))
+			return LANG_NL;
+		if (language.equals("italian"))
+			return LANG_IT;
+		if (language.equals("norwegian"))
+			return LANG_NO;
+		if (language.equals("swedish"))
+			return LANG_SE;
 		// Not found
 		return LANG_OTHER;
 	}
@@ -380,6 +437,14 @@ public class Constants {
 			return "turkish";
 		if (langID == LANG_FI)
 			return "finnish";
+		if (langID == LANG_NL)
+			return "dutch";
+		if (langID == LANG_IT)
+			return "italian";
+		if (langID == LANG_NO)
+			return "norwegian";
+		if (langID == LANG_SE)
+			return "swedish";
 		// Not found
 		return "other";
 	}
@@ -411,6 +476,14 @@ public class Constants {
 			return "tr";
 		if (langID == LANG_FI)
 			return "fi";
+		if (langID == LANG_NL)
+			return "nl";
+		if (langID == LANG_IT)
+			return "it";
+		if (langID == LANG_NO)
+			return "no";
+		if (langID == LANG_SE)
+			return "se";
 		// Not found
 		return "xx";
 	}
@@ -637,6 +710,14 @@ public class Constants {
 			return new turkishStemmer();
 		if (language.equals("finnish"))
 			return new finnishStemmer();
+		if (language.equals("dutch"))
+			return new dutchStemmer();
+		if (language.equals("italian"))
+			return new italianStemmer();
+		if (language.equals("norwegian"))
+			return new norwegianStemmer();
+		if (language.equals("swedish"))
+			return new swedishStemmer();
 		// Not found
 		return new englishStemmer();
 	}
@@ -687,6 +768,18 @@ public class Constants {
 			modules.add(MODULE_EXACT);
 			modules.add(MODULE_STEM);
 		} else if (langID == LANG_FI) {
+			modules.add(MODULE_EXACT);
+			modules.add(MODULE_STEM);
+		} else if (langID == LANG_NL) {
+			modules.add(MODULE_EXACT);
+			modules.add(MODULE_STEM);
+		} else if (langID == LANG_IT) {
+			modules.add(MODULE_EXACT);
+			modules.add(MODULE_STEM);
+		} else if (langID == LANG_NO) {
+			modules.add(MODULE_EXACT);
+			modules.add(MODULE_STEM);
+		} else if (langID == LANG_SE) {
 			modules.add(MODULE_EXACT);
 			modules.add(MODULE_STEM);
 		} else {
