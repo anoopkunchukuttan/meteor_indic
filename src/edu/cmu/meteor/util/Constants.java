@@ -14,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 
 import org.tartarus.snowball.SnowballStemmer;
 import org.tartarus.snowball.ext.danishStemmer;
@@ -100,6 +101,21 @@ public class Constants {
 
 	public static final int LANG_MAX = 16;
 	public static final int LANG_OTHER = 99;
+
+	private static HashSet<Integer> supportedLangIDs = null;
+
+	public static final boolean isSupported(int langID) {
+		if (supportedLangIDs == null) {
+			supportedLangIDs = new HashSet<Integer>();
+			supportedLangIDs.add(LANG_EN);
+			supportedLangIDs.add(LANG_CZ);
+			supportedLangIDs.add(LANG_FR);
+			supportedLangIDs.add(LANG_ES);
+			supportedLangIDs.add(LANG_DE);
+			supportedLangIDs.add(LANG_AR);
+		}
+		return supportedLangIDs.contains(langID);
+	}
 
 	public static String getLangsString() {
 		StringBuilder sb = new StringBuilder();
@@ -286,8 +302,11 @@ public class Constants {
 
 	/* Language-independent task */
 	public static final int TASK_LI = 99;
+	// These parameters tend to work well across languages for which judgment
+	// data exists
 	public static final double PARAM_I[] = { 0.75, 1.40, 0.70, 0.50 };
-	public static final double WEIGHT_I[] = { 1.0, 0.0, 0.0, 0.0 };
+	// Non-exact matches all get half credit
+	public static final double WEIGHT_I[] = { 1.0, 0.5, 0.5, 0.5 };
 
 	/* Tuning task */
 	public static final int TASK_TUNE = 100;
@@ -308,10 +327,12 @@ public class Constants {
 	 */
 
 	public static int getDefaultTask(int langID) {
-		// Other languages always get language-independent task
-		if (langID == LANG_OTHER)
-			return TASK_LI;
-		return TASK_DEFAULT;
+		// Supported languages get the default task
+		if (isSupported(langID)) {
+			return TASK_DEFAULT;
+		}
+		// Unsupported languages get language-independent parameters
+		return TASK_LI;
 	}
 
 	public static String getLocation() {
@@ -724,9 +745,7 @@ public class Constants {
 
 	public static ArrayList<Integer> getModules(int langID, int taskID) {
 		ArrayList<Integer> modules = new ArrayList<Integer>();
-		if (taskID == TASK_LI) {
-			modules.add(MODULE_EXACT);
-		} else if (langID == LANG_EN) {
+		if (langID == LANG_EN) {
 			modules.add(MODULE_EXACT);
 			modules.add(MODULE_STEM);
 			modules.add(MODULE_SYNONYM);

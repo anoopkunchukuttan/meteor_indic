@@ -187,9 +187,9 @@ public class Aligner {
 			}
 			in.close();
 		} catch (IOException ex) {
-			System.err.println("Error loading function word list:");
-			ex.printStackTrace();
-			System.err.println("All words treated as content words");
+			System.err.println("Warning: No function word list for language "
+					+ language + ".");
+			System.err.println("Warning: All words treated as content words.");
 		}
 	}
 

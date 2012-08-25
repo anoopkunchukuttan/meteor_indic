@@ -172,6 +172,13 @@ public class Normalizer {
 	public static String normalizeLine(String line, int langID,
 			boolean keepPunctuation) {
 
+		if (!Constants.isSupported(langID)) {
+			System.err.println("Warning: No normalization rules for language "
+					+ Constants.getLanguageName(langID) + ".");
+			System.err.println("Warning: Returning line as is: " + line);
+			return line;
+		}
+
 		// Special handling of non-western languages
 		if (langID == Constants.LANG_AR || langID == Constants.LANG_OTHER)
 			return normalizeNonWestern(line, keepPunctuation);
@@ -249,7 +256,7 @@ public class Normalizer {
 					// New: Drop dots to match undotted output (U.S. -> US)
 					sb.append(words[i].replace(s_nbp, s_nbp2));
 				}// Always nonbreaking or followed by lowercase (trick to catch
-				// unlisted items such as Inc.)
+					// unlisted items such as Inc.)
 				else if ((type != null && type == Constants.NBP_ANY)
 						|| (i < words.length - 1 && r_nbp2
 								.matcher(words[i + 1]).find())) {
