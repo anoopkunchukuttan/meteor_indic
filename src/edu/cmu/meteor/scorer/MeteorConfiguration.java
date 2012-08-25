@@ -94,7 +94,7 @@ public class MeteorConfiguration {
 		if (defaultTask == Constants.TASK_LI) {
 			System.err.println("Warning: Language "
 					+ Constants.getLanguageName(langID)
-					+ " does NOT had tuned parameters.");
+					+ " does NOT have tuned parameters.");
 			System.err
 					.println("Warning: Using language-independent task with all available matchers.");
 		}
