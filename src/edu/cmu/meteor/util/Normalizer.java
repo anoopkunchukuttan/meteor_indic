@@ -175,6 +175,7 @@ public class Normalizer {
 		if (!Constants.isSupported(langID)) {
 			System.err.println("Warning: No normalization rules for language "
 					+ Constants.getLanguageName(langID) + ".");
+			System.err.println("Warning: You should pre-normalize data and run Meteor without -norm");
 			System.err.println("Warning: Returning line as is: " + line);
 			return line;
 		}
