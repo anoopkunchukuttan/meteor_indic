@@ -49,11 +49,11 @@ public class Meteor {
 		// Print settings
 		Boolean ssOut = Boolean.parseBoolean(props.getProperty("ssOut"));
 		Boolean sgml = Boolean.parseBoolean(props.getProperty("sgml"));
-		Boolean mira = Boolean.parseBoolean(props.getProperty("mira"));
+		Boolean stdio = Boolean.parseBoolean(props.getProperty("stdio"));
 		Boolean quiet = Boolean.parseBoolean(props.getProperty("quiet"));
 
 		String format = sgml ? "SGML" : "plaintext";
-		if (!ssOut && !mira && !quiet) {
+		if (!ssOut && !stdio && !quiet) {
 			System.out.println("Meteor version: " + Constants.VERSION);
 			System.out.println();
 			System.out.println("Eval ID:        " + config.getConfigID());
@@ -77,19 +77,19 @@ public class Meteor {
 					+ "- modules with no weights will not be counted.");
 		}
 
-		// MIRA check
-		if (mira && sgml) {
+		// Stdio check
+		if (stdio && sgml) {
 			System.err
-					.println("Warning: MIRA incompatible with other modes - using MIRA only");
+					.println("Warning: Stdio incompatible with other modes - using Stdio only");
 		}
 
 		MeteorScorer scorer = new MeteorScorer(config);
 
-		if (mira) {
+		if (stdio) {
 			try {
-				scoreMIRA(scorer);
+				scoreStdio(scorer);
 			} catch (IOException ex) {
-				System.err.println("Error: Could not score MIRA outputs");
+				System.err.println("Error: Could not score Stdio inputs");
 				ex.printStackTrace();
 				System.exit(1);
 			}
@@ -560,10 +560,10 @@ public class Meteor {
 	}
 
 	/**
-	 * Input is in MIRA format
+	 * Input is in Stdio format
 	 */
 
-	private static void scoreMIRA(MeteorScorer scorer) throws IOException {
+	private static void scoreStdio(MeteorScorer scorer) throws IOException {
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in,
 				"UTF-8"));
@@ -715,8 +715,10 @@ public class Meteor {
 			} else if (args[curArg].equals("-sgml")) {
 				props.setProperty("sgml", "true");
 				curArg += 1;
-			} else if (args[curArg].equals("-mira")) {
-				props.setProperty("mira", "true");
+				// Include -mira for backward compatibility
+			} else if (args[curArg].equals("-stdio")
+					|| args[curArg].equals("-mira")) {
+				props.setProperty("stdio", "true");
 				curArg += 1;
 			} else if (args[curArg].equals("-noPunct")) {
 				props.setProperty("noPunct", "true");
@@ -796,7 +798,7 @@ public class Meteor {
 		System.err
 				.println("-sgml                           Input is in SGML format");
 		System.err
-				.println("-mira                           Input is in MIRA format");
+				.println("-stdio                           Input is from stdin, see README for format");
 		System.err
 				.println("                                  (Use '-' for test and reference files)");
 		System.err

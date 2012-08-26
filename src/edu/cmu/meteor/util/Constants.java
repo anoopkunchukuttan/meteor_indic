@@ -178,7 +178,7 @@ public class Constants {
 			{ 0.90, 1.40, 0.60, 0.65 }, // French
 			{ 0.65, 1.30, 0.50, 0.80 }, // Spanish
 			{ 0.95, 1.00, 0.55, 0.55 }, // German
-			{ 0.0, 0.0, 0.0, 0.50 }, // Arabic
+			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
@@ -329,6 +329,10 @@ public class Constants {
 	public static int getDefaultTask(int langID) {
 		// Supported languages get the default task
 		if (isSupported(langID)) {
+			// Arabic only has parameters for adequacy
+			if (langID == LANG_AR) {
+				return TASK_ADQ;
+			}
 			return TASK_DEFAULT;
 		}
 		// Unsupported languages get language-independent parameters

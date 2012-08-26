@@ -33,7 +33,7 @@ public class Matcher {
 			System.out.println();
 			System.out.println("Options:");
 			System.out
-					.println("-l language                     One of: en cz de es fr ar");
+					.println("-l language                     One of: en da de es fi fr hu it nl no pt ro ru se tr");
 			System.out
 					.println("-m 'module1 module2 ...'        Specify modules (overrides default)");
 			System.out
