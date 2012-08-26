@@ -91,7 +91,7 @@
 
     <body>
         <div id="page">
-            <h1>Meteor 1.4: Automatic Alignment and MT Evaluation Suite</h1>
+            <h1>Meteor 1.4: Automatic Machine Translation Evaluation System</h1>
             <h4>Code by <a target="_blank" href="http://www.cs.cmu.edu/~mdenkows/">Michael Denkowski</a></h4>
             <h4><a class="padded" target="_blank" href="http://www.cs.cmu.edu/~alavie/METEOR/">Website</a><a class="padded" target="_blank" href="http://github.com/mjdenkowski/meteor">Github</a></h4>
 
@@ -416,7 +416,7 @@ Final score:            0.3204832379614146
                 <pre>SCORE ||| reference 1 words ||| reference n words ||| hypothesis words</pre>
                 Scores hypothesis against one or more references and returns line of sufficient statistics.
                 <pre>EVAL ||| stats</pre>
-                Calculates final scores using output of SCORE lines.
+                Calculates final scores using output of SCORE lines.  Meteor exits on end-of-file.
             </p>
             <p>
                 <h5>Verbose Output: -vOut</h5>
@@ -483,8 +483,159 @@ Line2Start:Length	Line1Start:Length	Module		Score
                 Text should be segmented, tokenized, and lowercased as desired prior to Meteor alignment.
             </p>
             <h3><a name="stemmer"></a>6. Standalone Word Stemmer</h3>
+            <p>
+                Meteor includes a standalone word stemmer for supported languages.
+                To run the stemmer, use:
+                <pre>java -cp meteor-*.jar Stemmer</pre>
+                Running the stemmer with no arguments shows the help message:
+<pre>Snowball stem some text in a supported language
+Languages: en da de es fi fr hu it nl no pt ro ru se tr
+Usage: Stemmer lang < in > out
+</pre>
+                The stemmer reads lines from stdin and writes to stdout.
+                Each word in the input is stemmed using the <a target="_blank" hreaf="http://snowball.tartarus.org/">Snowball stemmer</a> for the specified language.
+            </p>
+            <p>
+                <b>Important note:</b> the Meteor Stemmer does not apply any normalization to input text.
+                Text should be segmented, tokenized, and lowercased as desired prior to Meteor alignment.
+            </p>
             <h3><a name="#integration"></a>7. Integrating Meteor with your Software</h3>
+            <p>
+                The simplest way to integrate Meteor with your software involves using the -stdio option:
+                <pre>java -Xmx2G -jar meteor-*.jar - - -l en -norm -stdio</pre>
+                This tells Meteor to use the English settings, normalize text, and use stdin/stdout.
+                You can then write lines of the following form to Meteor's stdin:
+                <pre>SCORE ||| reference 1 words ||| reference n words ||| hypothesis words</pre>
+                This scores a hypothesis against one or more references and returns a line of sufficient statistics.
+                <pre>EVAL ||| stats</pre>
+                This reads a line of sufficient statistics and produces a final score.  Meteor exits on end-of-file.
+            </p>
+            <p>
+                Languages such as C++, Python, and Perl can open an external process and communicate with its stdin and stdout.
+                For more information, see the documentation for process control for your language.
+            </p>
+            <p>
+                If your software is written in Java, you can use the Meteor API directly:
+<pre>
+import edu.cmu.meteor.scorer.MeteorConfiguration;
+import edu.cmu.meteor.scorer.MeteorScorer;
+import edu.cmu.meteor.util.Constants;
+
+MeteorConfiguration config = new MeteorConfiguration();
+config.setLanguage("en");
+config.setNormalization(Constants.NORMALIZE_KEEP_PUNCT);
+MeteorScorer scorer = new MeteorScorer(config);
+double score = scorer.getMeteorStats("test string", "reference string").score;
+</pre>
+            Remember to add meteor-*.jar to your classpath.
+            </p>
             <h3><a name="#xray"></a>8. Meteor X-ray</h3>
+            <p>
+                X-ray visualizes alignments and scores of one or more MT systems against a set of reference translations.
+                When scoring translation hypotheses with Meteor, use the -writeAlignments option to produce alignment files annotated with Meteor statistics.
+                X-Ray uses these files to produce graphical representations of alignment matrices and score distributions via XeTeX and Gnuplot.
+                Final output is in PDF form with intermediate LaTeX and plot files preserved for easy inclusion in reports and presentations.
+            </p>
+            <p>
+                Requirements:
+                <ul>
+                    <li>Python 2.6 or later 2.x (<a target="_blank" href="http://www.python.org/">http://www.python.org/</a>)</li>
+                    <li>XeTeX 2009 (<a target="_blank" href="http://www.tug.org/texlive/">http://www.tug.org/texlive/</a>)</li>
+                    <li>Gnuplot 4.4 or later (<a target="_blank" href="http://www.gnuplot.info/">http://www.gnuplot.info/</a>)</li>
+                    <li>GNU Unifont (Optional, used for non-western languages) (<a target="_blank" href="http://unifoundry.com/unifont.html">http://unifoundry.com/unifont.html</a>)</li>
+                </ul>
+                For example, on Ubuntu Linux, install the following packages:
+                <pre>sudo apt-get install python texlive-full gnuplot unifont</pre>
+            </p>
+            <p>
+                Setup:
+            </p>
+            <p>
+                If XeTeX and Gnuplot are installed somewhere other than /usr/bin, edit xray/Generation.py to include the correct locations:
+<pre>
+xelatex_cmd = '/usr/bin/xelatex'
+gnuplot_cmd = '/usr/bin/gnuplot'
+</pre>
+            </p>
+            <p>
+                Usage:
+            </p>
+            <p>
+                Run X-ray with the following:
+                <pre>python xray/xray.py</pre>
+                Running X-Ray with no arguments shows the help message:
+<pre>
+MX: X-Ray your translation output
+Usage: xray.py [options] &lt;align.out&gt; [align.out2 ...]
+
+Options:
+  -h, --help            show this help message and exit
+  -c, --compare         compare alignments of two result sets (only first 2
+                        input files used)
+  -n, --no-align        do not visualize alignments
+  -x MAX, --max=MAX     max alignments to sample (default use all)
+  -p PRE, --prefix=PRE  prefix for output files (default mx)
+  -l LBL, --label=LBL   optional system label list, comma separated:
+                        label1,label2,...
+  -u, --unifont         use unifont (use for non-western languages)
+</pre>
+            </p>
+            <p>
+                Example usage: score and visualize the hypotheses from system1 and system2 in the example/xray directory.
+            </p>
+            <p>
+                Score system1 with Meteor using the following options:
+<pre>
+java -Xmx2G -jar meteor-*.jar example/xray/system1.hyp example/xray/reference \
+-norm -writeAlignments -f system1
+</pre>
+                -norm: tokenize and normalize before scoring<br />
+                -writeAlignments: write out sentence alignments used to calculate Meteor scores<br />
+                -f system1: write alignments to system1-align.out<br />
+            </p>
+            <p>
+                Visualize alignments and scores of system1 with Meteor X-Ray:
+<pre>
+python xray/xray.py -p system1 system1-align.out
+</pre>
+                -p system1: prefix output files with 'system1'<br/>
+                system1-align.out: output from Meteor
+            </p>
+            <p>
+                Files produced:
+                <ul>
+                    <li>system1-align-system-1.pdf: visualized Meteor alignments for each sentence</li>
+                    <li>system1-score.pdf: visualized distributions of Meteor statistics</li>
+                    <li>system1-files: LaTeX and gnuplot files used to produce PDFs</li>
+                </ul>
+            </p>
+            <p>
+                Score system2 with Meteor:
+<pre>
+java -Xmx2G -jar meteor-*.jar example/xray/system2.hyp example/xray/reference \
+-norm -writeAlignments -f system2
+</pre>
+                Compare performances of system1 and system2:
+                <pre>python xray/xray.py -c -p compare system1-align.out system2-align.out</pre>
+                -c: compare two Meteor outputs<br />
+                -p compare: prefix output with 'compare'
+            </p>
+            <p>
+                Files produced:
+                <ul>
+                    <li>compare-align.pdf: visualized alignments for both systems overlain</li>
+                    <li>compare-score.pdf: score distributions for both systems</li>
+                    <li>compare-files: LaTeX and gnuplot files</li>
+                </ul>
+            </p>
+            <p>
+                Additional systems:
+            </p>
+            <p>
+                To compare any number of systems, score each with Meteor (as above) and pass the align.out files to X-Ray.
+                Without the -c flag, X-Ray will generate individual alignment matrices for each system and a single score PDF with score distributions for all systems.
+                This is useful for comparing many configurations of the same system.
+            </p>
             <h3><a name="#thanks"></a>9. Special Thanks</h3>
             <p>
                 Authors of previous Meteor versions:
