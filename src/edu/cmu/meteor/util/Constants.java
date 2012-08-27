@@ -391,7 +391,7 @@ public class Constants {
 			return "italian";
 		if (lang.equals("norwegian") || lang.equals("no"))
 			return "norweigian";
-		if (lang.equals("swedish") || lang.equals("se"))
+		if (lang.equals("swedish") || lang.equals("se") || lang.equals("sv"))
 			return "swedish";
 		if (lang.equals("other") || lang.equals("xx"))
 			return "other";
