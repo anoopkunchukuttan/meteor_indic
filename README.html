@@ -172,6 +172,15 @@
 </pre>
                 This tells Meteor to use the paraphrase table (-a paraphrase-da.gz) add the paraphrase module (-m 'exact stem paraphrase') and add a weight for paraphrases (-w '1.0 0.5 0.5').
             </p>
+            <p>
+                Other Languages:
+            </p>
+            <p>
+                Meteor is capable of scoring UTF-8 encoded data for any language.
+                Specifying language "other" will automatically select exact matches only for alignment and language-independent scoring parameters.
+                Remember to pre-segment, tokenize, and lowercase text as needed.
+                <pre>java -Xmx2G -jar meteor-*.jar test reference -l other</pre>
+            </p>
             <h3><a name="running"></a>3. Running Meteor</h3>
             <p>
                 To call Meteor, run the following:
@@ -493,7 +502,7 @@ Languages: en da de es fi fr hu it nl no pt ro ru se tr
 Usage: Stemmer lang < in > out
 </pre>
                 The stemmer reads lines from stdin and writes to stdout.
-                Each word in the input is stemmed using the <a target="_blank" hreaf="http://snowball.tartarus.org/">Snowball stemmer</a> for the specified language.
+                Each word in the input is stemmed using the <a target="_blank" href="http://snowball.tartarus.org/">Snowball stemmer</a> for the specified language.
             </p>
             <p>
                 <b>Important note:</b> the Meteor Stemmer does not apply any normalization to input text.
@@ -528,6 +537,7 @@ MeteorScorer scorer = new MeteorScorer(config);
 double score = scorer.getMeteorStats("test string", "reference string").score;
 </pre>
             Remember to add meteor-*.jar to your classpath.
+            See the source files for MeteorConfiguration and MeteorScorer for additional information.
             </p>
             <h3><a name="#xray"></a>8. Meteor X-ray</h3>
             <p>
