@@ -117,7 +117,7 @@ public class Constants {
 		return supportedLangIDs.contains(langID);
 	}
 
-	public static String getLangsString() {
+	public static String getLangsString() throws RuntimeException {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i <= LANG_MAX; i++) {
 			sb.append(" ");
@@ -346,7 +346,7 @@ public class Constants {
 		return codeDir.getParent();
 	}
 
-	public static URL getDefaultParaFileURL(int langID) {
+	public static URL getDefaultParaFileURL(int langID) throws RuntimeException {
 		String shortLang = getLanguageShortName(langID);
 		String fileName = "/data/paraphrase-" + shortLang + ".gz";
 		try {
@@ -356,7 +356,8 @@ public class Constants {
 		}
 	}
 
-	public static String normLanguageName(String language) {
+	public static String normLanguageName(String language)
+			throws RuntimeException {
 		String lang = language.toLowerCase();
 		if (lang.equals("english") || lang.equals("en"))
 			return "english";
@@ -392,11 +393,13 @@ public class Constants {
 			return "norweigian";
 		if (lang.equals("swedish") || lang.equals("se"))
 			return "swedish";
+		if (lang.equals("other") || lang.equals("xx"))
+			return "other";
 		// Not listed
-		return "other";
+		throw new RuntimeException("Unknown language (" + language + ")");
 	}
 
-	public static int getLanguageID(String language) {
+	public static int getLanguageID(String language) throws RuntimeException {
 		if (language.equals("english"))
 			return LANG_EN;
 		if (language.equals("czech"))
@@ -431,11 +434,13 @@ public class Constants {
 			return LANG_NO;
 		if (language.equals("swedish"))
 			return LANG_SE;
+		if (language.equals("other"))
+			return LANG_OTHER;
 		// Not found
-		return LANG_OTHER;
+		throw new RuntimeException("Unknown language (" + language + ")");
 	}
 
-	public static String getLanguageName(int langID) {
+	public static String getLanguageName(int langID) throws RuntimeException {
 		if (langID == LANG_EN)
 			return "english";
 		if (langID == LANG_CZ)
@@ -470,11 +475,14 @@ public class Constants {
 			return "norwegian";
 		if (langID == LANG_SE)
 			return "swedish";
+		if (langID == LANG_OTHER)
+			return "other";
 		// Not found
-		return "other";
+		throw new RuntimeException("Unknown language ID (" + langID + ")");
 	}
 
-	public static String getLanguageShortName(int langID) {
+	public static String getLanguageShortName(int langID)
+			throws RuntimeException {
 		if (langID == LANG_EN)
 			return "en";
 		if (langID == LANG_CZ)
@@ -509,11 +517,13 @@ public class Constants {
 			return "no";
 		if (langID == LANG_SE)
 			return "se";
+		if (langID == LANG_OTHER)
+			return "other";
 		// Not found
-		return "xx";
+		throw new RuntimeException("Unknown language ID (" + langID + ")");
 	}
 
-	public static String getNormName(int norm) {
+	public static String getNormName(int norm) throws RuntimeException {
 		if (norm == NO_NORMALIZE)
 			return "no_norm";
 		if (norm == NORMALIZE_LC_ONLY)
@@ -522,12 +532,11 @@ public class Constants {
 			return "norm";
 		if (norm == NORMALIZE_NO_PUNCT)
 			return "norm_nopunct";
-
 		// Not found
-		return "other";
+		throw new RuntimeException("Unknown normalization type (" + norm + ")");
 	}
 
-	public static int getModuleID(String modName) {
+	public static int getModuleID(String modName) throws RuntimeException {
 		String mod = modName.toLowerCase();
 		if (mod.equals("exact"))
 			return MODULE_EXACT;
@@ -537,14 +546,11 @@ public class Constants {
 			return MODULE_SYNONYM;
 		if (mod.equals("paraphrase"))
 			return MODULE_PARAPHRASE;
-
 		// Not found
-		System.err.println("Module \"" + modName
-				+ "\" not found, using \"exact\"");
-		return MODULE_EXACT;
+		throw new RuntimeException("Unknown module (" + modName + ")");
 	}
 
-	public static String getModuleName(int module) {
+	public static String getModuleName(int module) throws RuntimeException {
 		if (module == MODULE_EXACT)
 			return "exact";
 		if (module == MODULE_STEM)
@@ -553,12 +559,11 @@ public class Constants {
 			return "synonym";
 		if (module == MODULE_PARAPHRASE)
 			return "paraphrase";
-
 		// Not found
-		return "other";
+		throw new RuntimeException("Unknown module ID (" + module + ")");
 	}
 
-	public static String getModuleShortName(int module) {
+	public static String getModuleShortName(int module) throws RuntimeException {
 		if (module == MODULE_EXACT)
 			return "ex";
 		if (module == MODULE_STEM)
@@ -567,12 +572,12 @@ public class Constants {
 			return "sy";
 		if (module == MODULE_PARAPHRASE)
 			return "pa";
-
 		// Not found
-		return "other";
+		throw new RuntimeException("Unknown module ID (" + module + ")");
 	}
 
-	public static String getModuleListString(ArrayList<Integer> mods) {
+	public static String getModuleListString(ArrayList<Integer> mods)
+			throws RuntimeException {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < mods.size(); i++) {
 			sb.append(getModuleShortName(mods.get(i)));
@@ -582,7 +587,7 @@ public class Constants {
 		return sb.toString();
 	}
 
-	public static int getTaskID(String taskName) {
+	public static int getTaskID(String taskName) throws RuntimeException {
 		String task = taskName.toLowerCase();
 		if (task.equals("default"))
 			return TASK_DEFAULT;
@@ -598,12 +603,13 @@ public class Constants {
 			return TASK_TUNE;
 		if (task.equals("util"))
 			return TASK_UTIL;
-
-		// Other
-		return TASK_CUSTOM;
+		if (task.equals("custom"))
+			return TASK_CUSTOM;
+		// Not found
+		throw new RuntimeException("Unknown task (" + taskName + ")");
 	}
 
-	public static String getTaskName(int task) {
+	public static String getTaskName(int task) throws RuntimeException {
 		if (task == TASK_ADQ)
 			return "adq";
 		if (task == TASK_RANK)
@@ -616,16 +622,18 @@ public class Constants {
 			return "tune";
 		if (task == TASK_UTIL)
 			return "util";
-
-		// Other
-		return "custom";
+		if (task == TASK_CUSTOM)
+			return "custom";
+		// Not found
+		throw new RuntimeException("Unknown task ID (" + task + ")");
 	}
 
-	public static String getTaskDescription(String task) {
+	public static String getTaskDescription(String task)
+			throws RuntimeException {
 		return getTaskDescription(getTaskID(task));
 	}
 
-	public static String getTaskDescription(int task) {
+	public static String getTaskDescription(int task) throws RuntimeException {
 		if (task == TASK_ADQ)
 			return "Adequacy";
 		if (task == TASK_RANK)
@@ -638,9 +646,10 @@ public class Constants {
 			return "Tune";
 		if (task == TASK_UTIL)
 			return "Translator-Utility";
-
-		// Other
-		return "Custom";
+		if (task == TASK_CUSTOM)
+			return "Custom";
+		// Not found
+		throw new RuntimeException("Unknown task ID (" + task + ")");
 	}
 
 	public static ArrayList<Double> getParameters(int langID, int taskID) {
@@ -671,7 +680,7 @@ public class Constants {
 	}
 
 	public static ArrayList<Double> getModuleWeights(String language,
-			String task) {
+			String task) throws RuntimeException {
 		return getModuleWeights(getLanguageID(language), getTaskID(task));
 	}
 
@@ -712,7 +721,8 @@ public class Constants {
 		return sb.toString();
 	}
 
-	public static SnowballStemmer newStemmer(String language) {
+	public static SnowballStemmer newStemmer(String language)
+			throws RuntimeException {
 		if (language.equals("english"))
 			return new englishStemmer();
 		if (language.equals("french"))
@@ -744,10 +754,11 @@ public class Constants {
 		if (language.equals("swedish"))
 			return new swedishStemmer();
 		// Not found
-		return new englishStemmer();
+		throw new RuntimeException("No stemmer for language (" + language + ")");
 	}
 
-	public static ArrayList<Integer> getModules(int langID, int taskID) {
+	public static ArrayList<Integer> getModules(int langID, int taskID)
+			throws RuntimeException {
 		ArrayList<Integer> modules = new ArrayList<Integer>();
 		if (langID == LANG_EN) {
 			modules.add(MODULE_EXACT);
@@ -805,8 +816,21 @@ public class Constants {
 		} else if (langID == LANG_SE) {
 			modules.add(MODULE_EXACT);
 			modules.add(MODULE_STEM);
-		} else {
+		} else if (langID == LANG_OTHER) {
 			modules.add(MODULE_EXACT);
+		} else {
+			// Not found
+			String lang = "";
+			String task = "";
+			try {
+				lang = getLanguageName(langID);
+				task = getTaskName(taskID);
+			} catch (Exception ex) {
+				// Blank lang and task
+			}
+			throw new RuntimeException(
+					"No default modules for language and task (" + lang + ") ("
+							+ task + ")");
 		}
 		return modules;
 	}

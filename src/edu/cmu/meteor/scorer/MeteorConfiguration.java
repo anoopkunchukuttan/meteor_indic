@@ -90,14 +90,6 @@ public class MeteorConfiguration {
 		this.langID = Constants.getLanguageID(this.language);
 		setParaFileURL(Constants.getDefaultParaFileURL(langID));
 		int defaultTask = Constants.getDefaultTask(langID);
-		// Warn if we have to back off to language-independent parameters
-		if (defaultTask == Constants.TASK_LI) {
-			System.err.println("Warning: Language "
-					+ Constants.getLanguageName(langID)
-					+ " does NOT have tuned parameters.");
-			System.err
-					.println("Warning: Using language-independent task with all available matchers.");
-		}
 		setTask(defaultTask);
 
 	}

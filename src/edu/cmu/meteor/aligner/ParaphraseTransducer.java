@@ -128,8 +128,8 @@ public class ParaphraseTransducer {
 				paraphrase.add(parWords);
 			}
 		} catch (FileNotFoundException fe) {
-			System.err.println("Error: file " + paraphraseFileURL
-					+ " not found - using empty transducer");
+			throw new RuntimeException("Error: file not found ("
+					+ paraphraseFileURL + ")");
 		} catch (IOException ie) {
 			ie.printStackTrace();
 		}

@@ -162,14 +162,9 @@ public class Aligner {
 					this.synonyms = new SynonymDictionary(excFileURL,
 							synFileURL, relFileURL);
 				} catch (IOException ex) {
-					System.err
-							.println("Error: Synonym dictionary could not be loaded:");
-					ex.printStackTrace();
-					System.err
-							.println("Falling back to EXACT module for stage "
-									+ i);
-					this.synonyms = null;
-					this.modules.set(i, Constants.MODULE_EXACT);
+					throw new RuntimeException(
+							"Error: Synonym dictionary could not be loaded ("
+									+ synDirURL.toString() + ")");
 				}
 			} else if (module == Constants.MODULE_PARAPHRASE) {
 				this.moduleWeights.add(Constants.DEFAULT_WEIGHT_PARAPHRASE);
@@ -187,9 +182,8 @@ public class Aligner {
 			}
 			in.close();
 		} catch (IOException ex) {
-			System.err.println("Warning: No function word list for language "
-					+ language + ".");
-			System.err.println("Warning: All words treated as content words.");
+			throw new RuntimeException("No function word list for language ("
+					+ language + ")");
 		}
 	}
 
@@ -234,8 +228,7 @@ public class Aligner {
 				// Paraphrase also need the paraphrase dictionary
 				ParaphraseMatcher.match(modNum, a, s, paraphrase);
 			} else {
-				System.err.println("Matcher not recognized: " + matcher);
-				return;
+				throw new RuntimeException("Matcher not recognized: " + matcher);
 			}
 		}
 

@@ -173,11 +173,16 @@ public class Normalizer {
 			boolean keepPunctuation) {
 
 		if (!Constants.isSupported(langID)) {
-			System.err.println("Warning: No normalization rules for language "
-					+ Constants.getLanguageName(langID) + ".");
-			System.err.println("Warning: You should pre-normalize data and run Meteor without -norm");
-			System.err.println("Warning: Returning line as is: " + line);
-			return line;
+			System.err
+					.println("Error: Pre-process the input files and run Meteor without the -norm option.");
+			String lang = "";
+			try {
+				lang = Constants.getLanguageName(langID);
+			} catch (Exception ex) {
+				// Unknown language, leave blank
+			}
+			throw new RuntimeException("No normalizer for language (" + lang
+					+ ")");
 		}
 
 		// Special handling of non-western languages
