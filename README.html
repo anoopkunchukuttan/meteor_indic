@@ -508,7 +508,7 @@ Usage: Stemmer lang < in > out
                 <b>Important note:</b> the Meteor Stemmer does not apply any normalization to input text.
                 Text should be segmented, tokenized, and lowercased as desired prior to Meteor alignment.
             </p>
-            <h3><a name="#integration"></a>7. Integrating Meteor with your Software</h3>
+            <h3><a name="integration"></a>7. Integrating Meteor with your Software</h3>
             <p>
                 The simplest way to integrate Meteor with your software involves using the -stdio option:
                 <pre>java -Xmx2G -jar meteor-*.jar - - -l en -norm -stdio</pre>
@@ -539,7 +539,7 @@ double score = scorer.getMeteorStats("test string", "reference string").score;
             Remember to add meteor-*.jar to your classpath.
             See the source files for MeteorConfiguration and MeteorScorer for additional information.
             </p>
-            <h3><a name="#xray"></a>8. Meteor X-ray</h3>
+            <h3><a name="xray"></a>8. Meteor X-ray</h3>
             <p>
                 X-ray visualizes alignments and scores of one or more MT systems against a set of reference translations.
                 When scoring translation hypotheses with Meteor, use the -writeAlignments option to produce alignment files annotated with Meteor statistics.
@@ -646,7 +646,7 @@ java -Xmx2G -jar meteor-*.jar example/xray/system2.hyp example/xray/reference \
                 Without the -c flag, X-Ray will generate individual alignment matrices for each system and a single score PDF with score distributions for all systems.
                 This is useful for comparing many configurations of the same system.
             </p>
-            <h3><a name="#thanks"></a>9. Special Thanks</h3>
+            <h3><a name="thanks"></a>9. Special Thanks</h3>
             <p>
                 Authors of previous Meteor versions:
                 <ul>
