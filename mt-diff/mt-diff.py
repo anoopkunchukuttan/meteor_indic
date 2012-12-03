@@ -8,7 +8,7 @@ import math, os, re, shutil, subprocess, sys, tempfile
 bleu_script = os.path.abspath(os.path.join(os.path.dirname(__file__), \
   'files', 'mteval-v13m.pl'))
 meteor_jar = os.path.abspath(os.path.join(os.path.dirname( \
-  os.path.dirname(__file__)), 'meteor-1.3.jar'))
+  os.path.dirname(__file__)), 'meteor-1.4.jar'))
 
 langs = 'en cz de es fr ar other'
 
@@ -114,7 +114,7 @@ def main(argv):
 def bleu(hyp, ref, src, work_dir=os.curdir):
     # Run BLEU
     bleu_cmd = ['perl', bleu_script, '-t', hyp, '-r', ref, '-s', src, '-b', \
-      '--metricsMATR']
+      '--metricsMATR', '--no-norm']
     subprocess.Popen(bleu_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, \
       cwd=work_dir).wait()
     # Get scores from file
@@ -132,7 +132,7 @@ def bleu(hyp, ref, src, work_dir=os.curdir):
 def meteor(hyp, ref, lang='en', work_dir=os.curdir):
     # Run Meteor
     meteor_cmd = ['java', '-Xmx2G', '-jar', meteor_jar, hyp, ref, '-sgml', \
-      '-l', lang, '-norm']
+      '-l', lang]
     subprocess.Popen(meteor_cmd, stdout=subprocess.PIPE, \
       stderr=subprocess.PIPE, cwd=work_dir).wait()
     # Get scores from file
