@@ -2,8 +2,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-import org.tartarus.snowball.SnowballStemmer;
-
 import edu.cmu.meteor.util.Constants;
 
 public class Stemmer {
@@ -11,13 +9,14 @@ public class Stemmer {
 		if (args.length != 1) {
 			System.err
 					.println("Snowball stem some text in a supported language");
-			System.err.println("Languages: en da de es fi fr hu it nl no pt ro ru se tr");
+			System.err
+					.println("Languages: en ar da de es fi fr hu it nl no pt ro ru se tr");
 			System.err.println("Usage: Stemmer lang < in > out");
 			System.exit(1);
 		}
 
 		String lang = Constants.normLanguageName(args[0]);
-		SnowballStemmer stemmer = Constants.newStemmer(lang);
+		edu.cmu.meteor.aligner.Stemmer stemmer = Constants.newStemmer(lang);
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		String line;
@@ -29,9 +28,7 @@ public class Stemmer {
 			while (tok.hasMoreTokens()) {
 				word = tok.nextToken();
 				if (!isNumber(word)) {
-					stemmer.setCurrent(word);
-					stemmer.stem();
-					word = stemmer.getCurrent();
+					word = stemmer.stem(word);
 				}
 				sb.append(" " + word);
 			}

@@ -105,7 +105,6 @@ public class ParaphraseTransducer {
 					new GZIPInputStream(paraphraseFileURL.openStream()),
 					"UTF-8"));
 			String line;
-			// System.out.println("Loading paraphrases:");
 			while ((line = in.readLine()) != null) {
 				// These probabilities do not appear to correlate with actual
 				// paraphrase probability

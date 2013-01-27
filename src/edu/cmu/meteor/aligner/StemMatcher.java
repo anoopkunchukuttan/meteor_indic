@@ -11,12 +11,9 @@ package edu.cmu.meteor.aligner;
 
 import java.util.ArrayList;
 
-import org.tartarus.snowball.SnowballStemmer;
-
 public class StemMatcher {
 
-	public static void match(int stage, Alignment a, Stage s,
-			SnowballStemmer stemmer) {
+	public static void match(int stage, Alignment a, Stage s, Stemmer stemmer) {
 
 		// Get keys for word stems
 		int[] stems1 = wordsToStemKeys(a.words1, stemmer);
@@ -47,13 +44,11 @@ public class StemMatcher {
 	}
 
 	private static int[] wordsToStemKeys(ArrayList<String> words,
-			SnowballStemmer stemmer) {
+			Stemmer stemmer) {
 		int[] keys = new int[words.size()];
 		for (int i = 0; i < words.size(); i++) {
 			// Stem the word before generating a key
-			stemmer.setCurrent(words.get(i));
-			stemmer.stem();
-			keys[i] = stemmer.getCurrent().hashCode();
+			keys[i] = stemmer.stem(words.get(i)).hashCode();
 		}
 		return keys;
 	}

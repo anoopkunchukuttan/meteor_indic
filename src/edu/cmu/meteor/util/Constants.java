@@ -10,13 +10,13 @@
 package edu.cmu.meteor.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 
-import org.tartarus.snowball.SnowballStemmer;
 import org.tartarus.snowball.ext.danishStemmer;
 import org.tartarus.snowball.ext.dutchStemmer;
 import org.tartarus.snowball.ext.englishStemmer;
@@ -33,7 +33,10 @@ import org.tartarus.snowball.ext.spanishStemmer;
 import org.tartarus.snowball.ext.swedishStemmer;
 import org.tartarus.snowball.ext.turkishStemmer;
 
+import edu.cmu.meteor.aligner.LookupTableStemmer;
 import edu.cmu.meteor.aligner.PartialAlignment;
+import edu.cmu.meteor.aligner.SnowballStemmerWrapper;
+import edu.cmu.meteor.aligner.Stemmer;
 
 public class Constants {
 
@@ -68,6 +71,9 @@ public class Constants {
 	public static final double DEFAULT_WEIGHT_PARAPHRASE = 1.0;
 
 	public static final int DEFAULT_BEAM_SIZE = 40;
+
+	public static final URL DEFAULT_STEM_DIR_URL = ClassLoader
+			.getSystemResource("stem");
 
 	public static final URL DEFAULT_SYN_DIR_URL = ClassLoader
 			.getSystemResource("synonym");
@@ -721,38 +727,47 @@ public class Constants {
 		return sb.toString();
 	}
 
-	public static SnowballStemmer newStemmer(String language)
-			throws RuntimeException {
+	public static Stemmer newStemmer(String language) throws RuntimeException {
 		if (language.equals("english"))
-			return new englishStemmer();
+			return new SnowballStemmerWrapper(new englishStemmer());
 		if (language.equals("french"))
-			return new frenchStemmer();
+			return new SnowballStemmerWrapper(new frenchStemmer());
 		if (language.equals("german"))
-			return new germanStemmer();
+			return new SnowballStemmerWrapper(new germanStemmer());
 		if (language.equals("spanish"))
-			return new spanishStemmer();
+			return new SnowballStemmerWrapper(new spanishStemmer());
 		if (language.equals("portuguese"))
-			return new portugueseStemmer();
+			return new SnowballStemmerWrapper(new portugueseStemmer());
 		if (language.equals("russian"))
-			return new russianStemmer();
+			return new SnowballStemmerWrapper(new russianStemmer());
 		if (language.equals("danish"))
-			return new danishStemmer();
+			return new SnowballStemmerWrapper(new danishStemmer());
 		if (language.equals("romanian"))
-			return new romanianStemmer();
+			return new SnowballStemmerWrapper(new romanianStemmer());
 		if (language.equals("hungarian"))
-			return new hungarianStemmer();
+			return new SnowballStemmerWrapper(new hungarianStemmer());
 		if (language.equals("turkish"))
-			return new turkishStemmer();
+			return new SnowballStemmerWrapper(new turkishStemmer());
 		if (language.equals("finnish"))
-			return new finnishStemmer();
+			return new SnowballStemmerWrapper(new finnishStemmer());
 		if (language.equals("dutch"))
-			return new dutchStemmer();
+			return new SnowballStemmerWrapper(new dutchStemmer());
 		if (language.equals("italian"))
-			return new italianStemmer();
+			return new SnowballStemmerWrapper(new italianStemmer());
 		if (language.equals("norwegian"))
-			return new norwegianStemmer();
+			return new SnowballStemmerWrapper(new norwegianStemmer());
 		if (language.equals("swedish"))
-			return new swedishStemmer();
+			return new SnowballStemmerWrapper(new swedishStemmer());
+		if (language.equals("arabic")) {
+			try {
+				URL stemFileURL = new URL(DEFAULT_STEM_DIR_URL.toString() + "/"
+						+ language + ".gz");
+				return new LookupTableStemmer(stemFileURL);
+			} catch (IOException ex) {
+				throw new RuntimeException(
+						"Error loading stemmer for language (" + language + ")");
+			}
+		}
 		// Not found
 		throw new RuntimeException("No stemmer for language (" + language + ")");
 	}

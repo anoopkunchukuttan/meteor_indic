@@ -19,8 +19,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 
-import org.tartarus.snowball.SnowballStemmer;
-
 import edu.cmu.meteor.util.Constants;
 
 public class Aligner {
@@ -35,7 +33,7 @@ public class Aligner {
 
 	private int beamSize;
 
-	private SnowballStemmer stemmer;
+	private Stemmer stemmer;
 	private SynonymDictionary synonyms;
 	private ParaphraseTransducer paraphrase;
 	private HashSet<String> functionWords;
