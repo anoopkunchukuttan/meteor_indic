@@ -186,7 +186,7 @@ public class Normalizer {
 		}
 
 		// Special handling of non-western languages
-		if (langID == Constants.LANG_AR || langID == Constants.LANG_OTHER)
+		if (langID == Constants.LANG_AR_BW_RED || langID == Constants.LANG_OTHER)
 			return normalizeNonWestern(line, keepPunctuation);
 
 		// Wrap line in whitespace

@@ -92,7 +92,7 @@ public class Constants {
 	public static final int LANG_FR = 2;
 	public static final int LANG_ES = 3;
 	public static final int LANG_DE = 4;
-	public static final int LANG_AR = 5;
+	public static final int LANG_AR_BW_RED = 5;
 	public static final int LANG_PT = 6;
 	public static final int LANG_RU = 7;
 	public static final int LANG_DA = 8;
@@ -118,7 +118,7 @@ public class Constants {
 			supportedLangIDs.add(LANG_FR);
 			supportedLangIDs.add(LANG_ES);
 			supportedLangIDs.add(LANG_DE);
-			supportedLangIDs.add(LANG_AR);
+			supportedLangIDs.add(LANG_AR_BW_RED);
 		}
 		return supportedLangIDs.contains(langID);
 	}
@@ -141,7 +141,7 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // French
 			{ 0.0, 0.0, 0.0, 0.0 }, // Spanish
 			{ 0.0, 0.0, 0.0, 0.0 }, // German
-			{ 0.00, 0.05, 0.80, 0.50 }, // Arabic
+			{ 0.00, 0.05, 0.80, 0.50 }, // Arabic Buckwalter Reduced
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
@@ -161,7 +161,7 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // French
 			{ 0.0, 0.0, 0.0, 0.0 }, // Spanish
 			{ 0.0, 0.0, 0.0, 0.0 }, // German
-			{ 1.0, 0.6, 0.0, 0.0 }, // Arabic
+			{ 1.0, 0.6, 0.0, 0.0 }, // Arabic Buckwalter Reduced
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
@@ -184,7 +184,7 @@ public class Constants {
 			{ 0.90, 1.40, 0.60, 0.65 }, // French
 			{ 0.65, 1.30, 0.50, 0.80 }, // Spanish
 			{ 0.95, 1.00, 0.55, 0.55 }, // German
-			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic
+			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic Buckwalter Reduced
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
@@ -204,7 +204,7 @@ public class Constants {
 			{ 1.0, 0.2, 0.4, 0.0 }, // French
 			{ 1.0, 0.8, 0.6, 0.0 }, // Spanish
 			{ 1.0, 0.8, 0.2, 0.0 }, // German
-			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic
+			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic Buckwalter Reduced
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
@@ -227,7 +227,7 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // French
 			{ 0.0, 0.0, 0.0, 0.0 }, // Spanish
 			{ 0.0, 0.0, 0.0, 0.0 }, // German
-			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic
+			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic Buckwalter Reduced
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
@@ -247,7 +247,7 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // French
 			{ 0.0, 0.0, 0.0, 0.0 }, // Spanish
 			{ 0.0, 0.0, 0.0, 0.0 }, // German
-			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic
+			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic Buckwalter Reduced
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
@@ -270,7 +270,7 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // French
 			{ 0.0, 0.0, 0.0, 0.0 }, // Spanish
 			{ 0.0, 0.0, 0.0, 0.0 }, // German
-			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic
+			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic Buckwalter Reduced
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
@@ -290,7 +290,7 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // French
 			{ 0.0, 0.0, 0.0, 0.0 }, // Spanish
 			{ 0.0, 0.0, 0.0, 0.0 }, // German
-			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic
+			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic Buckwalter Reduced
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
@@ -336,7 +336,7 @@ public class Constants {
 		// Supported languages get the default task
 		if (isSupported(langID)) {
 			// Arabic only has parameters for adequacy
-			if (langID == LANG_AR) {
+			if (langID == LANG_AR_BW_RED) {
 				return TASK_ADQ;
 			}
 			return TASK_DEFAULT;
@@ -375,8 +375,8 @@ public class Constants {
 			return "german";
 		if (lang.equals("spanish") || lang.equals("es"))
 			return "spanish";
-		if (lang.equals("arabic") || lang.equals("ar"))
-			return "arabic";
+		if (lang.equals("arabic-buckwalter-reduced") || lang.equals("ar-bw-red"))
+			return "arabic-buckwalter-reduced";
 		if (lang.equals("portuguese") || lang.equals("pt"))
 			return "portuguese";
 		if (lang.equals("russian") || lang.equals("ru"))
@@ -416,8 +416,8 @@ public class Constants {
 			return LANG_ES;
 		if (language.equals("german"))
 			return LANG_DE;
-		if (language.equals("arabic"))
-			return LANG_AR;
+		if (language.equals("arabic-buckwalter-reduced"))
+			return LANG_AR_BW_RED;
 		if (language.equals("portuguese"))
 			return LANG_PT;
 		if (language.equals("russian"))
@@ -457,8 +457,8 @@ public class Constants {
 			return "spanish";
 		if (langID == LANG_DE)
 			return "german";
-		if (langID == LANG_AR)
-			return "arabic";
+		if (langID == LANG_AR_BW_RED)
+			return "arabic-buckwalter-reduced";
 		if (langID == LANG_PT)
 			return "portuguese";
 		if (langID == LANG_RU)
@@ -499,8 +499,8 @@ public class Constants {
 			return "es";
 		if (langID == LANG_DE)
 			return "de";
-		if (langID == LANG_AR)
-			return "ar";
+		if (langID == LANG_AR_BW_RED)
+			return "ar-bw-red";
 		if (langID == LANG_PT)
 			return "pt";
 		if (langID == LANG_RU)
@@ -609,7 +609,7 @@ public class Constants {
 			return TASK_TUNE;
 		if (task.equals("util"))
 			return TASK_UTIL;
-		if (task.equals("custom"))
+		if (task.startsWith("custom"))
 			return TASK_CUSTOM;
 		// Not found
 		throw new RuntimeException("Unknown task (" + taskName + ")");
@@ -758,7 +758,7 @@ public class Constants {
 			return new SnowballStemmerWrapper(new norwegianStemmer());
 		if (language.equals("swedish"))
 			return new SnowballStemmerWrapper(new swedishStemmer());
-		if (language.equals("arabic")) {
+		if (language.equals("arabic-buckwalter-reduced")) {
 			try {
 				URL stemFileURL = new URL(DEFAULT_STEM_DIR_URL.toString() + "/"
 						+ language + ".gz");
@@ -795,7 +795,7 @@ public class Constants {
 		} else if (langID == LANG_CZ) {
 			modules.add(MODULE_EXACT);
 			modules.add(MODULE_PARAPHRASE);
-		} else if (langID == LANG_AR) {
+		} else if (langID == LANG_AR_BW_RED) {
 			modules.add(MODULE_EXACT);
 			modules.add(MODULE_PARAPHRASE);
 		} else if (langID == LANG_PT) {
