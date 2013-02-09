@@ -4,8 +4,10 @@ import org.tartarus.snowball.SnowballStemmer;
 
 /**
  * 
- * SNOWBALL STEMMERS ARE NOT THREADSAFE. KEEP THIS IN MIND WHEN USING THIS
- * CLASS.
+ * SNOWBALL STEMMERS ARE NOT THREADSAFE. THIS IS WORKED AROUND WITH A
+ * SYNCHRONIZED METHOD. WHILE TECHNICALLY THREADSAFE, THIS WILL SLOW DOWN
+ * MULTITHREADED APPLICATIONS. USE THE COPY CONSTRUCTORS FOR Aligner AND
+ * MeteorScorer FOR MULTITHREADED APPLICATIONS.
  * 
  */
 public class SnowballStemmerWrapper implements Stemmer {
@@ -18,10 +20,10 @@ public class SnowballStemmerWrapper implements Stemmer {
 
 	/**
 	 * 
-	 * THIS METHOD IS NOT THREADSAFE BECAUSE SNOWBALL STEMMERS ARE NOT
-	 * THREADSAFE. USE WITH CAUTION.
+	 * THIS METHOD IS A SYNCHRONIZED WRAPPER FOR NON-THREADSAFE SNOWBALL
+	 * STEMMERS.
 	 */
-	public String stem(String word) {
+	public synchronized String stem(String word) {
 		stemmer.setCurrent(word);
 		stemmer.stem();
 		return stemmer.getCurrent();

@@ -118,7 +118,6 @@ public class Constants {
 			supportedLangIDs.add(LANG_FR);
 			supportedLangIDs.add(LANG_ES);
 			supportedLangIDs.add(LANG_DE);
-			supportedLangIDs.add(LANG_AR_BW_RED);
 		}
 		return supportedLangIDs.contains(langID);
 	}
@@ -141,7 +140,7 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // French
 			{ 0.0, 0.0, 0.0, 0.0 }, // Spanish
 			{ 0.0, 0.0, 0.0, 0.0 }, // German
-			{ 0.00, 0.05, 0.80, 0.50 }, // Arabic Buckwalter Reduced
+			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic Buckwalter Reduced
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
@@ -161,7 +160,7 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // French
 			{ 0.0, 0.0, 0.0, 0.0 }, // Spanish
 			{ 0.0, 0.0, 0.0, 0.0 }, // German
-			{ 1.0, 0.6, 0.0, 0.0 }, // Arabic Buckwalter Reduced
+			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic Buckwalter Reduced
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
 			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
@@ -335,10 +334,6 @@ public class Constants {
 	public static int getDefaultTask(int langID) {
 		// Supported languages get the default task
 		if (isSupported(langID)) {
-			// Arabic only has parameters for adequacy
-			if (langID == LANG_AR_BW_RED) {
-				return TASK_ADQ;
-			}
 			return TASK_DEFAULT;
 		}
 		// Unsupported languages get language-independent parameters
@@ -375,7 +370,8 @@ public class Constants {
 			return "german";
 		if (lang.equals("spanish") || lang.equals("es"))
 			return "spanish";
-		if (lang.equals("arabic-buckwalter-reduced") || lang.equals("ar-bw-red"))
+		if (lang.equals("arabic-buckwalter-reduced")
+				|| lang.equals("ar-bw-red"))
 			return "arabic-buckwalter-reduced";
 		if (lang.equals("portuguese") || lang.equals("pt"))
 			return "portuguese";
@@ -760,9 +756,9 @@ public class Constants {
 			return new SnowballStemmerWrapper(new swedishStemmer());
 		if (language.equals("arabic-buckwalter-reduced")) {
 			try {
-				URL stemFileURL = new URL(DEFAULT_STEM_DIR_URL.toString() + "/"
-						+ language + ".gz");
-				return new LookupTableStemmer(stemFileURL);
+				return new LookupTableStemmer(new URL(
+						DEFAULT_STEM_DIR_URL.toString() + "/" + language
+								+ ".gz"));
 			} catch (IOException ex) {
 				throw new RuntimeException(
 						"Error loading stemmer for language (" + language + ")");
@@ -797,7 +793,7 @@ public class Constants {
 			modules.add(MODULE_PARAPHRASE);
 		} else if (langID == LANG_AR_BW_RED) {
 			modules.add(MODULE_EXACT);
-			modules.add(MODULE_PARAPHRASE);
+			modules.add(MODULE_STEM);
 		} else if (langID == LANG_PT) {
 			modules.add(MODULE_EXACT);
 			modules.add(MODULE_STEM);
