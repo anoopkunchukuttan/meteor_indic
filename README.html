@@ -655,7 +655,16 @@ java -Xmx2G -jar meteor-*.jar example/xray/system2.hyp example/xray/reference \
                 <ul>
                     <li>System outputs, plain text, one sentence per line: sys1, sys2, ... (typically named after site)</li>
                     <li>Reference translation: ref</li>
-                    <li>A file of rankings: rank</li>
+                    <li>
+                        A file of rankings: rank
+                        <ul>
+                            <li>Lines are formatted as (tab delimited):</li>
+                            <pre>segment-id    lang-pair1    system1    lang-pair2    system2</pre>
+                            <li>This means that for segment id, system1 is ranked better than system2</li>
+                            <li>The same hypothesis pair can have multiple judgments.</li>
+                            <li>Ties should be discarded prior to training.</li>
+                        </ul>
+                    </li>
                 </ul>
                 These files can exist for multiple language pairs with the same target language.
                 For example, in WMT English, we have fr-en.sys1, fr-en.sys2, fr-en.ref, fr-en.rank, de-en.sys1, de-en.sys2, de-en.ref, de-en.rank, ...
