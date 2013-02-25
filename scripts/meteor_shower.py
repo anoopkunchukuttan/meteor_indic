@@ -58,7 +58,7 @@ def main(argv):
         start = '{0} 0 {1} 0 {2}'.format(a, g_min, w_start)
         end = '{0} 2.5 {1} 1.0 {2}'.format(a, g_max, w_end)
         # Retry in case of filesystem failure
-        trainer_cmd = 'cd {sd} && while true ; do sleep 1 ; java -XX:+UseCompressedOops -Xmx2G -cp {0} Trainer {1} {2} -l {3} -i \'{4}\' -f \'{5}\' -s \'{6}\' {args} > {7} ; if [ "$?" = "0" ] ; then break ; fi ; done'.format(meteor_jar, task, data_dir, lang, start, end, step, out_file, sd=sb_sub_dir, args=' '.join(other_args))
+        trainer_cmd = 'cd {sd} && while true ; do sleep 1 ; java -Xmx1G -cp {0} Trainer {1} {2} -l {3} -i \'{4}\' -f \'{5}\' -s \'{6}\' {args} > {7} ; if [ "$?" = "0" ] ; then break ; fi ; done'.format(meteor_jar, task, data_dir, lang, start, end, step, out_file, sd=sb_sub_dir, args=' '.join(other_args))
         queue.append(trainer_cmd)
     
     # Run Trainers

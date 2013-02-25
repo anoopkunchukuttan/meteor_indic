@@ -104,7 +104,8 @@
             <a href="#stemmer">6. Standalone Word Stemmer</a><br />
             <a href="#integration">7. Integrating Meteor with your Software</a><br />
             <a href="#xray">8. Meteor X-ray</a><br />
-            <a href="#thanks">9. Special Thanks</a><br />
+            <a href="#training">9. Training Meteor Parameters</a><br />
+            <a href="#thanks">10. Special Thanks</a><br />
 
             <h3><a name="about"></a>1. About</h3>
             <p>
@@ -645,6 +646,69 @@ java -Xmx2G -jar meteor-*.jar example/xray/system2.hyp example/xray/reference \
                 To compare any number of systems, score each with Meteor (as above) and pass the align.out files to X-Ray.
                 Without the -c flag, X-Ray will generate individual alignment matrices for each system and a single score PDF with score distributions for all systems.
                 This is useful for comparing many configurations of the same system.
+            </p>
+            <h3><a name="training"></a>10. Training Meteor Parameters</h3>
+            <p>
+                Meteor parameters can be optimized to maximize agreement with human judgments of translation quality.
+                The most frequently used evaluation task is ranking, where metrics should replicate human preferences between multiple translation hypotheses.
+                Training Meteor to ranking data requires the following:
+                <ul>
+                    <li>System outputs, plain text, one sentence per line: sys1, sys2, ... (typically named after site)</li>
+                    <li>Reference translation: ref</li>
+                    <li>A file of rankings: rank</li>
+                </ul>
+                These files can exist for multiple language pairs with the same target language.
+                For example, in WMT English, we have fr-en.sys1, fr-en.sys2, fr-en.ref, fr-en.rank, de-en.sys1, de-en.sys2, de-en.ref, de-en.rank, ...
+                Meteor will consider all data files in the training directory when optimizing parameters.
+                Meteor outputs the names of processed files to verify the data being used.
+            </p>
+            <p>
+                To prepare for training, convert the input files to SGML format where needed.
+                (Plaintext would be fine in most cases, but datasets distributed as SGML aren't required to have segments in consistent order, which can create problems for older data.)
+                The following example uses the included data in example/train:
+            </p>
+<pre>
+mkdir my-train-dir
+python scripts/sgmlize.py t &lt; example/train/fr-en.sys1 &gt; my-train-dir/fr-en.sys1.sgm
+python scripts/sgmlize.py t &lt; example/train/fr-en.sys2 &gt; my-train-dir/fr-en.sys2.sgm
+python scripts/sgmlize.py r &lt; example/train/fr-en.ref &gt; my-train-dir/fr-en.ref.sgm
+cp example/train/fr-en.rank my-train-dir
+</pre>
+            <p>
+                Since parallel training requires loading several copies of Meteor into memory, filter the paraphrase table to minimize memory usage:
+            </p>
+<pre>
+java -cp meteor-*.jar FilterParaphrase data/paraphrase-en.gz filtered.gz \
+example/train/fr-en.ref
+</pre>
+            <p>
+                Meteor trains parameters by calculating sufficient statistics for all hypotheses and running an exhaustive grid search over rescorings.
+                Every point explored is written out.
+                To run the Trainer directly on one cpu:
+            </p>
+<pre>
+java -cp meteor-*.jar Trainer rank my-train-dir -a filtered.gz &gt; train.out
+</pre>
+            <p>
+                To find the best training point, sort the output:
+            </p>
+<pre>
+sort -gr train.out &gt; train.out.sort
+</pre>
+            <p>
+                The point with the highest correlation is the first line of the sorted file.
+            </p>
+            <p>
+                Running on multiple cpus greatly improves the speed of Meteor training.
+                To run the grid search in parallel, use the meteor_shower script:
+            </p>
+<pre>
+python scripts/meteor_shower.py meteor-*.jar en 4 rank my-train-dir work-dir 8 -a `pwd`/filtered.gz
+</pre>
+            <p>
+                This will keep 8 trainers running in parallel.
+                Make sure to specify an absolute path for the paraphrase file.
+                The results will be written to work-dir, along with a script for sorting the results.    
             </p>
             <h3><a name="thanks"></a>9. Special Thanks</h3>
             <p>
