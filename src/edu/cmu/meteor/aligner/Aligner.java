@@ -206,8 +206,16 @@ public class Aligner {
 		// Set the stage for matching
 		Stage s = new Stage(a.words1, a.words2);
 
+		// Special case: if sentences are identical, only exact matches are
+		// needed. This prevents beam search errors.
+		int modsUsed = moduleCount;
+		if (a.words1.size() == a.words2.size()
+				&& Arrays.equals(s.words1, s.words2)) {
+			modsUsed = 1;
+		}
+
 		// For each module
-		for (int modNum = 0; modNum < moduleCount; modNum++) {
+		for (int modNum = 0; modNum < modsUsed; modNum++) {
 
 			// Get the matcher for this module
 			int matcher = modules.get(modNum);
