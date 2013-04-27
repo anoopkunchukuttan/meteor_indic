@@ -118,6 +118,7 @@ public class Constants {
 			supportedLangIDs.add(LANG_FR);
 			supportedLangIDs.add(LANG_ES);
 			supportedLangIDs.add(LANG_DE);
+            supportedLangIDs.add(LANG_RU);
 		}
 		return supportedLangIDs.contains(langID);
 	}
@@ -185,7 +186,7 @@ public class Constants {
 			{ 0.95, 1.00, 0.55, 0.55 }, // German
 			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic Buckwalter Reduced
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
-			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
+			{ 0.75, 1.40, 0.70, 0.50 }, // Russian, copy of LI
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
 			{ 0.0, 0.0, 0.0, 0.0 }, // Romanian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Hungarian
@@ -205,7 +206,7 @@ public class Constants {
 			{ 1.0, 0.8, 0.2, 0.0 }, // German
 			{ 0.0, 0.0, 0.0, 0.0 }, // Arabic Buckwalter Reduced
 			{ 0.0, 0.0, 0.0, 0.0 }, // Portuguese
-			{ 0.0, 0.0, 0.0, 0.0 }, // Russian
+			{ 1.0, 0.5, 0.5, 0.0 }, // Russian, copy of LI
 			{ 0.0, 0.0, 0.0, 0.0 }, // Danish
 			{ 0.0, 0.0, 0.0, 0.0 }, // Romanian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Hungarian
@@ -800,6 +801,7 @@ public class Constants {
 		} else if (langID == LANG_RU) {
 			modules.add(MODULE_EXACT);
 			modules.add(MODULE_STEM);
+            modules.add(MODULE_PARAPHRASE);
 		} else if (langID == LANG_DA) {
 			modules.add(MODULE_EXACT);
 			modules.add(MODULE_STEM);

@@ -32,9 +32,10 @@ public class Normalizer {
 
 	private static String s_space = " ";
 
-	// Lists of alpha and alphanumeric characters, including unicode ranges
-	private static String alpha = "A-Za-zŠŽšžŸÀ-ÖØ-öø-ž";
-	private static String alnum = "0-9A-Za-zŠŽšžŸÀ-ÖØ-öø-ž";
+	// Lists of alpha and alphanumeric characters, including Unicode ranges
+    //                            Western European         Cyrillic
+	private static String alpha = "A-Za-zŠŽšžŸÀ-ÖØ-öø-ž" + "Ѐ-ӿԀ-ԧꙀ-ꙮ꙾-ꚗᴀ-ᵿ";
+	private static String alnum = "0-9A-Za-zŠŽšžŸÀ-ÖØ-öø-ž" + "Ѐ-ӿԀ-ԧꙀ-ꙮ꙾-ꚗᴀ-ᵿ";
 
 	// List of special case characters not to wrap in whitespace
 	private static Pattern r_sep_other = Pattern.compile("([^" + alnum
@@ -106,7 +107,8 @@ public class Normalizer {
 			+ "\\.])[\\-]([" + alnum + "])");
 	private static String s_rm_dash = "$1 $2";
 
-	private static Pattern r_white = Pattern.compile("\\ +");
+    //                                                  Unicode spaces
+	private static Pattern r_white = Pattern.compile("[               　 ]+");
 	private static String s_white = " ";
 
 	// Nonbreaking prefixes
