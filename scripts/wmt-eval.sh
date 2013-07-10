@@ -13,20 +13,20 @@ fi
 PLAIN=$1
 
 for SET in $(ls $PLAIN/system-outputs) ; do
-    for LANG in cs de es fr ; do
+    for LANG in cs de es fr ru ; do
         echo "$LANG-en:"
         for HYP in $PLAIN/system-outputs/$SET/$LANG-en/* ; do
-            SYS=$(echo $HYP | sed -re 's/.+\.//')
+            SYS=$(echo $HYP | sed -re "s/.+$SET\.$LANG-en\.//")
             echo " $SYS"
-            java -Xmx2G -jar $METEOR $HYP $PLAIN/references/$SET-ref.en -l en -norm | $FMT $LANG-en $SET $SYS Meteor
+            java -Xmx700M -jar $METEOR $HYP $PLAIN/references/$SET-ref.en -l en -norm | $FMT $LANG-en $SET $SYS Meteor
         done
     done
-    for LANG in cs de es fr ; do
+    for LANG in cs de es fr ru ; do
         echo "en-$LANG"
         for HYP in $PLAIN/system-outputs/$SET/en-$LANG/* ; do
-            SYS=$(echo $HYP | sed -re 's/.+\.//')
+            SYS=$(echo $HYP | sed -re "s/.+$SET\.en-$LANG\.//")
             echo " $SYS"
-            java -Xmx2G -jar $METEOR $HYP $PLAIN/references/$SET-ref.$LANG -l $LANG -norm | $FMT en-$LANG $SET $SYS Meteor
+            java -Xmx700M -jar $METEOR $HYP $PLAIN/references/$SET-ref.$LANG -l $LANG -norm | $FMT en-$LANG $SET $SYS Meteor
         done
     done
 done

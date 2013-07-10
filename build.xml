@@ -23,7 +23,7 @@
     </jar>
   </target>
 
-  <target name="clean" description="clean up generted files">
+  <target name="clean" description="clean up generated files">
     <delete dir="build" />
     <delete file="${meteor-jar}" />
   </target>
