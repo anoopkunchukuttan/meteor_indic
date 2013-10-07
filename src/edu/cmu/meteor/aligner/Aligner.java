@@ -158,7 +158,7 @@ public class Aligner {
 					URL relFileURL = new URL(synDirURL.toString() + "/"
 							+ this.language + ".relations");
 					this.synonyms = new SynonymDictionary(excFileURL,
-							synFileURL, relFileURL);
+							synFileURL, relFileURL,language);
 				} catch (IOException ex) {
 					throw new RuntimeException(
 							"Error: Synonym dictionary could not be loaded ("

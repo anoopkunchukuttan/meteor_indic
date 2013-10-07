@@ -9,6 +9,8 @@
 
 package edu.cmu.meteor.aligner;
 
+import in.ac.iitb.cfilt.genstem.Trie;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -28,13 +30,14 @@ public class SynonymDictionary {
 
 	// Relations
 	private Hashtable<Integer, HashSet<Integer>> setToRelations;
+	private String language;
 
-	public SynonymDictionary(URL excFileURL, URL synFileURL, URL relFileURL)
+	public SynonymDictionary(URL excFileURL, URL synFileURL, URL relFileURL,String lang)
 			throws IOException {
 		wordToBases = new Hashtable<String, ArrayList<String>>();
 		wordToSynsets = new Hashtable<String, HashSet<Integer>>();
 		setToRelations = new Hashtable<Integer, HashSet<Integer>>();
-
+		language = lang;
 		// Exception file
 		BufferedReader inExc = new BufferedReader(new InputStreamReader(
 				excFileURL.openStream(), "UTF-8"));
@@ -107,7 +110,7 @@ public class SynonymDictionary {
 				set.addAll(getSynSets(base));
 			return set;
 		}
-		return getSynSets(morph(word));
+		return getSynSets(morph(word,language));
 	}
 
 	public HashSet<Integer> getRelations(int set) {
@@ -141,21 +144,43 @@ public class SynonymDictionary {
 	/* Adjective endings */
 	"", "", "e", "e" };
 
-	private String morph(String word) {
+	private String morph(String word,String lang) {
+		try{
+		if (lang.equals("en")){
+			return engMorph(word);
+		}
+		else{
+			return indicMorph(word,lang);
+		}
+		}catch(Exception e){return word;}
+	}
+	
+	/******************* 06/10/2013: Added by Abhijit*******/
+	private String indicMorph(String word,String lang)
+	{
+		Trie t = new Trie();
+		t.setupTrie(lang);
+		String stem = t.getRoot(word,"n","0");
+		
+		return stem;
+		
+	}
+	/******************* 06/10/2013: Modified by Abhijit*******/
+	private String engMorph(String word){
 		String tmp = "";
 		String end = "";
 		String retval = "";
-
+	
 		if (word.endsWith("ful")) {
 			tmp = word.substring(0, word.lastIndexOf('f'));
 			end = "ful";
 		}
-
+	
 		if (word.endsWith("ss") || word.length() <= 2)
 			return word;
-
+	
 		tmp = word;
-
+	
 		for (int i = 0; i < CNT; i++) {
 			int ender = i + OFFSET;
 			if (tmp.endsWith(sufx[ender]))
@@ -169,7 +194,7 @@ public class SynonymDictionary {
 				return retval;
 			}
 		}
-
+	
 		return "";
 	}
 }
