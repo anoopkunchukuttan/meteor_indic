@@ -1,4 +1,4 @@
-package helper;
+package in.ac.iitb.cfilt.genstem.helper;
 
 /**
  * <p>Class	: DictionaryItem

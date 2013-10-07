@@ -31,6 +31,7 @@ public class SynonymDictionary {
 	// Relations
 	private Hashtable<Integer, HashSet<Integer>> setToRelations;
 	private String language;
+	private Trie t;
 
 	public SynonymDictionary(URL excFileURL, URL synFileURL, URL relFileURL,String lang)
 			throws IOException {
@@ -92,7 +93,9 @@ public class SynonymDictionary {
 			}
 			inRel.close();
 		}
-
+		
+		t = new Trie();
+		t.setupTrie(lang);
 	}
 
 	public HashSet<Integer> getSynSets(String word) {
@@ -158,11 +161,10 @@ public class SynonymDictionary {
 	/******************* 06/10/2013: Added by Abhijit*******/
 	private String indicMorph(String word,String lang)
 	{
-		Trie t = new Trie();
-		t.setupTrie(lang);
-		String stem = t.getRoot(word,"n","0");
 		
-		return stem;
+		String root = t.getRoot(word,"n","0");
+		
+		return root;
 		
 	}
 	/******************* 06/10/2013: Modified by Abhijit*******/

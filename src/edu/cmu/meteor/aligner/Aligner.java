@@ -180,6 +180,7 @@ public class Aligner {
 			}
 			in.close();
 		} catch (IOException ex) {
+			ex.printStackTrace();
 			throw new RuntimeException("No function word list for language ("
 					+ language + ")");
 		}

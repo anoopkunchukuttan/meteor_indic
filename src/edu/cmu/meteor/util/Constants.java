@@ -33,6 +33,7 @@ import org.tartarus.snowball.ext.spanishStemmer;
 import org.tartarus.snowball.ext.swedishStemmer;
 import org.tartarus.snowball.ext.turkishStemmer;
 
+import edu.cmu.meteor.aligner.IndicStemmer;
 import edu.cmu.meteor.aligner.LookupTableStemmer;
 import edu.cmu.meteor.aligner.PartialAlignment;
 import edu.cmu.meteor.aligner.SnowballStemmerWrapper;
@@ -78,8 +79,7 @@ public class Constants {
 	public static final URL DEFAULT_SYN_DIR_URL = ClassLoader
 			.getSystemResource("synonym");
 
-	public static final URL DEFAULT_WORD_DIR_URL = ClassLoader
-			.getSystemResource("function");
+	public static final URL DEFAULT_WORD_DIR_URL = Constants.class.getClassLoader().getResource("function");
 
 	/*
 	 * Scorer Constants
@@ -104,7 +104,7 @@ public class Constants {
 	public static final int LANG_IT = 14;
 	public static final int LANG_NO = 15;
 	public static final int LANG_SE = 16;
-	
+
 	// codes for Indic languages
 	// Added: 16 Sep 2013 by Anoop Kunchukuttan
 	public static final int LANG_AS = 17;
@@ -139,7 +139,7 @@ public class Constants {
 			supportedLangIDs.add(LANG_FR);
 			supportedLangIDs.add(LANG_ES);
 			supportedLangIDs.add(LANG_DE);
-            supportedLangIDs.add(LANG_RU);
+			supportedLangIDs.add(LANG_RU);
 		}
 		return supportedLangIDs.contains(langID);
 	}
@@ -174,26 +174,26 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Italian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Norwegian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Swedish
-	// parameters for Indic languages
-	// Added: 16 Sep 2013 by Anoop Kunchukuttan
-            { 0.0, 0.0, 0.0, 0.0 }, //  as
-            { 0.0, 0.0, 0.0, 0.0 }, //  bD
-            { 0.0, 0.0, 0.0, 0.0 }, //  bn
-            { 0.0, 0.0, 0.0, 0.0 }, //  gu
-            { 0.0, 0.0, 0.0, 0.0 }, //  hi
-            { 0.0, 0.0, 0.0, 0.0 }, //  kK
-            { 0.0, 0.0, 0.0, 0.0 }, //  kn
-            { 0.0, 0.0, 0.0, 0.0 }, //  ks
-            { 0.0, 0.0, 0.0, 0.0 }, //  ml
-            { 0.0, 0.0, 0.0, 0.0 }, //  mP
-            { 0.0, 0.0, 0.0, 0.0 }, //  mr
-            { 0.0, 0.0, 0.0, 0.0 }, //  ne
-            { 0.0, 0.0, 0.0, 0.0 }, //  or
-            { 0.0, 0.0, 0.0, 0.0 }, //  pa
-            { 0.0, 0.0, 0.0, 0.0 }, //  sa
-            { 0.0, 0.0, 0.0, 0.0 }, //  ta
-            { 0.0, 0.0, 0.0, 0.0 }, //  te
-            { 0.0, 0.0, 0.0, 0.0 }, //  ur
+			// parameters for Indic languages
+			// Added: 16 Sep 2013 by Anoop Kunchukuttan
+			{ 0.0, 0.0, 0.0, 0.0 }, // as
+			{ 0.0, 0.0, 0.0, 0.0 }, // bD
+			{ 0.0, 0.0, 0.0, 0.0 }, // bn
+			{ 0.0, 0.0, 0.0, 0.0 }, // gu
+			{ 0.0, 0.0, 0.0, 0.0 }, // hi
+			{ 0.0, 0.0, 0.0, 0.0 }, // kK
+			{ 0.0, 0.0, 0.0, 0.0 }, // kn
+			{ 0.0, 0.0, 0.0, 0.0 }, // ks
+			{ 0.0, 0.0, 0.0, 0.0 }, // ml
+			{ 0.0, 0.0, 0.0, 0.0 }, // mP
+			{ 0.0, 0.0, 0.0, 0.0 }, // mr
+			{ 0.0, 0.0, 0.0, 0.0 }, // ne
+			{ 0.0, 0.0, 0.0, 0.0 }, // or
+			{ 0.0, 0.0, 0.0, 0.0 }, // pa
+			{ 0.0, 0.0, 0.0, 0.0 }, // sa
+			{ 0.0, 0.0, 0.0, 0.0 }, // ta
+			{ 0.0, 0.0, 0.0, 0.0 }, // te
+			{ 0.0, 0.0, 0.0, 0.0 }, // ur
 	};
 	public static final double WEIGHT_ADQ[][] = {
 			//
@@ -214,26 +214,26 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Italian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Norwegian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Swedish
-	// parameters for Indic languages
-	// Added: 16 Sep 2013 by Anoop Kunchukuttan
-            { 0.0, 0.0, 0.0, 0.0 }, //  as
-            { 0.0, 0.0, 0.0, 0.0 }, //  bD
-            { 0.0, 0.0, 0.0, 0.0 }, //  bn
-            { 0.0, 0.0, 0.0, 0.0 }, //  gu
-            { 0.0, 0.0, 0.0, 0.0 }, //  hi
-            { 0.0, 0.0, 0.0, 0.0 }, //  kK
-            { 0.0, 0.0, 0.0, 0.0 }, //  kn
-            { 0.0, 0.0, 0.0, 0.0 }, //  ks
-            { 0.0, 0.0, 0.0, 0.0 }, //  ml
-            { 0.0, 0.0, 0.0, 0.0 }, //  mP
-            { 0.0, 0.0, 0.0, 0.0 }, //  mr
-            { 0.0, 0.0, 0.0, 0.0 }, //  ne
-            { 0.0, 0.0, 0.0, 0.0 }, //  or
-            { 0.0, 0.0, 0.0, 0.0 }, //  pa
-            { 0.0, 0.0, 0.0, 0.0 }, //  sa
-            { 0.0, 0.0, 0.0, 0.0 }, //  ta
-            { 0.0, 0.0, 0.0, 0.0 }, //  te
-            { 0.0, 0.0, 0.0, 0.0 }, //  ur
+			// parameters for Indic languages
+			// Added: 16 Sep 2013 by Anoop Kunchukuttan
+			{ 0.0, 0.0, 0.0, 0.0 }, // as
+			{ 0.0, 0.0, 0.0, 0.0 }, // bD
+			{ 0.0, 0.0, 0.0, 0.0 }, // bn
+			{ 0.0, 0.0, 0.0, 0.0 }, // gu
+			{ 0.0, 0.0, 0.0, 0.0 }, // hi
+			{ 0.0, 0.0, 0.0, 0.0 }, // kK
+			{ 0.0, 0.0, 0.0, 0.0 }, // kn
+			{ 0.0, 0.0, 0.0, 0.0 }, // ks
+			{ 0.0, 0.0, 0.0, 0.0 }, // ml
+			{ 0.0, 0.0, 0.0, 0.0 }, // mP
+			{ 0.0, 0.0, 0.0, 0.0 }, // mr
+			{ 0.0, 0.0, 0.0, 0.0 }, // ne
+			{ 0.0, 0.0, 0.0, 0.0 }, // or
+			{ 0.0, 0.0, 0.0, 0.0 }, // pa
+			{ 0.0, 0.0, 0.0, 0.0 }, // sa
+			{ 0.0, 0.0, 0.0, 0.0 }, // ta
+			{ 0.0, 0.0, 0.0, 0.0 }, // te
+			{ 0.0, 0.0, 0.0, 0.0 }, // ur
 	};
 
 	/* Ranking task */
@@ -257,26 +257,26 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Italian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Norwegian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Swedish
-	// parameters for Indic languages
-	// Added: 16 Sep 2013 by Anoop Kunchukuttan
-            { 0.0, 0.0, 0.0, 0.0 }, //  as
-            { 0.0, 0.0, 0.0, 0.0 }, //  bD
-            { 0.0, 0.0, 0.0, 0.0 }, //  bn
-            { 0.0, 0.0, 0.0, 0.0 }, //  gu
-            { 0.0, 0.0, 0.0, 0.0 }, //  hi
-            { 0.0, 0.0, 0.0, 0.0 }, //  kK
-            { 0.0, 0.0, 0.0, 0.0 }, //  kn
-            { 0.0, 0.0, 0.0, 0.0 }, //  ks
-            { 0.0, 0.0, 0.0, 0.0 }, //  ml
-            { 0.0, 0.0, 0.0, 0.0 }, //  mP
-            { 0.0, 0.0, 0.0, 0.0 }, //  mr
-            { 0.0, 0.0, 0.0, 0.0 }, //  ne
-            { 0.0, 0.0, 0.0, 0.0 }, //  or
-            { 0.0, 0.0, 0.0, 0.0 }, //  pa
-            { 0.0, 0.0, 0.0, 0.0 }, //  sa
-            { 0.0, 0.0, 0.0, 0.0 }, //  ta
-            { 0.0, 0.0, 0.0, 0.0 }, //  te
-            { 0.0, 0.0, 0.0, 0.0 }, //  ur
+			// parameters for Indic languages
+			// Added: 16 Sep 2013 by Anoop Kunchukuttan
+			{ 0.0, 0.0, 0.0, 0.0 }, // as
+			{ 0.0, 0.0, 0.0, 0.0 }, // bD
+			{ 0.0, 0.0, 0.0, 0.0 }, // bn
+			{ 0.0, 0.0, 0.0, 0.0 }, // gu
+			{ 0.0, 0.0, 0.0, 0.0 }, // hi
+			{ 0.0, 0.0, 0.0, 0.0 }, // kK
+			{ 0.0, 0.0, 0.0, 0.0 }, // kn
+			{ 0.0, 0.0, 0.0, 0.0 }, // ks
+			{ 0.0, 0.0, 0.0, 0.0 }, // ml
+			{ 0.0, 0.0, 0.0, 0.0 }, // mP
+			{ 0.0, 0.0, 0.0, 0.0 }, // mr
+			{ 0.0, 0.0, 0.0, 0.0 }, // ne
+			{ 0.0, 0.0, 0.0, 0.0 }, // or
+			{ 0.0, 0.0, 0.0, 0.0 }, // pa
+			{ 0.0, 0.0, 0.0, 0.0 }, // sa
+			{ 0.0, 0.0, 0.0, 0.0 }, // ta
+			{ 0.0, 0.0, 0.0, 0.0 }, // te
+			{ 0.0, 0.0, 0.0, 0.0 }, // ur
 	};
 	public static final double WEIGHT_RANK[][] = {
 			//
@@ -297,26 +297,26 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Italian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Norwegian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Swedish
-	// parameters for Indic languages
-	// Added: 16 Sep 2013 by Anoop Kunchukuttan
-            { 0.0, 0.0, 0.0, 0.0 }, //  as
-            { 0.0, 0.0, 0.0, 0.0 }, //  bD
-            { 0.0, 0.0, 0.0, 0.0 }, //  bn
-            { 0.0, 0.0, 0.0, 0.0 }, //  gu
-            { 0.0, 0.0, 0.0, 0.0 }, //  hi
-            { 0.0, 0.0, 0.0, 0.0 }, //  kK
-            { 0.0, 0.0, 0.0, 0.0 }, //  kn
-            { 0.0, 0.0, 0.0, 0.0 }, //  ks
-            { 0.0, 0.0, 0.0, 0.0 }, //  ml
-            { 0.0, 0.0, 0.0, 0.0 }, //  mP
-            { 0.0, 0.0, 0.0, 0.0 }, //  mr
-            { 0.0, 0.0, 0.0, 0.0 }, //  ne
-            { 0.0, 0.0, 0.0, 0.0 }, //  or
-            { 0.0, 0.0, 0.0, 0.0 }, //  pa
-            { 0.0, 0.0, 0.0, 0.0 }, //  sa
-            { 0.0, 0.0, 0.0, 0.0 }, //  ta
-            { 0.0, 0.0, 0.0, 0.0 }, //  te
-            { 0.0, 0.0, 0.0, 0.0 }, //  ur
+			// parameters for Indic languages
+			// Added: 16 Sep 2013 by Anoop Kunchukuttan
+			{ 0.0, 0.0, 0.0, 0.0 }, // as
+			{ 0.0, 0.0, 0.0, 0.0 }, // bD
+			{ 0.0, 0.0, 0.0, 0.0 }, // bn
+			{ 0.0, 0.0, 0.0, 0.0 }, // gu
+			{ 0.0, 0.0, 0.0, 0.0 }, // hi
+			{ 0.0, 0.0, 0.0, 0.0 }, // kK
+			{ 0.0, 0.0, 0.0, 0.0 }, // kn
+			{ 0.0, 0.0, 0.0, 0.0 }, // ks
+			{ 0.0, 0.0, 0.0, 0.0 }, // ml
+			{ 0.0, 0.0, 0.0, 0.0 }, // mP
+			{ 0.0, 0.0, 0.0, 0.0 }, // mr
+			{ 0.0, 0.0, 0.0, 0.0 }, // ne
+			{ 0.0, 0.0, 0.0, 0.0 }, // or
+			{ 0.0, 0.0, 0.0, 0.0 }, // pa
+			{ 0.0, 0.0, 0.0, 0.0 }, // sa
+			{ 0.0, 0.0, 0.0, 0.0 }, // ta
+			{ 0.0, 0.0, 0.0, 0.0 }, // te
+			{ 0.0, 0.0, 0.0, 0.0 }, // ur
 	};
 
 	/* HTER task */
@@ -340,26 +340,26 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Italian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Norwegian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Swedish
-	// parameters for Indic languages
-	// Added: 16 Sep 2013 by Anoop Kunchukuttan
-            { 0.0, 0.0, 0.0, 0.0 }, //  as
-            { 0.0, 0.0, 0.0, 0.0 }, //  bD
-            { 0.0, 0.0, 0.0, 0.0 }, //  bn
-            { 0.0, 0.0, 0.0, 0.0 }, //  gu
-            { 0.0, 0.0, 0.0, 0.0 }, //  hi
-            { 0.0, 0.0, 0.0, 0.0 }, //  kK
-            { 0.0, 0.0, 0.0, 0.0 }, //  kn
-            { 0.0, 0.0, 0.0, 0.0 }, //  ks
-            { 0.0, 0.0, 0.0, 0.0 }, //  ml
-            { 0.0, 0.0, 0.0, 0.0 }, //  mP
-            { 0.0, 0.0, 0.0, 0.0 }, //  mr
-            { 0.0, 0.0, 0.0, 0.0 }, //  ne
-            { 0.0, 0.0, 0.0, 0.0 }, //  or
-            { 0.0, 0.0, 0.0, 0.0 }, //  pa
-            { 0.0, 0.0, 0.0, 0.0 }, //  sa
-            { 0.0, 0.0, 0.0, 0.0 }, //  ta
-            { 0.0, 0.0, 0.0, 0.0 }, //  te
-            { 0.0, 0.0, 0.0, 0.0 }, //  ur
+			// parameters for Indic languages
+			// Added: 16 Sep 2013 by Anoop Kunchukuttan
+			{ 0.0, 0.0, 0.0, 0.0 }, // as
+			{ 0.0, 0.0, 0.0, 0.0 }, // bD
+			{ 0.0, 0.0, 0.0, 0.0 }, // bn
+			{ 0.0, 0.0, 0.0, 0.0 }, // gu
+			{ 0.0, 0.0, 0.0, 0.0 }, // hi
+			{ 0.0, 0.0, 0.0, 0.0 }, // kK
+			{ 0.0, 0.0, 0.0, 0.0 }, // kn
+			{ 0.0, 0.0, 0.0, 0.0 }, // ks
+			{ 0.0, 0.0, 0.0, 0.0 }, // ml
+			{ 0.0, 0.0, 0.0, 0.0 }, // mP
+			{ 0.0, 0.0, 0.0, 0.0 }, // mr
+			{ 0.0, 0.0, 0.0, 0.0 }, // ne
+			{ 0.0, 0.0, 0.0, 0.0 }, // or
+			{ 0.0, 0.0, 0.0, 0.0 }, // pa
+			{ 0.0, 0.0, 0.0, 0.0 }, // sa
+			{ 0.0, 0.0, 0.0, 0.0 }, // ta
+			{ 0.0, 0.0, 0.0, 0.0 }, // te
+			{ 0.0, 0.0, 0.0, 0.0 }, // ur
 	};
 	public static final double WEIGHT_HTER[][] = {
 			//
@@ -380,26 +380,26 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Italian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Norwegian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Swedish
-	// parameters for Indic languages
-	// Added: 16 Sep 2013 by Anoop Kunchukuttan
-            { 0.0, 0.0, 0.0, 0.0 }, //  as
-            { 0.0, 0.0, 0.0, 0.0 }, //  bD
-            { 0.0, 0.0, 0.0, 0.0 }, //  bn
-            { 0.0, 0.0, 0.0, 0.0 }, //  gu
-            { 0.0, 0.0, 0.0, 0.0 }, //  hi
-            { 0.0, 0.0, 0.0, 0.0 }, //  kK
-            { 0.0, 0.0, 0.0, 0.0 }, //  kn
-            { 0.0, 0.0, 0.0, 0.0 }, //  ks
-            { 0.0, 0.0, 0.0, 0.0 }, //  ml
-            { 0.0, 0.0, 0.0, 0.0 }, //  mP
-            { 0.0, 0.0, 0.0, 0.0 }, //  mr
-            { 0.0, 0.0, 0.0, 0.0 }, //  ne
-            { 0.0, 0.0, 0.0, 0.0 }, //  or
-            { 0.0, 0.0, 0.0, 0.0 }, //  pa
-            { 0.0, 0.0, 0.0, 0.0 }, //  sa
-            { 0.0, 0.0, 0.0, 0.0 }, //  ta
-            { 0.0, 0.0, 0.0, 0.0 }, //  te
-            { 0.0, 0.0, 0.0, 0.0 }, //  ur
+			// parameters for Indic languages
+			// Added: 16 Sep 2013 by Anoop Kunchukuttan
+			{ 0.0, 0.0, 0.0, 0.0 }, // as
+			{ 0.0, 0.0, 0.0, 0.0 }, // bD
+			{ 0.0, 0.0, 0.0, 0.0 }, // bn
+			{ 0.0, 0.0, 0.0, 0.0 }, // gu
+			{ 0.0, 0.0, 0.0, 0.0 }, // hi
+			{ 0.0, 0.0, 0.0, 0.0 }, // kK
+			{ 0.0, 0.0, 0.0, 0.0 }, // kn
+			{ 0.0, 0.0, 0.0, 0.0 }, // ks
+			{ 0.0, 0.0, 0.0, 0.0 }, // ml
+			{ 0.0, 0.0, 0.0, 0.0 }, // mP
+			{ 0.0, 0.0, 0.0, 0.0 }, // mr
+			{ 0.0, 0.0, 0.0, 0.0 }, // ne
+			{ 0.0, 0.0, 0.0, 0.0 }, // or
+			{ 0.0, 0.0, 0.0, 0.0 }, // pa
+			{ 0.0, 0.0, 0.0, 0.0 }, // sa
+			{ 0.0, 0.0, 0.0, 0.0 }, // ta
+			{ 0.0, 0.0, 0.0, 0.0 }, // te
+			{ 0.0, 0.0, 0.0, 0.0 }, // ur
 	};
 
 	/* Utility task */
@@ -423,26 +423,26 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Italian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Norwegian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Swedish
-	// parameters for Indic languages
-	// Added: 16 Sep 2013 by Anoop Kunchukuttan
-            { 0.0, 0.0, 0.0, 0.0 }, //  as
-            { 0.0, 0.0, 0.0, 0.0 }, //  bD
-            { 0.0, 0.0, 0.0, 0.0 }, //  bn
-            { 0.0, 0.0, 0.0, 0.0 }, //  gu
-            { 0.0, 0.0, 0.0, 0.0 }, //  hi
-            { 0.0, 0.0, 0.0, 0.0 }, //  kK
-            { 0.0, 0.0, 0.0, 0.0 }, //  kn
-            { 0.0, 0.0, 0.0, 0.0 }, //  ks
-            { 0.0, 0.0, 0.0, 0.0 }, //  ml
-            { 0.0, 0.0, 0.0, 0.0 }, //  mP
-            { 0.0, 0.0, 0.0, 0.0 }, //  mr
-            { 0.0, 0.0, 0.0, 0.0 }, //  ne
-            { 0.0, 0.0, 0.0, 0.0 }, //  or
-            { 0.0, 0.0, 0.0, 0.0 }, //  pa
-            { 0.0, 0.0, 0.0, 0.0 }, //  sa
-            { 0.0, 0.0, 0.0, 0.0 }, //  ta
-            { 0.0, 0.0, 0.0, 0.0 }, //  te
-            { 0.0, 0.0, 0.0, 0.0 }, //  ur
+			// parameters for Indic languages
+			// Added: 16 Sep 2013 by Anoop Kunchukuttan
+			{ 0.0, 0.0, 0.0, 0.0 }, // as
+			{ 0.0, 0.0, 0.0, 0.0 }, // bD
+			{ 0.0, 0.0, 0.0, 0.0 }, // bn
+			{ 0.0, 0.0, 0.0, 0.0 }, // gu
+			{ 0.0, 0.0, 0.0, 0.0 }, // hi
+			{ 0.0, 0.0, 0.0, 0.0 }, // kK
+			{ 0.0, 0.0, 0.0, 0.0 }, // kn
+			{ 0.0, 0.0, 0.0, 0.0 }, // ks
+			{ 0.0, 0.0, 0.0, 0.0 }, // ml
+			{ 0.0, 0.0, 0.0, 0.0 }, // mP
+			{ 0.0, 0.0, 0.0, 0.0 }, // mr
+			{ 0.0, 0.0, 0.0, 0.0 }, // ne
+			{ 0.0, 0.0, 0.0, 0.0 }, // or
+			{ 0.0, 0.0, 0.0, 0.0 }, // pa
+			{ 0.0, 0.0, 0.0, 0.0 }, // sa
+			{ 0.0, 0.0, 0.0, 0.0 }, // ta
+			{ 0.0, 0.0, 0.0, 0.0 }, // te
+			{ 0.0, 0.0, 0.0, 0.0 }, // ur
 	};
 	public static final double WEIGHT_UTIL[][] = {
 			//
@@ -463,26 +463,26 @@ public class Constants {
 			{ 0.0, 0.0, 0.0, 0.0 }, // Italian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Norwegian
 			{ 0.0, 0.0, 0.0, 0.0 }, // Swedish
-	// parameters for Indic languages
-	// Added: 16 Sep 2013 by Anoop Kunchukuttan
-            { 0.0, 0.0, 0.0, 0.0 }, //  as
-            { 0.0, 0.0, 0.0, 0.0 }, //  bD
-            { 0.0, 0.0, 0.0, 0.0 }, //  bn
-            { 0.0, 0.0, 0.0, 0.0 }, //  gu
-            { 0.0, 0.0, 0.0, 0.0 }, //  hi
-            { 0.0, 0.0, 0.0, 0.0 }, //  kK
-            { 0.0, 0.0, 0.0, 0.0 }, //  kn
-            { 0.0, 0.0, 0.0, 0.0 }, //  ks
-            { 0.0, 0.0, 0.0, 0.0 }, //  ml
-            { 0.0, 0.0, 0.0, 0.0 }, //  mP
-            { 0.0, 0.0, 0.0, 0.0 }, //  mr
-            { 0.0, 0.0, 0.0, 0.0 }, //  ne
-            { 0.0, 0.0, 0.0, 0.0 }, //  or
-            { 0.0, 0.0, 0.0, 0.0 }, //  pa
-            { 0.0, 0.0, 0.0, 0.0 }, //  sa
-            { 0.0, 0.0, 0.0, 0.0 }, //  ta
-            { 0.0, 0.0, 0.0, 0.0 }, //  te
-            { 0.0, 0.0, 0.0, 0.0 }, //  ur
+			// parameters for Indic languages
+			// Added: 16 Sep 2013 by Anoop Kunchukuttan
+			{ 0.0, 0.0, 0.0, 0.0 }, // as
+			{ 0.0, 0.0, 0.0, 0.0 }, // bD
+			{ 0.0, 0.0, 0.0, 0.0 }, // bn
+			{ 0.0, 0.0, 0.0, 0.0 }, // gu
+			{ 0.0, 0.0, 0.0, 0.0 }, // hi
+			{ 0.0, 0.0, 0.0, 0.0 }, // kK
+			{ 0.0, 0.0, 0.0, 0.0 }, // kn
+			{ 0.0, 0.0, 0.0, 0.0 }, // ks
+			{ 0.0, 0.0, 0.0, 0.0 }, // ml
+			{ 0.0, 0.0, 0.0, 0.0 }, // mP
+			{ 0.0, 0.0, 0.0, 0.0 }, // mr
+			{ 0.0, 0.0, 0.0, 0.0 }, // ne
+			{ 0.0, 0.0, 0.0, 0.0 }, // or
+			{ 0.0, 0.0, 0.0, 0.0 }, // pa
+			{ 0.0, 0.0, 0.0, 0.0 }, // sa
+			{ 0.0, 0.0, 0.0, 0.0 }, // ta
+			{ 0.0, 0.0, 0.0, 0.0 }, // te
+			{ 0.0, 0.0, 0.0, 0.0 }, // ur
 	};
 
 	public static final int TASK_DEFAULT = TASK_RANK;
@@ -578,45 +578,44 @@ public class Constants {
 		if (lang.equals("swedish") || lang.equals("se") || lang.equals("sv"))
 			return "swedish";
 
-	// language names for Indic languages
-	// Added: 16 Sep 2013 by Anoop Kunchukuttan
-        if (lang.equals("as") || lang.equals("as"))
-            return "as";
-        if (lang.equals("bD") || lang.equals("bD"))
-            return "bD";
-        if (lang.equals("bn") || lang.equals("bn"))
-            return "bn";
-        if (lang.equals("gu") || lang.equals("gu"))
-            return "gu";
-        if (lang.equals("hi") || lang.equals("hi"))
-            return "hi";
-        if (lang.equals("kK") || lang.equals("kK"))
-            return "kK";
-        if (lang.equals("kn") || lang.equals("kn"))
-            return "kn";
-        if (lang.equals("ks") || lang.equals("ks"))
-            return "ks";
-        if (lang.equals("ml") || lang.equals("ml"))
-            return "ml";
-        if (lang.equals("mP") || lang.equals("mP"))
-            return "mP";
-        if (lang.equals("mr") || lang.equals("mr"))
-            return "mr";
-        if (lang.equals("ne") || lang.equals("ne"))
-            return "ne";
-        if (lang.equals("or") || lang.equals("or"))
-            return "or";
-        if (lang.equals("pa") || lang.equals("pa"))
-            return "pa";
-        if (lang.equals("sa") || lang.equals("sa"))
-            return "sa";
-        if (lang.equals("ta") || lang.equals("ta"))
-            return "ta";
-        if (lang.equals("te") || lang.equals("te"))
-            return "te";
-        if (lang.equals("ur") || lang.equals("ur"))
-            return "ur";
-
+		// language names for Indic languages
+		// Added: 16 Sep 2013 by Anoop Kunchukuttan
+		if (lang.equals("as") || lang.equals("as"))
+			return "as";
+		if (lang.equals("bD") || lang.equals("bD"))
+			return "bD";
+		if (lang.equals("bn") || lang.equals("bn"))
+			return "bn";
+		if (lang.equals("gu") || lang.equals("gu"))
+			return "gu";
+		if (lang.equals("hi") || lang.equals("hi"))
+			return "hi";
+		if (lang.equals("kK") || lang.equals("kK"))
+			return "kK";
+		if (lang.equals("kn") || lang.equals("kn"))
+			return "kn";
+		if (lang.equals("ks") || lang.equals("ks"))
+			return "ks";
+		if (lang.equals("ml") || lang.equals("ml"))
+			return "ml";
+		if (lang.equals("mP") || lang.equals("mP"))
+			return "mP";
+		if (lang.equals("mr") || lang.equals("mr"))
+			return "mr";
+		if (lang.equals("ne") || lang.equals("ne"))
+			return "ne";
+		if (lang.equals("or") || lang.equals("or"))
+			return "or";
+		if (lang.equals("pa") || lang.equals("pa"))
+			return "pa";
+		if (lang.equals("sa") || lang.equals("sa"))
+			return "sa";
+		if (lang.equals("ta") || lang.equals("ta"))
+			return "ta";
+		if (lang.equals("te") || lang.equals("te"))
+			return "te";
+		if (lang.equals("ur") || lang.equals("ur"))
+			return "ur";
 
 		if (lang.equals("other") || lang.equals("xx"))
 			return "other";
@@ -660,44 +659,44 @@ public class Constants {
 		if (language.equals("swedish"))
 			return LANG_SE;
 
-	// language codes for Indic languages
-	// Added: 16 Sep 2013 by Anoop Kunchukuttan
-        if (language.equals("as"))
-            return LANG_AS;
-        if (language.equals("bD"))
-            return LANG_BD;
-        if (language.equals("bn"))
-            return LANG_BN;
-        if (language.equals("gu"))
-            return LANG_GU;
-        if (language.equals("hi"))
-            return LANG_HI;
-        if (language.equals("kK"))
-            return LANG_KK;
-        if (language.equals("kn"))
-            return LANG_KN;
-        if (language.equals("ks"))
-            return LANG_KS;
-        if (language.equals("ml"))
-            return LANG_ML;
-        if (language.equals("mP"))
-            return LANG_MP;
-        if (language.equals("mr"))
-            return LANG_MR;
-        if (language.equals("ne"))
-            return LANG_NE;
-        if (language.equals("or"))
-            return LANG_OR;
-        if (language.equals("pa"))
-            return LANG_PA;
-        if (language.equals("sa"))
-            return LANG_SA;
-        if (language.equals("ta"))
-            return LANG_TA;
-        if (language.equals("te"))
-            return LANG_TE;
-        if (language.equals("ur"))
-            return LANG_UR;
+		// language codes for Indic languages
+		// Added: 16 Sep 2013 by Anoop Kunchukuttan
+		if (language.equals("as"))
+			return LANG_AS;
+		if (language.equals("bD"))
+			return LANG_BD;
+		if (language.equals("bn"))
+			return LANG_BN;
+		if (language.equals("gu"))
+			return LANG_GU;
+		if (language.equals("hi"))
+			return LANG_HI;
+		if (language.equals("kK"))
+			return LANG_KK;
+		if (language.equals("kn"))
+			return LANG_KN;
+		if (language.equals("ks"))
+			return LANG_KS;
+		if (language.equals("ml"))
+			return LANG_ML;
+		if (language.equals("mP"))
+			return LANG_MP;
+		if (language.equals("mr"))
+			return LANG_MR;
+		if (language.equals("ne"))
+			return LANG_NE;
+		if (language.equals("or"))
+			return LANG_OR;
+		if (language.equals("pa"))
+			return LANG_PA;
+		if (language.equals("sa"))
+			return LANG_SA;
+		if (language.equals("ta"))
+			return LANG_TA;
+		if (language.equals("te"))
+			return LANG_TE;
+		if (language.equals("ur"))
+			return LANG_UR;
 
 		if (language.equals("other"))
 			return LANG_OTHER;
@@ -741,45 +740,44 @@ public class Constants {
 		if (langID == LANG_SE)
 			return "swedish";
 
-	// language codes for Indic languages
-	// Added: 16 Sep 2013 by Anoop Kunchukuttan
-        if (langID == LANG_AS)
-            return "as";
-        if (langID == LANG_BD)
-            return "bD";
-        if (langID == LANG_BN)
-            return "bn";
-        if (langID == LANG_GU)
-            return "gu";
-        if (langID == LANG_HI)
-            return "hi";
-        if (langID == LANG_KK)
-            return "kK";
-        if (langID == LANG_KN)
-            return "kn";
-        if (langID == LANG_KS)
-            return "ks";
-        if (langID == LANG_ML)
-            return "ml";
-        if (langID == LANG_MP)
-            return "mP";
-        if (langID == LANG_MR)
-            return "mr";
-        if (langID == LANG_NE)
-            return "ne";
-        if (langID == LANG_OR)
-            return "or";
-        if (langID == LANG_PA)
-            return "pa";
-        if (langID == LANG_SA)
-            return "sa";
-        if (langID == LANG_TA)
-            return "ta";
-        if (langID == LANG_TE)
-            return "te";
-        if (langID == LANG_UR)
-            return "ur";
-
+		// language codes for Indic languages
+		// Added: 16 Sep 2013 by Anoop Kunchukuttan
+		if (langID == LANG_AS)
+			return "as";
+		if (langID == LANG_BD)
+			return "bD";
+		if (langID == LANG_BN)
+			return "bn";
+		if (langID == LANG_GU)
+			return "gu";
+		if (langID == LANG_HI)
+			return "hi";
+		if (langID == LANG_KK)
+			return "kK";
+		if (langID == LANG_KN)
+			return "kn";
+		if (langID == LANG_KS)
+			return "ks";
+		if (langID == LANG_ML)
+			return "ml";
+		if (langID == LANG_MP)
+			return "mP";
+		if (langID == LANG_MR)
+			return "mr";
+		if (langID == LANG_NE)
+			return "ne";
+		if (langID == LANG_OR)
+			return "or";
+		if (langID == LANG_PA)
+			return "pa";
+		if (langID == LANG_SA)
+			return "sa";
+		if (langID == LANG_TA)
+			return "ta";
+		if (langID == LANG_TE)
+			return "te";
+		if (langID == LANG_UR)
+			return "ur";
 
 		if (langID == LANG_OTHER)
 			return "other";
@@ -824,45 +822,44 @@ public class Constants {
 		if (langID == LANG_SE)
 			return "se";
 
-
-	// language codes for Indic languages
-	// Added: 16 Sep 2013 by Anoop Kunchukuttan
-        if (langID == LANG_AS)
-            return "as";
-        if (langID == LANG_BD)
-            return "bD";
-        if (langID == LANG_BN)
-            return "bn";
-        if (langID == LANG_GU)
-            return "gu";
-        if (langID == LANG_HI)
-            return "hi";
-        if (langID == LANG_KK)
-            return "kK";
-        if (langID == LANG_KN)
-            return "kn";
-        if (langID == LANG_KS)
-            return "ks";
-        if (langID == LANG_ML)
-            return "ml";
-        if (langID == LANG_MP)
-            return "mP";
-        if (langID == LANG_MR)
-            return "mr";
-        if (langID == LANG_NE)
-            return "ne";
-        if (langID == LANG_OR)
-            return "or";
-        if (langID == LANG_PA)
-            return "pa";
-        if (langID == LANG_SA)
-            return "sa";
-        if (langID == LANG_TA)
-            return "ta";
-        if (langID == LANG_TE)
-            return "te";
-        if (langID == LANG_UR)
-            return "ur";
+		// language codes for Indic languages
+		// Added: 16 Sep 2013 by Anoop Kunchukuttan
+		if (langID == LANG_AS)
+			return "as";
+		if (langID == LANG_BD)
+			return "bD";
+		if (langID == LANG_BN)
+			return "bn";
+		if (langID == LANG_GU)
+			return "gu";
+		if (langID == LANG_HI)
+			return "hi";
+		if (langID == LANG_KK)
+			return "kK";
+		if (langID == LANG_KN)
+			return "kn";
+		if (langID == LANG_KS)
+			return "ks";
+		if (langID == LANG_ML)
+			return "ml";
+		if (langID == LANG_MP)
+			return "mP";
+		if (langID == LANG_MR)
+			return "mr";
+		if (langID == LANG_NE)
+			return "ne";
+		if (langID == LANG_OR)
+			return "or";
+		if (langID == LANG_PA)
+			return "pa";
+		if (langID == LANG_SA)
+			return "sa";
+		if (langID == LANG_TA)
+			return "ta";
+		if (langID == LANG_TE)
+			return "te";
+		if (langID == LANG_UR)
+			return "ur";
 
 		if (langID == LANG_OTHER)
 			return "other";
@@ -1099,6 +1096,19 @@ public class Constants {
 			return new SnowballStemmerWrapper(new norwegianStemmer());
 		if (language.equals("swedish"))
 			return new SnowballStemmerWrapper(new swedishStemmer());
+		if (language.equals("as") || language.equals("bD")
+				|| language.equals("bn") || language.equals("hi")
+				|| language.equals("mr") || language.equals("gu")
+				|| language.equals("pa") || language.equals("kK")
+				|| language.equals("kn") || language.equals("ks")
+				|| language.equals("ml") || language.equals("mP")
+				|| language.equals("ne") || language.equals("sa")
+				|| language.equals("ta") || language.equals("te")
+				|| language.equals("pa") || language.equals("ur")
+				|| language.equals("or")) {
+			return new IndicStemmer(language);
+		}
+
 		if (language.equals("arabic-buckwalter-reduced")) {
 			try {
 				return new LookupTableStemmer(new URL(
@@ -1109,6 +1119,7 @@ public class Constants {
 						"Error loading stemmer for language (" + language + ")");
 			}
 		}
+
 		// Not found
 		throw new RuntimeException("No stemmer for language (" + language + ")");
 	}
@@ -1145,7 +1156,7 @@ public class Constants {
 		} else if (langID == LANG_RU) {
 			modules.add(MODULE_EXACT);
 			modules.add(MODULE_STEM);
-            modules.add(MODULE_PARAPHRASE);
+			modules.add(MODULE_PARAPHRASE);
 		} else if (langID == LANG_DA) {
 			modules.add(MODULE_EXACT);
 			modules.add(MODULE_STEM);
@@ -1173,9 +1184,22 @@ public class Constants {
 		} else if (langID == LANG_SE) {
 			modules.add(MODULE_EXACT);
 			modules.add(MODULE_STEM);
-		} else if (langID == LANG_OTHER) {
+		}  else if (langID == LANG_AS || langID == LANG_BD || langID == LANG_BN
+				|| langID == LANG_GU || langID == LANG_HI || langID == LANG_KK
+				|| langID == LANG_KN || langID == LANG_KS || langID == LANG_ML
+				|| langID == LANG_MP || langID == LANG_MR || langID == LANG_NE
+				|| langID == LANG_OR || langID == LANG_PA || langID == LANG_SA
+				|| langID == LANG_TA || langID == LANG_TE || langID == LANG_UR) {
 			modules.add(MODULE_EXACT);
-		} else {
+			modules.add(MODULE_STEM);
+			modules.add(MODULE_SYNONYM);
+		}
+		else if (langID == LANG_OTHER) {
+			modules.add(MODULE_EXACT);
+			modules.add(MODULE_STEM);
+			modules.add(MODULE_SYNONYM);
+		}
+		else {
 			// Not found
 			String lang = "";
 			String task = "";
@@ -1188,6 +1212,7 @@ public class Constants {
 			throw new RuntimeException(
 					"No default modules for language and task (" + lang + ") ("
 							+ task + ")");
+
 		}
 		return modules;
 	}

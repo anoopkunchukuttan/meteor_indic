@@ -67,18 +67,25 @@ public class Trie {
 		}
 	}
 
-	int countfive = 0;
-	String prefix = "";
-	String myoutput = "";
-	int length = 0;
+	int countfive;
+	String prefix;
+	String myoutput;
+	int length ;
 	int lengthString;
 	static node root;
-	node current1 = null;
+	node current1;
 	node position;
-	public int[] amountList = new int[52];
-	static String[] unicodeRange = null;
+	public int[] amountList;
+	static String[] unicodeRange;
 
 	public Trie() {
+		countfive = 0;
+		prefix = "";
+		myoutput = "";
+		length = 0;
+		current1 = null;
+		amountList = new int[52];
+		unicodeRange = null;
 		root = position = null;
 	}
 
@@ -145,6 +152,14 @@ public class Trie {
 		Properties prop = new Properties();
 		String filename = null;
 		String word = new String();
+		countfive = 0;
+		prefix = "";
+		myoutput = "";
+		length = 0;
+		current1 = null;
+		amountList = new int[52];
+		unicodeRange = null;
+		root = position = null;
 		try {
 			
 			prop.load(new FileInputStream(
@@ -388,7 +403,7 @@ public class Trie {
 								// ""));
 								return printAllString(t.up, prefix.substring(0,
 										prefix.length() - 1));
-								/* Most Common Return - Ankit Bahuguna */
+								 /* Most Common Return - Ankit Bahuguna */
 								// System.out.println(prefix.replace(
 								// prefix.substring(prefix.length() - 1),
 								// ""));
@@ -755,83 +770,9 @@ public class Trie {
 		Trie t = new Trie();
 		t.setupTrie("hi");
 		System.out.println(t.getRoot("बताओ", "n", "0"));
-		t.setupTrie("en");
-		System.out.println(t.getStem("", "n", "0"));
-		/*
-		 * String result; String result1; String resultValue; int lengthInput;
-		 * 
-		 * String lang = "0"; String infword = "लड़कियाँ"; String backTrack =
-		 * "n"; String backtrackLevel = "0";
-		 * 
-		 * // String lang = args[0]; // String infword = args[1]; // String
-		 * backTrack = args[2]; // String backtrackLevel = args[3]; // 0 लड़कियां
-		 * n 0 String filename = null; // lengthInput = infword.length();
-		 * lengthInput = getCharLength(infword);
-		 * 
-		 * // INDIAN LANGUAGES // HINDI if (lang.equalsIgnoreCase("0")) {
-		 * filename = "./indicResources/trie_wn_db/hindi.wordnet"; } // ASSAMESE if
-		 * (lang.equalsIgnoreCase("2")) { filename =
-		 * "./indicResources/trie_wn_db/assamese.wordnet"; } // BENGALI if
-		 * (lang.equalsIgnoreCase("3")) { filename =
-		 * "./indicResources/trie_wn_db/bengali.wordnet"; } // BODO if
-		 * (lang.equalsIgnoreCase("4")) { filename =
-		 * "./indicResources/trie_wn_db/bodo.wordnet"; } // GUJARATI if
-		 * (lang.equalsIgnoreCase("5")) { filename =
-		 * "./indicResources/trie_wn_db/gujrati.wordnet"; } // KANNADA if
-		 * (lang.equalsIgnoreCase("6")) { filename =
-		 * "./indicResources/trie_wn_db/kannada.wordnet"; } // KASHMIRI if
-		 * (lang.equalsIgnoreCase("7")) { filename =
-		 * "./indicResources/trie_wn_db/kashmiri.wordnet"; } // KONKANI if
-		 * (lang.equalsIgnoreCase("8")) { filename =
-		 * "./indicResources/trie_wn_db/konkani.wordnet"; } // MALAYALAM if
-		 * (lang.equalsIgnoreCase("9")) { filename =
-		 * "./indicResources/trie_wn_db/malayalam.wordnet"; } // MANIPURI if
-		 * (lang.equalsIgnoreCase("10")) { filename =
-		 * "./indicResources/trie_wn_db/manipuri.wordnet"; } // MARATHI if
-		 * (lang.equalsIgnoreCase("11")) { filename =
-		 * "./indicResources/trie_wn_db/marathi.wordnet"; } // NEPALI if
-		 * (lang.equalsIgnoreCase("12")) { filename =
-		 * "./indicResources/trie_wn_db/nepali.wordnet"; } // SANSKRIT if
-		 * (lang.equalsIgnoreCase("13")) { filename =
-		 * "./indicResources/trie_wn_db/sanskrit.wordnet"; } // TAMIL if
-		 * (lang.equalsIgnoreCase("14")) { filename =
-		 * "./indicResources/trie_wn_db/tamil.wordnet"; } // TELUGU if
-		 * (lang.equalsIgnoreCase("15")) { filename =
-		 * "./indicResources/trie_wn_db/telugu.wordnet"; } // PUNJABI if
-		 * (lang.equalsIgnoreCase("16")) { filename =
-		 * "./indicResources/trie_wn_db/punjabi.wordnet"; } // URDU if
-		 * (lang.equalsIgnoreCase("17")) { filename =
-		 * "./indicResources/trie_wn_db/urdu.wordnet"; } // ODIYA if
-		 * (lang.equalsIgnoreCase("18")) { filename =
-		 * "./indicResources/trie_wn_db/odiya.wordnet"; } //
-		 * /////////////////////////////////// // EUROPEAN LANGUAGES // FRENCH
-		 * if (lang.equalsIgnoreCase("19")) { filename =
-		 * "./indicResources/trie_wn_db/french.wordnet"; } // DANISH if
-		 * (lang.equalsIgnoreCase("20")) { filename =
-		 * "./indicResources/trie_wn_db/danish.wordnet"; } // HUNGARY if
-		 * (lang.equalsIgnoreCase("21")) { filename =
-		 * "./indicResources/trie_wn_db/hungary.wordnet"; } // ENGLISH if
-		 * (lang.equalsIgnoreCase("22")) { filename =
-		 * "./indicResources/trie_wn_db/english.wordnet"; } // ITALIAN if
-		 * (lang.equalsIgnoreCase("23")) { filename =
-		 * "./indicResources/trie_wn_db/italian.wordnet"; } //
-		 * ////////////////////////////////////
-		 * 
-		 * // Backtrack = NO if (backTrack.equalsIgnoreCase("N")) { Trie t = new
-		 * Trie(); t.setupTrie(filename); resultValue = t.searchInTrie(infword,
-		 * lang); result = rankTrieResults(resultValue, lengthInput); if
-		 * (result.equals("")) { System.out.print("(" + infword + ")"); } else {
-		 * System.out.print("(" + result + ")"); } }
-		 * 
-		 * // Backtrack = Yes else if (backTrack.equalsIgnoreCase("Y")) { Trie
-		 * t1 = new Trie(); t1.setupTrie(filename); resultValue =
-		 * t1.searchInTrie(infword, lang, backtrackLevel); result1 =
-		 * rankTrieResults(resultValue, lengthInput); if (result1.equals("")) {
-		 * System.out.print("(" + infword + ")"); } else { System.out.print("("
-		 * + result1 + ")"); }
-		 * 
-		 * } else { System.out.println("EXIT"); }
-		 */
+		
+		System.out.println(t.getStem("लड़कियाँ", "n", "0"));
+
 
 	}
 
@@ -848,8 +789,129 @@ public class Trie {
 		return len;
 	}
 	public String getStem(String infword, String backTrack,String backtrackLevel ){
-		
-		return "";
+		//Getting the morphological base form 
+				HashMap<Integer, List<String>> lScore = new HashMap<Integer, List<String>>();
+				String stem = "";
+				String result;
+				String result1;
+				String resultValue;
+				int lengthInput;
+				countfive = 0;
+				prefix = "";
+				myoutput = "";
+				length = 0;
+
+
+				try {
+					lengthInput = getCharLength(infword);
+					// Backtrack = NO
+					if (backTrack.equalsIgnoreCase("N")) {
+						resultValue = searchInTrie(infword);
+						result = rankTrieResults(resultValue, lengthInput);
+						result = result.trim().replace("  ", " ");
+						String[] stems = result.split(" ");
+						//System.out.println("Result: " + result);
+						int score2;
+						int score1;
+						for (String str : stems) {
+							score1 = LDistance.LD(str, infword);
+
+							if (lScore.get(score1) == null) {
+								List<String> list = new ArrayList<String>();
+								list.add(str);
+								lScore.put(score1, list);
+							} else {
+								lScore.get(score1).add(str);
+							}
+						}
+						for (Integer key : lScore.keySet()) {
+							List<String> tempVal = lScore.get(key);
+
+							HashMap<Integer, List<String>> tempMap = new HashMap<Integer, List<String>>();
+							for (String st : tempVal) {
+								score2 = LDistance.stackDistance(st, infword);
+
+								if (tempMap.get(score2) == null) {
+									List<String> list = new ArrayList<String>();
+									list.add(st);
+									tempMap.put(score2, list);
+
+								} else {
+									tempMap.get(score2).add(st);
+								}
+
+							}
+							for (Integer k1 : tempMap.keySet()) {
+								stem = tempMap.get(k1).get(0);
+//								System.out.println(key + " : " + k1 + ":"
+//										+ tempMap.get(k1));
+
+							}
+							break;
+						}
+					}
+
+					// Backtrack = Yes
+					else if (backTrack.equalsIgnoreCase("Y")) {
+						resultValue = searchInTrie(infword, backtrackLevel);
+						result1 = rankTrieResults(resultValue, lengthInput);
+						result1 = result1.trim().replace("  ", " ");
+						String[] stems = result1.split(" ");
+						//System.out.println("Result: " + result1);
+						int score2;
+						int score1;
+						for (String str : stems) {
+							score1 = LDistance.LD(str, infword);
+
+							if (lScore.get(score1) == null) {
+								List<String> list = new ArrayList<String>();
+								list.add(str);
+								lScore.put(score1, list);
+							} else {
+								lScore.get(score1).add(str);
+							}
+						}
+						for (Integer key : lScore.keySet()) {
+							List<String> tempVal = lScore.get(key);
+
+							HashMap<Integer, List<String>> tempMap = new HashMap<Integer, List<String>>();
+							for (String st : tempVal) {
+								score2 = LDistance.stackDistance(st, infword);
+
+								if (tempMap.get(score2) == null) {
+									List<String> list = new ArrayList<String>();
+									list.add(st);
+									tempMap.put(score2, list);
+
+								} else {
+									tempMap.get(score2).add(st);
+								}
+
+							}
+							for (Integer k1 : tempMap.keySet()) {
+								stem = tempMap.get(k1).get(0);
+//								System.out.println(key + " : " + k1 + ":"
+//										+ tempMap.get(k1));
+							}
+							break;
+						}
+
+					} else {
+						System.out.println("EXIT from trie stemming program");
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				int longestSub = LDistance.longestSubstr(infword,stem);
+				if(longestSub==0){
+					return infword;
+				}
+				else{
+					
+					return infword.substring(0,longestSub);
+				}
+				
 	}
 	
 	public String getRoot(String infword, String backTrack,
@@ -861,6 +923,10 @@ public class Trie {
 		String result1;
 		String resultValue;
 		int lengthInput;
+		countfive = 0;
+		prefix = "";
+		myoutput = "";
+		length = 0;
 
 		try {
 			lengthInput = getCharLength(infword);
@@ -962,6 +1028,7 @@ public class Trie {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println(root);
 		return root;
 	}
 
