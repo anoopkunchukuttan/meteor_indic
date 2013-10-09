@@ -6,6 +6,8 @@ IWN_DIR=$1
 #Output directory where the data is generated in a format as required by METEOR
 #$OUT_DIR/meteor_data will contain the synonym resources to be used in METEOR
 OUT_DIR=$2
+# NOTE: Manipuri needs some manual cleanup currently, since there is an 'N' in the idx file after the synset ids. This simple cleanup applied for other languages cannot be done for Manipuri since it is written in the Devanagari script
+
 
 mkdir -p $OUT_DIR/iwn_data $OUT_DIR/meteor_data
 cd $OUT_DIR/iwn_data
@@ -39,7 +41,12 @@ mv urd ur
 for f in `ls`
 do
  cat $f/{adj.idx,noun.idx,adv.idx,verb.idx} > $f/all.idx
- sed 's, ,\n,' $f/all.idx > ../meteor_data/$f.synsets
- touch ../meteor_data/$f.exceptions
- touch ../meteor_data/$f.relations
+ if [ $f != 'mP' ]
+ then  
+    sed 's, ,\n,' $f/all.idx  | sed 's,N, ,'  > ../meteor_data/$f.synsets
+ else    
+    sed 's, ,\n,' $f/all.idx  > ../meteor_data/$f.synsets
+ fi  
+    touch ../meteor_data/$f.exceptions
+    touch ../meteor_data/$f.relations
 done
