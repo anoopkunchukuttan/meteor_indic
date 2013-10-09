@@ -909,7 +909,9 @@ public class Trie {
 				}
 				else{
 					
-					return infword.substring(0,longestSub);
+					stem =infword.substring(0,longestSub);
+					System.out.println("Stem="+infword+"::"+stem);
+					return stem;
 				}
 				
 	}
@@ -1028,7 +1030,7 @@ public class Trie {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println(root);
+		System.out.println("Root="+infword+"::"+root);
 		return root;
 	}
 

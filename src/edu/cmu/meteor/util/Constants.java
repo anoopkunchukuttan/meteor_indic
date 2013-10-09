@@ -73,14 +73,13 @@ public class Constants {
 
 	public static final int DEFAULT_BEAM_SIZE = 40;
 
-	public static final URL DEFAULT_STEM_DIR_URL = ClassLoader
-			.getSystemResource("stem");
+	public static final URL DEFAULT_STEM_DIR_URL = ClassLoader.getSystemResource("stem");
 
-	public static final URL DEFAULT_SYN_DIR_URL = ClassLoader
-			.getSystemResource("synonym");
+	public static final URL DEFAULT_SYN_DIR_URL = ClassLoader.getSystemResource("synonym");
 
-	public static final URL DEFAULT_WORD_DIR_URL = Constants.class.getClassLoader().getResource("function");
-
+	// public static final URL DEFAULT_WORD_DIR_URL = ClassLoader
+	// .getSystemResource("function");
+	public static final URL DEFAULT_WORD_DIR_URL = ClassLoader.getSystemResource("function");
 	/*
 	 * Scorer Constants
 	 */
@@ -1184,7 +1183,7 @@ public class Constants {
 		} else if (langID == LANG_SE) {
 			modules.add(MODULE_EXACT);
 			modules.add(MODULE_STEM);
-		}  else if (langID == LANG_AS || langID == LANG_BD || langID == LANG_BN
+		} else if (langID == LANG_AS || langID == LANG_BD || langID == LANG_BN
 				|| langID == LANG_GU || langID == LANG_HI || langID == LANG_KK
 				|| langID == LANG_KN || langID == LANG_KS || langID == LANG_ML
 				|| langID == LANG_MP || langID == LANG_MR || langID == LANG_NE
@@ -1193,13 +1192,11 @@ public class Constants {
 			modules.add(MODULE_EXACT);
 			modules.add(MODULE_STEM);
 			modules.add(MODULE_SYNONYM);
-		}
-		else if (langID == LANG_OTHER) {
+		} else if (langID == LANG_OTHER) {
 			modules.add(MODULE_EXACT);
 			modules.add(MODULE_STEM);
 			modules.add(MODULE_SYNONYM);
-		}
-		else {
+		} else {
 			// Not found
 			String lang = "";
 			String task = "";
