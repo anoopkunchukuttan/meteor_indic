@@ -563,7 +563,8 @@ public class Constants {
 
 	public static String normLanguageName(String language)
 			throws RuntimeException {
-		String lang = language.toLowerCase();
+		//String lang = language.toLowerCase();
+		String lang = language;
 		if (lang.equals("english") || lang.equals("en"))
 			return "english";
 		if (lang.equals("czech") || lang.equals("cz") || lang.equals("cs"))
