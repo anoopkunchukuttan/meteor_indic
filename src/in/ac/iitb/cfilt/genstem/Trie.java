@@ -167,115 +167,115 @@ public class Trie {
 			// INDIAN LANGUAGES
 			// HINDI
 			if (lang.equalsIgnoreCase("hi")) {
-				filename = "./indicResources/trie_wn_db/hindi.wordnet";
+				filename = "./indicResources/trie_wn_db/hi.wordnet";
 				unicodeRange = prop.getProperty("HINDI").split("-");
 			}
 			// ASSAMESE
 			if (lang.equalsIgnoreCase("as")) {
-				filename = "./indicResources/trie_wn_db/assamese.wordnet";
+				filename = "./indicResources/trie_wn_db/as.wordnet";
 				unicodeRange = prop.getProperty("ASSAMESE").split("-");
 			}
 			// BENGALI
 			if (lang.equalsIgnoreCase("bn")) {
-				filename = "./indicResources/trie_wn_db/bengali.wordnet";
+				filename = "./indicResources/trie_wn_db/bn.wordnet";
 				unicodeRange = prop.getProperty("BENGALI").split("-");
 			}
 			// BODO
 			if (lang.equalsIgnoreCase("bD")) {
-				filename = "./indicResources/trie_wn_db/bodo.wordnet";
+				filename = "./indicResources/trie_wn_db/bD.wordnet";
 				unicodeRange = prop.getProperty("BODO").split("-");
 			}
 			// GUJARATI
 			if (lang.equalsIgnoreCase("gu")) {
-				filename = "./indicResources/trie_wn_db/gujrati.wordnet";
+				filename = "./indicResources/trie_wn_db/gu.wordnet";
 				unicodeRange = prop.getProperty("GUJARATI").split("-");
 			}
 			// KANNADA
 			if (lang.equalsIgnoreCase("kn")) {
-				filename = "./indicResources/trie_wn_db/kannada.wordnet";
+				filename = "./indicResources/trie_wn_db/kn.wordnet";
 				unicodeRange = prop.getProperty("KANNADA").split("-");
 			}
 			// KASHMIRI
 			if (lang.equalsIgnoreCase("ks")) {
-				filename = "./indicResources/trie_wn_db/kashmiri.wordnet";
+				filename = "./indicResources/trie_wn_db/ks.wordnet";
 				unicodeRange = prop.getProperty("KASHMIRI").split("-");
 			}
 			// KONKANI
 			if (lang.equalsIgnoreCase("kK")) {
-				filename = "./indicResources/trie_wn_db/konkani.wordnet";
+				filename = "./indicResources/trie_wn_db/kK.wordnet";
 				unicodeRange = prop.getProperty("KONKANI").split("-");
 			}
 			// MALAYALAM
 			if (lang.equalsIgnoreCase("ml")) {
-				filename = "./indicResources/trie_wn_db/malayalam.wordnet";
+				filename = "./indicResources/trie_wn_db/ml.wordnet";
 				unicodeRange = prop.getProperty("MALAYALAM").split("-");
 			}
 			// MANIPURI
 			if (lang.equalsIgnoreCase("mP")) {
-				filename = "./indicResources/trie_wn_db/manipuri.wordnet";
+				filename = "./indicResources/trie_wn_db/mP.wordnet";
 				unicodeRange = prop.getProperty("MANIPURI").split("-");
 			}
 			// MARATHI
 			if (lang.equalsIgnoreCase("mr")) {
-				filename = "./indicResources/trie_wn_db/marathi.wordnet";
+				filename = "./indicResources/trie_wn_db/mr.wordnet";
 				unicodeRange = prop.getProperty("MARATHI").split("-");
 			}
 			// NEPALI
 			if (lang.equalsIgnoreCase("ne")) {
-				filename = "./indicResources/trie_wn_db/nepali.wordnet";
+				filename = "./indicResources/trie_wn_db/ne.wordnet";
 				unicodeRange = prop.getProperty("NEPALI").split("-");
 			}
 			// SANSKRIT
 			if (lang.equalsIgnoreCase("sa")) {
-				filename = "./indicResources/trie_wn_db/sanskrit.wordnet";
+				filename = "./indicResources/trie_wn_db/sa.wordnet";
 				unicodeRange = prop.getProperty("SANSKRIT").split("-");
 			}
 			// TAMIL
 			if (lang.equalsIgnoreCase("ta")) {
-				filename = "./indicResources/trie_wn_db/tamil.wordnet";
+				filename = "./indicResources/trie_wn_db/ta.wordnet";
 				unicodeRange = prop.getProperty("TAMIL").split("-");
 			}
 			// TELUGU
 			if (lang.equalsIgnoreCase("te")) {
-				filename = "./indicResources/trie_wn_db/telugu.wordnet";
+				filename = "./indicResources/trie_wn_db/te.wordnet";
 				unicodeRange = prop.getProperty("TELUGU").split("-");
 			}
 			// PUNJABI
 			if (lang.equalsIgnoreCase("pa")) {
-				filename = "./indicResources/trie_wn_db/punjabi.wordnet";
+				filename = "./indicResources/trie_wn_db/pa.wordnet";
 				unicodeRange = prop.getProperty("PUNJABI").split("-");
 			}
 			// URDU
 			if (lang.equalsIgnoreCase("ur")) {
-				filename = "./indicResources/trie_wn_db/urdu.wordnet";
+				filename = "./indicResources/trie_wn_db/ur.wordnet";
 				unicodeRange = prop.getProperty("URDU").split("-");
 			}
 			// ODIYA
 			if (lang.equalsIgnoreCase("or")) {
-				filename = "./indicResources/trie_wn_db/odiya.wordnet";
+				filename = "./indicResources/trie_wn_db/or.wordnet";
 				unicodeRange = prop.getProperty("ODIYA").split("-");
 			}
 			// ///////////////////////////////////
 			// EUROPEAN LANGUAGES
 			// FRENCH
 			if (lang.equalsIgnoreCase("fr")) {
-				filename = "./indicResources/trie_wn_db/french.wordnet";
+				filename = "./indicResources/trie_wn_db/fr.wordnet";
 			}
 			// DANISH
 			if (lang.equalsIgnoreCase("da")) {
-				filename = "./indicResources/trie_wn_db/danish.wordnet";
+				filename = "./indicResources/trie_wn_db/da.wordnet";
 			}
 			// HUNGARY
 			if (lang.equalsIgnoreCase("hu")) {
-				filename = "./indicResources/trie_wn_db/hungary.wordnet";
+				filename = "./indicResources/trie_wn_db/hu.wordnet";
 			}
 			// ENGLISH
 			if (lang.equalsIgnoreCase("en")) {
-				filename = "./indicResources/trie_wn_db/english.wordnet";
+				filename = "./indicResources/trie_wn_db/en.wordnet";
 			}
 			// ITALIAN
 			if (lang.equalsIgnoreCase("it")) {
-				filename = "./indicResources/trie_wn_db/italian.wordnet";
+				filename = "./indicResources/trie_wn_db/it.wordnet";
 			}
 			FileReader read = new FileReader(filename);
 			BufferedReader in = new BufferedReader(read, 50);
