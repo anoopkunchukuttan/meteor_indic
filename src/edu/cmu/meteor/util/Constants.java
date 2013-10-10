@@ -14,8 +14,10 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 
 import org.tartarus.snowball.ext.danishStemmer;
 import org.tartarus.snowball.ext.dutchStemmer;
@@ -77,10 +79,7 @@ public class Constants {
 
 	public static final URL DEFAULT_SYN_DIR_URL = ClassLoader.getSystemResource("synonym");
 
-	// public static final URL DEFAULT_WORD_DIR_URL = ClassLoader
-	// .getSystemResource("function");
 	public static final URL DEFAULT_WORD_DIR_URL = ClassLoader.getSystemResource("function");
-	public static final URL DEFAULT_FUNCTION_DIR_URL = ClassLoader.getSystemResource("function");
 
 	/*
 	 * Scorer Constants
@@ -130,6 +129,28 @@ public class Constants {
 	public static final int LANG_MAX = 34;
 	public static final int LANG_OTHER = 99;
 
+	String[] x;
+	
+	public static final List<String> INDIC_LANGS=Arrays.asList(   "as", 
+																	"bD",
+																	"bn",
+																	"gu",
+																	"hi",
+																	"kK",
+																	"kn",
+																	"ks",
+																	"ml",
+																	"mP",
+																	"mr",
+																	"ne",
+																	"or",
+																	"pa",
+																	"sa",
+																	"ta",
+																	"te",
+																	"ur");
+	
+	
 	private static HashSet<Integer> supportedLangIDs = null;
 
 	public static final boolean isSupported(int langID) {

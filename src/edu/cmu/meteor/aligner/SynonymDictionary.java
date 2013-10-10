@@ -20,6 +20,8 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 
+import edu.cmu.meteor.util.Constants;
+
 public class SynonymDictionary {
 
 	// Exceptions
@@ -93,9 +95,12 @@ public class SynonymDictionary {
 			}
 			inRel.close();
 		}
-		
-		t = new Trie();
-		t.setupTrie(lang);
+
+		if(Constants.INDIC_LANGS.contains(lang))
+		{
+			t = new Trie();
+			t.setupTrie(lang);
+		}
 	}
 
 	public HashSet<Integer> getSynSets(String word) {
